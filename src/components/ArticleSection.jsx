@@ -11,34 +11,34 @@ import {
 } from '@mui/material';
 import { Person, CalendarToday } from '@mui/icons-material';
 
-// Dummy data untuk artikel
+// Dummy data untuk berita
 const articles = [
   {
     id: 1,
-    category: 'ARTIKEL',
-    title: 'FOSIS Jepara Sukses Gelar Grand Final Duta OSIS 5 Anti 2026 di Gedung Wanita',
-    excerpt: 'Lorem ipsum dolor sit amet consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco.',
+    category: 'BERITA',
+    title: 'Judul Berita Terbaru dari SMA Negeri 1 Bangsri',
+    excerpt: 'Deskripsi singkat berita yang menjelaskan tentang kegiatan atau informasi penting seputar sekolah dan siswa. Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt.',
     image: '/article1.jpg',
-    author: 'Tim Jurnalis SMANSABA',
-    date: '15 Feb 2026',
+    author: 'Nama Penulis',
+    date: 'Tanggal',
   },
   {
     id: 2,
-    category: 'ARTIKEL',
-    title: 'Pelaksanaan UKK Teknik Otomotif SMAN 1 Bangsri Tahun 2026',
-    excerpt: 'Lorem ipsum dolor sit amet consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus mi quis viverra ornare eros dolor interdum nulla.',
+    category: 'BERITA',
+    title: 'Judul Berita Terbaru dari SMA Negeri 1 Bangsri',
+    excerpt: 'Deskripsi singkat berita yang menjelaskan tentang kegiatan atau informasi penting seputar sekolah dan siswa. Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt.',
     image: '/article2.jpg',
-    author: 'Tim Jurnalis SMANSABA',
-    date: '12 Feb 2026',
+    author: 'Nama Penulis',
+    date: 'Tanggal',
   },
   {
     id: 3,
-    category: 'ARTIKEL',
-    title: 'Sosialisasi Investasi Skill dan Visi Masa Depan bagi Siswa Kelas X SMAN 1 Bangsri',
-    excerpt: 'Lorem ipsum dolor sit amet consectetur adipiscing elit. Nulla vitae elit libero a pharetra augue. Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna vel.',
+    category: 'BERITA',
+    title: 'Judul Berita Terbaru dari SMA Negeri 1 Bangsri',
+    excerpt: 'Deskripsi singkat berita yang menjelaskan tentang kegiatan atau informasi penting seputar sekolah dan siswa. Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt.',
     image: '/article3.jpg',
-    author: 'Tim Jurnalis SMANSABA',
-    date: '08 Feb 2026',
+    author: 'Nama Penulis',
+    date: 'Tanggal',
   },
 ];
 

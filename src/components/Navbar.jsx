@@ -4,6 +4,7 @@ import logo from '../assets/image/logo.png';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [activeMenu, setActiveMenu] = useState('Beranda');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,7 +24,6 @@ const Navbar = () => {
     'Guru',
     'Prestasi',
     'Ekstrakurikuler',
-    'Artikel',
     'Berita',
     'Galeri',
     'Kontak',
@@ -60,13 +60,18 @@ const Navbar = () => {
             {menuItems.map((item) => (
               <Button 
                 key={item}
+                onClick={() => setActiveMenu(item)}
                 sx={{
                   color: scrolled ? '#333' : '#ffffff',
                   textTransform: 'none',
                   fontSize: '15px',
-                  fontWeight: 500,
+                  fontWeight: activeMenu === item ? 700 : 500,
                   padding: '15px 16px',
-                  transition: 'color 0.3s ease',
+                  transition: 'all 0.3s ease',
+                  position: 'relative',
+                  borderBottom: activeMenu === item ? '3px solid' : '3px solid transparent',
+                  borderColor: activeMenu === item ? (scrolled ? '#34495e' : '#ffffff') : 'transparent',
+                  borderRadius: 0,
                   '&:hover': {
                     backgroundColor: scrolled ? '#f5f5f5' : 'rgba(255,255,255,0.1)',
                   },

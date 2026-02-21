@@ -1,0 +1,399 @@
+import { Box, Container, Typography, Grid, IconButton, Link } from '@mui/material';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import TikTokIcon from '@mui/icons-material/MusicNote';
+import XIcon from '@mui/icons-material/X';
+import PhoneIcon from '@mui/icons-material/Phone';
+import logo from '../assets/image/logo.png';
+
+const Footer = () => {
+  const menuItems = [
+    { label: 'Beranda', href: '#' },
+    { label: 'Tentang', href: '#' },
+    { label: 'Guru', href: '#' },
+    { label: 'Prestasi', href: '#' },
+    { label: 'Ekstrakurikuler', href: '#' },
+    { label: 'Kontak', href: '#' },
+  ];
+
+  const otherItems = [
+    { label: 'Esktrakurikuler', href: '#' },
+    { label: 'Berita', href: '#' },
+    { label: 'Galeri', href: '#' },
+  ];
+
+  return (
+    <Box
+      component="footer"
+      sx={{
+        backgroundColor: '#f8f9fa',
+        borderTop: '3px solid #34495e',
+        paddingTop: '60px',
+        paddingBottom: '20px',
+      }}
+    >
+      <Container maxWidth="xl">
+        <Grid container spacing={4} justifyContent="space-between">
+          {/* Logo and School Info */}
+          <Grid item xs={12} md={3}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 2,
+                }}
+              >
+                <Box
+                  component="img"
+                  src={logo}
+                  alt="Logo"
+                  sx={{
+                    height: '70px',
+                    width: 'auto',
+                  }}
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 700,
+                    color: '#2c3e50',
+                    fontSize: '1rem',
+                    lineHeight: 1.3,
+                  }}
+                >
+                  SMA Negeri 1 Bangsri
+                </Typography>
+              </Box>
+              
+              <Typography
+                variant="body2"
+                sx={{
+                  color: '#555',
+                  fontSize: '0.95rem',
+                  lineHeight: 1.6,
+                }}
+              >
+                Jl. Jerukwangi, Bangsri, Krajan, Jerukwangi, <br/>Kec. Jepara, Jawa Tengah, 59453
+              </Typography>
+
+              <Box>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: '#555',
+                    fontSize: '0.9rem',
+                    fontWeight: 600,
+                    marginBottom: '4px',
+                  }}
+                >
+                  No Telp
+                </Typography>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1,
+                  }}
+                >
+                  <PhoneIcon sx={{ fontSize: '1.2rem', color: '#34495e' }} />
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      color: '#2c3e50',
+                      fontSize: '1.1rem',
+                      fontWeight: 700,
+                    }}
+                  >
+                    (0291) 771186
+                  </Typography>
+                </Box>
+              </Box>
+
+              {/* Social Media Icons */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: 1,
+                  marginTop: '8px',
+                }}
+              >
+                <IconButton
+                  component="a"
+                  href="#"
+                  target="_blank"
+                  sx={{
+                    backgroundColor: '#fff',
+                    border: '2px solid #ddd',
+                    width: '40px',
+                    height: '40px',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      backgroundColor: '#E4405F',
+                      borderColor: '#E4405F',
+                      color: '#fff',
+                      transform: 'translateY(-3px)',
+                    },
+                  }}
+                >
+                  <InstagramIcon sx={{ fontSize: '1.3rem' }} />
+                </IconButton>
+                <IconButton
+                  component="a"
+                  href="#"
+                  target="_blank"
+                  sx={{
+                    backgroundColor: '#fff',
+                    border: '2px solid #ddd',
+                    width: '40px',
+                    height: '40px',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      backgroundColor: '#FF0000',
+                      borderColor: '#FF0000',
+                      color: '#fff',
+                      transform: 'translateY(-3px)',
+                    },
+                  }}
+                >
+                  <YouTubeIcon sx={{ fontSize: '1.3rem' }} />
+                </IconButton>
+                <IconButton
+                  component="a"
+                  href="#"
+                  target="_blank"
+                  sx={{
+                    backgroundColor: '#fff',
+                    border: '2px solid #ddd',
+                    width: '40px',
+                    height: '40px',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      backgroundColor: '#000',
+                      borderColor: '#000',
+                      color: '#fff',
+                      transform: 'translateY(-3px)',
+                    },
+                  }}
+                >
+                  <TikTokIcon sx={{ fontSize: '1.3rem' }} />
+                </IconButton>
+                <IconButton
+                  component="a"
+                  href="#"
+                  target="_blank"
+                  sx={{
+                    backgroundColor: '#fff',
+                    border: '2px solid #ddd',
+                    width: '40px',
+                    height: '40px',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      backgroundColor: '#000',
+                      borderColor: '#000',
+                      color: '#fff',
+                      transform: 'translateY(-3px)',
+                    },
+                  }}
+                >
+                  <XIcon sx={{ fontSize: '1.3rem' }} />
+                </IconButton>
+              </Box>
+            </Box>
+          </Grid>
+
+          {/* Menu Utama */}
+          <Grid item xs={12} sm={6} md={2}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 700,
+                color: '#2c3e50',
+                fontSize: '1.2rem',
+                marginBottom: '20px',
+              }}
+            >
+              Menu Utama
+            </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 1.5,
+              }}
+            >
+              {menuItems.map((item, index) => (
+                <Link
+                  key={index}
+                  href={item.href}
+                  underline="none"
+                  sx={{
+                    color: '#555',
+                    fontSize: '0.95rem',
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                      color: '#34495e',
+                      fontWeight: 600,
+                      paddingLeft: '8px',
+                    },
+                  }}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </Box>
+          </Grid>
+
+          {/* Lain - Lain */}
+          <Grid item xs={12} sm={6} md={2}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 700,
+                color: '#2c3e50',
+                fontSize: '1.2rem',
+                marginBottom: '20px',
+              }}
+            >
+              Lain - Lain
+            </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 1.5,
+              }}
+            >
+              {otherItems.map((item, index) => (
+                <Link
+                  key={index}
+                  href={item.href}
+                  underline="none"
+                  sx={{
+                    color: '#555',
+                    fontSize: '0.95rem',
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                      color: '#34495e',
+                      fontWeight: 600,
+                      paddingLeft: '8px',
+                    },
+                  }}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </Box>
+          </Grid>
+
+          {/* Maps */}
+          <Grid item xs={12} md={5}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 700,
+                color: '#2c3e50',
+                fontSize: '1.2rem',
+                marginBottom: '20px',
+              }}
+            >
+              Maps
+            </Typography>
+            <Box
+              sx={{
+                position: 'relative',
+                width: '100%',
+                height: '250px',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                border: '3px solid #e0e0e0',
+              }}
+            >
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3962.1899876543!2d110.75476931477444!3d-6.513164095315428!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e711e9b1b1b1b1b%3A0x1b1b1b1b1b1b1b1b!2sSMA%20Negeri%201%20Bangsri!5e0!3m2!1sid!2sid!4v1234567890"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Google Maps Location"
+              />
+              {/* Button to enlarge map */}
+              <Link
+                href="https://www.google.com/maps/place/-6.513164,110.757258/@-6.513164,110.757258,15z"
+                target="_blank"
+                sx={{
+                  position: 'absolute',
+                  top: '10px',
+                  left: '10px',
+                  backgroundColor: '#fff',
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  color: '#34495e',
+                  textDecoration: 'none',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    backgroundColor: '#34495e',
+                    color: '#fff',
+                    transform: 'scale(1.05)',
+                  },
+                }}
+              >
+                Lihat peta lebih besar
+              </Link>
+            </Box>
+          </Grid>
+        </Grid>
+
+        {/* Copyright Section */}
+        <Box
+          sx={{
+            marginTop: '50px',
+            paddingTop: '24px',
+            borderTop: '1px solid #ddd',
+            textAlign: 'center',
+          }}
+        >
+          <Typography
+            variant="body2"
+            sx={{
+              color: '#7f8c8d',
+              fontSize: '0.9rem',
+            }}
+          >
+            2026 © SMA Negeri 1 Bangsri, All Right Reserved. dikembangkan oleh:{' '}
+            <Link
+              href="#"
+              sx={{
+                color: '#34495e',
+                fontWeight: 600,
+                textDecoration: 'none',
+                '&:hover': {
+                  textDecoration: 'underline',
+                },
+              }}
+            >
+              M. Reval Fahrizal Akbar
+            </Link>
+          </Typography>
+        </Box>
+      </Container>
+    </Box>
+  );
+};
+
+export default Footer;

@@ -12,42 +12,42 @@ import { Speed } from '@mui/icons-material';
 const extracurriculars = [
   {
     id: 1,
-    name: 'Paskibra',
+    name: 'Ekstrakurikuler',
     logo: '/ekskul-paskibra.png',
   },
   {
     id: 2,
-    name: 'Pramuka',
+    name: 'Ekstrakurikuler',
     logo: '/ekskul-pramuka.png',
   },
   {
     id: 3,
-    name: 'PMR',
+    name: 'Ekstrakurikuler',
     logo: '/ekskul-pmr.png',
   },
   {
     id: 4,
-    name: 'Futsal',
+    name: 'Ekstrakurikuler',
     logo: '/ekskul-futsal.png',
   },
   {
     id: 5,
-    name: 'Basket',
+    name: 'Ekstrakurikuler',
     logo: '/ekskul-basket.png',
   },
   {
     id: 6,
-    name: 'Voli',
+    name: 'Ekstrakurikuler',
     logo: '/ekskul-voli.png',
   },
   {
     id: 7,
-    name: 'Badminton',
+    name: 'Ekstrakurikuler',
     logo: '/ekskul-badminton.png',
   },
   {
     id: 8,
-    name: 'Musik',
+    name: 'Ekstrakurikuler',
     logo: '/ekskul-musik.png',
   },
 ];

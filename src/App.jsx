@@ -9,8 +9,8 @@ function App() {
       <CssBaseline />
       <BrowserRouter>
         <Routes>
-          <Route path="/home" element={<LandingPage />} />
-          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/beranda" element={<LandingPage />} />
+          <Route path="/" element={<Navigate to="/beranda" replace />} />
         </Routes>
       </BrowserRouter>
     </Box>
