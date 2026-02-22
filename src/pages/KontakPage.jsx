@@ -136,7 +136,7 @@ const KontakPage = () => {
                     Alamat
                   </Typography>
                   <Typography sx={{ fontSize: { xs: '0.9rem', md: '0.95rem' }, color: '#666', lineHeight: 1.7 }}>
-                    Jl. Jerukwangi, Bangsri, Krajan, Jerukwangi, Kec. Jepara, Jawa Tengah, 59453
+                    Jl. Jerukwangi, Bangsri, Krajan, Jerukwangi,<br/> Kec. Jepara, Jawa Tengah, 59453
                   </Typography>
                 </Box>
               </Grid>
