@@ -1,12 +1,14 @@
 import { AppBar, Toolbar, Box, Button, Container, IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
 import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
 import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import logo from '../assets/image/logo.png';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
-  const [activeMenu, setActiveMenu] = useState('Beranda');
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,14 +23,14 @@ const Navbar = () => {
   }, [scrolled]);
 
   const menuItems = [
-    'Beranda',
-    'Tentang',
-    'Guru',
-    'Prestasi',
-    'Ekstrakurikuler',
-    'Berita',
-    'Galeri',
-    'Kontak',
+    { label: 'Beranda', path: '/beranda' },
+    { label: 'Tentang', path: '/tentang' },
+    { label: 'Guru', path: '/guru' },
+    { label: 'Prestasi', path: '/prestasi' },
+    { label: 'Ekstrakurikuler', path: '/ekstrakurikuler' },
+    { label: 'Berita', path: '/berita' },
+    { label: 'Galeri', path: '/galeri' },
+    { label: 'Kontak', path: '/kontak' },
   ];
 
   const handleDrawerToggle = () => {
@@ -36,8 +38,14 @@ const Navbar = () => {
   };
 
   const handleMenuClick = (item) => {
-    setActiveMenu(item);
+    if (item.path !== '#') {
+      navigate(item.path);
+    }
     setMobileOpen(false);
+  };
+
+  const isActive = (path) => {
+    return location.pathname === path;
   };
 
   const drawer = (
@@ -63,8 +71,13 @@ const Navbar = () => {
           component="img"
           src={logo}
           alt="Logo SMANSABA"
+          onClick={() => {
+            navigate('/beranda');
+            setMobileOpen(false);
+          }}
           sx={{
             height: '40px',
+            cursor: 'pointer',
           }}
         />
         <IconButton onClick={handleDrawerToggle} sx={{ color: '#333' }}>
@@ -75,23 +88,23 @@ const Navbar = () => {
         {menuItems.map((item) => (
           <ListItem 
             button 
-            key={item}
+            key={item.label}
             onClick={() => handleMenuClick(item)}
             sx={{
               padding: '16px 24px',
-              borderLeft: activeMenu === item ? '4px solid #34495e' : '4px solid transparent',
-              backgroundColor: activeMenu === item ? '#f5f5f5' : 'transparent',
+              borderLeft: isActive(item.path) ? '4px solid #34495e' : '4px solid transparent',
+              backgroundColor: isActive(item.path) ? '#f5f5f5' : 'transparent',
               '&:hover': {
                 backgroundColor: '#f5f5f5',
               },
             }}
           >
             <ListItemText 
-              primary={item}
+              primary={item.label}
               primaryTypographyProps={{
                 fontSize: '16px',
-                fontWeight: activeMenu === item ? 700 : 500,
-                color: activeMenu === item ? '#34495e' : '#333',
+                fontWeight: isActive(item.path) ? 700 : 500,
+                color: isActive(item.path) ? '#34495e' : '#333',
               }}
             />
           </ListItem>
@@ -123,9 +136,11 @@ const Navbar = () => {
                 component="img"
                 src={logo}
                 alt="Logo SMANSABA"
+                onClick={() => navigate('/beranda')}
                 sx={{
                   height: { xs: '40px', md: '50px' },
                   marginRight: { xs: '12px', md: '20px' },
+                  cursor: 'pointer',
                 }}
               />
             </Box>
@@ -134,25 +149,25 @@ const Navbar = () => {
             <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' }, gap: 1 }}>
               {menuItems.map((item) => (
                 <Button 
-                  key={item}
-                  onClick={() => setActiveMenu(item)}
+                  key={item.label}
+                  onClick={() => handleMenuClick(item)}
                   sx={{
                     color: scrolled ? '#333' : '#ffffff',
                     textTransform: 'none',
                     fontSize: '15px',
-                    fontWeight: activeMenu === item ? 700 : 500,
+                    fontWeight: isActive(item.path) ? 700 : 500,
                     padding: '15px 16px',
                     transition: 'all 0.3s ease',
                     position: 'relative',
-                    borderBottom: activeMenu === item ? '3px solid' : '3px solid transparent',
-                    borderColor: activeMenu === item ? (scrolled ? '#34495e' : '#ffffff') : 'transparent',
+                    borderBottom: isActive(item.path) ? '3px solid' : '3px solid transparent',
+                    borderColor: isActive(item.path) ? (scrolled ? '#34495e' : '#ffffff') : 'transparent',
                     borderRadius: 0,
                     '&:hover': {
                       backgroundColor: scrolled ? '#f5f5f5' : 'rgba(255,255,255,0.1)',
                     },
                   }}
                 >
-                  {item}
+                  {item.label}
                 </Button>
               ))}
             </Box>

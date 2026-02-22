@@ -6,6 +6,7 @@ import {
   CardContent,
   Button,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { Speed } from '@mui/icons-material';
 
 // Dummy data untuk ekstrakurikuler
@@ -53,6 +54,8 @@ const extracurriculars = [
 ];
 
 const ExtracurricularSection = () => {
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -121,11 +124,6 @@ const ExtracurricularSection = () => {
                 alignItems: 'center',
                 borderRadius: '12px',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                '&:hover': {
-                  transform: 'translateY(-8px)',
-                  boxShadow: '0 8px 16px rgba(0,0,0,0.15)',
-                },
                 padding: '24px',
               }}
             >
@@ -180,34 +178,40 @@ const ExtracurricularSection = () => {
                       fontSize: '1.25rem',
                       fontWeight: 600,
                       color: '#333',
-                      marginBottom: '16px',
                     }}
                   >
                     {ekskul.name}
                   </Typography>
-                  
-                  <Button
-                    variant="outlined"
-                    sx={{
-                      color: '#34495e',
-                      borderColor: '#34495e',
-                      padding: '8px 24px',
-                      fontSize: '14px',
-                      fontWeight: 600,
-                      borderRadius: '4px',
-                      textTransform: 'none',
-                      '&:hover': {
-                        backgroundColor: '#34495e',
-                        borderColor: '#34495e',
-                        color: '#ffffff',
-                      },
-                    }}
-                  >
-                    Lihat Selengkapnya
-                  </Button>
                 </CardContent>
               </Card>
           ))}
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: { xs: '30px', md: '40px' },
+          }}
+        >
+          <Button
+            variant="contained"
+            onClick={() => navigate('/ekstrakurikuler')}
+            sx={{
+              backgroundColor: '#34495e',
+              color: '#ffffff',
+              padding: { xs: '10px 28px', md: '12px 40px' },
+              fontSize: { xs: '14px', md: '16px' },
+              fontWeight: 600,
+              borderRadius: '4px',
+              textTransform: 'none',
+              '&:hover': {
+                backgroundColor: '#2c3e50',
+              },
+            }}
+          >
+            Selengkapnya
+          </Button>
         </Box>
       </Container>
     </Box>

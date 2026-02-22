@@ -9,6 +9,7 @@ import {
   Grid,
   Button,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { Person, CalendarToday } from '@mui/icons-material';
 
 // Dummy data untuk berita
@@ -43,6 +44,8 @@ const articles = [
 ];
 
 const ArticleSection = () => {
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -232,6 +235,7 @@ const ArticleSection = () => {
         >
           <Button
             variant="contained"
+            onClick={() => navigate('/berita')}
             sx={{
               backgroundColor: '#34495e',
               color: '#ffffff',

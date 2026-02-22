@@ -1,4 +1,5 @@
 import { Box, Container, Typography, Grid, IconButton, Link } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import TikTokIcon from '@mui/icons-material/MusicNote';
@@ -8,18 +9,17 @@ import logo from '../assets/image/logo.png';
 
 const Footer = () => {
   const menuItems = [
-    { label: 'Beranda', href: '#' },
-    { label: 'Tentang', href: '#' },
-    { label: 'Guru', href: '#' },
-    { label: 'Prestasi', href: '#' },
-    { label: 'Ekstrakurikuler', href: '#' },
-    { label: 'Kontak', href: '#' },
+    { label: 'Beranda', href: '/' },
+    { label: 'Tentang', href: '/tentang' },
+    { label: 'Guru', href: '/guru' },
+    { label: 'Prestasi', href: '/prestasi' },
+    { label: 'Ekstrakurikuler', href: '/ekstrakurikuler' },
+    { label: 'Kontak', href: '/kontak' },
   ];
 
   const otherItems = [
-    { label: 'Esktrakurikuler', href: '#' },
-    { label: 'Berita', href: '#' },
-    { label: 'Galeri', href: '#' },
+    { label: 'Berita', href: '/berita' },
+    { label: 'Galeri', href: '/galeri' },
   ];
 
   return (
@@ -236,7 +236,8 @@ const Footer = () => {
                 {menuItems.map((item, index) => (
                   <Link
                     key={index}
-                    href={item.href}
+                    component={RouterLink}
+                    to={item.href}
                     underline="none"
                     sx={{
                       color: '#555',
@@ -280,7 +281,8 @@ const Footer = () => {
               {otherItems.map((item, index) => (
                 <Link
                   key={index}
-                  href={item.href}
+                  component={RouterLink}
+                  to={item.href}
                   underline="none"
                   sx={{
                     color: '#555',

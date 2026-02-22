@@ -163,7 +163,10 @@ const PTNAcceptanceSection = () => {
                     opacity: 0.3,
                   },
                   '& .university-badge': {
-                    transform: 'scale(1.1)',
+                    top: '16px',
+                    left: '16px',
+                    transform: 'translate(0, 0)',
+                    textAlign: 'left',
                     textShadow: '3px 3px 8px rgba(0,0,0,0.5)',
                   },
                   '& .info-section': {
@@ -225,47 +228,37 @@ const PTNAcceptanceSection = () => {
                     textAlign: 'center',
                     color: '#fff',
                     zIndex: 2,
-                    transition: 'transform 0.4s ease, text-shadow 0.4s ease',
+                    transition: 'all 0.4s ease',
                   }}
                 >
-                  <Box
+                  <SchoolIcon
                     sx={{
-                      backgroundColor: 'rgba(255,255,255,0.15)',
-                      backdropFilter: 'blur(10px)',
-                      padding: '20px 30px',
-                      borderRadius: '12px',
-                      border: '2px solid rgba(255,255,255,0.3)',
+                      fontSize: '2.5rem',
+                      marginBottom: '8px',
+                      filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
+                    }}
+                  />
+                  <Typography
+                    variant="h3"
+                    sx={{
+                      fontSize: '2.2rem',
+                      fontWeight: 700,
+                      marginBottom: '8px',
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
                     }}
                   >
-                    <SchoolIcon
-                      sx={{
-                        fontSize: '2.5rem',
-                        marginBottom: '8px',
-                        filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
-                      }}
-                    />
-                    <Typography
-                      variant="h3"
-                      sx={{
-                        fontSize: '2.2rem',
-                        fontWeight: 700,
-                        marginBottom: '8px',
-                        textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-                      }}
-                    >
-                      {student.university}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontSize: '1rem',
-                        fontWeight: 500,
-                        textShadow: '1px 1px 3px rgba(0,0,0,0.3)',
-                      }}
-                    >
-                      {student.program}
-                    </Typography>
-                  </Box>
+                    {student.university}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontSize: '1rem',
+                      fontWeight: 500,
+                      textShadow: '1px 1px 3px rgba(0,0,0,0.3)',
+                    }}
+                  >
+                    {student.program}
+                  </Typography>
                 </Box>
 
                 {/* Class Badge - Top Right */}
