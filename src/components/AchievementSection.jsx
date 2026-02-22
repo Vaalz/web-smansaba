@@ -39,7 +39,7 @@ const AchievementSection = () => {
   return (
     <Box
       sx={{
-        padding: '80px 0',
+        padding: { xs: '60px 0', md: '80px 0' },
         backgroundColor: '#1a2332',
         color: '#fff',
       }}
@@ -48,11 +48,12 @@ const AchievementSection = () => {
         <Typography
           variant="h2"
           sx={{
-            fontSize: '2.5rem',
+            fontSize: { xs: '1.75rem', sm: '2rem', md: '2.5rem' },
             fontWeight: 700,
             textAlign: 'center',
             marginBottom: '12px',
             color: '#fff',
+            padding: { xs: '0 16px', md: '0' },
           }}
         >
           Prestasi
@@ -60,10 +61,11 @@ const AchievementSection = () => {
         <Typography
           variant="subtitle1"
           sx={{
-            fontSize: '1.1rem',
+            fontSize: { xs: '0.95rem', sm: '1rem', md: '1.1rem' },
             textAlign: 'center',
-            marginBottom: '50px',
+            marginBottom: { xs: '40px', md: '50px' },
             color: '#b8c5d6',
+            padding: { xs: '0 16px', md: '0' },
           }}
         >
           Prestasi Siswa SMA Negeri 1 Bangsri terbaru di bawah ini
@@ -77,16 +79,18 @@ const AchievementSection = () => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'stretch',
-            gap: 3,
+            gap: { xs: 2, md: 3 },
             flexWrap: 'wrap',
+            padding: { xs: '0 16px', md: '0' },
           }}
         >
           {achievements.map((achievement) => (
             <Card
               key={achievement.id}
               sx={{
-                minWidth: '320px',
-                width: '320px',
+                minWidth: { xs: '280px', sm: '320px' },
+                width: { xs: '100%', sm: '320px' },
+                maxWidth: { xs: '320px', sm: 'none' },
                 backgroundColor: 'transparent',
                 border: '2px solid rgba(255,255,255,0.2)',
                 borderRadius: '16px',

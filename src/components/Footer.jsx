@@ -28,12 +28,12 @@ const Footer = () => {
       sx={{
         backgroundColor: '#f8f9fa',
         borderTop: '3px solid #34495e',
-        paddingTop: '60px',
+        paddingTop: { xs: '40px', md: '60px' },
         paddingBottom: '20px',
       }}
     >
       <Container maxWidth="xl">
-        <Grid container spacing={4} justifyContent="space-between">
+        <Grid container spacing={{ xs: 3, md: 4 }} justifyContent="space-between">
           {/* Logo and School Info */}
           <Grid item xs={12} md={3}>
             <Box
@@ -41,6 +41,7 @@ const Footer = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 2,
+                padding: { xs: '0 16px', md: '0' },
               }}
             >
               <Box
@@ -67,7 +68,7 @@ const Footer = () => {
                   sx={{
                     fontWeight: 700,
                     color: '#2c3e50',
-                    fontSize: '1rem',
+                    fontSize: { xs: '0.95rem', md: '1rem' },
                     lineHeight: 1.3,
                   }}
                 >
@@ -79,7 +80,7 @@ const Footer = () => {
                 variant="body2"
                 sx={{
                   color: '#555',
-                  fontSize: '0.95rem',
+                  fontSize: { xs: '0.9rem', md: '0.95rem' },
                   lineHeight: 1.6,
                 }}
               >
@@ -213,55 +214,58 @@ const Footer = () => {
 
           {/* Menu Utama */}
           <Grid item xs={12} sm={6} md={2}>
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 700,
-                color: '#2c3e50',
-                fontSize: '1.2rem',
-                marginBottom: '20px',
-              }}
-            >
-              Menu Utama
-            </Typography>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 1.5,
-              }}
-            >
-              {menuItems.map((item, index) => (
-                <Link
-                  key={index}
-                  href={item.href}
-                  underline="none"
-                  sx={{
-                    color: '#555',
-                    fontSize: '0.95rem',
-                    transition: 'all 0.2s ease',
-                    '&:hover': {
-                      color: '#34495e',
-                      fontWeight: 600,
-                      paddingLeft: '8px',
-                    },
-                  }}
-                >
-                  {item.label}
-                </Link>
-              ))}
+            <Box sx={{ padding: { xs: '0 16px', md: '0' } }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 700,
+                  color: '#2c3e50',
+                  fontSize: { xs: '1.1rem', md: '1.2rem' },
+                  marginBottom: { xs: '16px', md: '20px' },
+                }}
+              >
+                Menu Utama
+              </Typography>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 1.5,
+                }}
+              >
+                {menuItems.map((item, index) => (
+                  <Link
+                    key={index}
+                    href={item.href}
+                    underline="none"
+                    sx={{
+                      color: '#555',
+                      fontSize: { xs: '0.9rem', md: '0.95rem' },
+                      transition: 'all 0.2s ease',
+                      '&:hover': {
+                        color: '#34495e',
+                        fontWeight: 600,
+                        paddingLeft: '8px',
+                      },
+                    }}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </Box>
             </Box>
           </Grid>
 
           {/* Lain - Lain */}
           <Grid item xs={12} sm={6} md={2}>
+            <Box sx={{ padding: { xs: '0 16px', md: '0' } }}>
             <Typography
               variant="h6"
               sx={{
                 fontWeight: 700,
                 color: '#2c3e50',
-                fontSize: '1.2rem',
-                marginBottom: '20px',
+                fontSize: { xs: '1.1rem', md: '1.2rem' },
+                marginBottom: { xs: '16px', md: '20px' },
               }}
             >
               Lain - Lain
@@ -280,7 +284,7 @@ const Footer = () => {
                   underline="none"
                   sx={{
                     color: '#555',
-                    fontSize: '0.95rem',
+                    fontSize: { xs: '0.9rem', md: '0.95rem' },
                     transition: 'all 0.2s ease',
                     '&:hover': {
                       color: '#34495e',
@@ -293,17 +297,19 @@ const Footer = () => {
                 </Link>
               ))}
             </Box>
+            </Box>
           </Grid>
 
           {/* Maps */}
           <Grid item xs={12} md={5}>
+            <Box sx={{ padding: { xs: '0 16px', md: '0' } }}>
             <Typography
               variant="h6"
               sx={{
                 fontWeight: 700,
                 color: '#2c3e50',
-                fontSize: '1.2rem',
-                marginBottom: '20px',
+                fontSize: { xs: '1.1rem', md: '1.2rem' },
+                marginBottom: { xs: '16px', md: '20px' },
               }}
             >
               Maps
@@ -312,7 +318,7 @@ const Footer = () => {
               sx={{
                 position: 'relative',
                 width: '100%',
-                height: '250px',
+                height: { xs: '200px', sm: '250px' },
                 borderRadius: '12px',
                 overflow: 'hidden',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
@@ -338,9 +344,9 @@ const Footer = () => {
                   top: '10px',
                   left: '10px',
                   backgroundColor: '#fff',
-                  padding: '8px 16px',
+                  padding: { xs: '6px 12px', sm: '8px 16px' },
                   borderRadius: '6px',
-                  fontSize: '0.85rem',
+                  fontSize: { xs: '0.75rem', sm: '0.85rem' },
                   fontWeight: 600,
                   color: '#34495e',
                   textDecoration: 'none',
@@ -356,23 +362,25 @@ const Footer = () => {
                 Lihat peta lebih besar
               </Link>
             </Box>
+            </Box>
           </Grid>
         </Grid>
 
         {/* Copyright Section */}
         <Box
           sx={{
-            marginTop: '50px',
+            marginTop: { xs: '40px', md: '50px' },
             paddingTop: '24px',
             borderTop: '1px solid #ddd',
             textAlign: 'center',
+            padding: { xs: '24px 16px 0', md: '24px 0 0' },
           }}
         >
           <Typography
             variant="body2"
             sx={{
               color: '#7f8c8d',
-              fontSize: '0.9rem',
+              fontSize: { xs: '0.85rem', md: '0.9rem' },
             }}
           >
             2026 © SMA Negeri 1 Bangsri, All Right Reserved. dikembangkan oleh:{' '}

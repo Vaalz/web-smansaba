@@ -5,7 +5,7 @@ const WelcomeSection = () => {
   return (
     <Box
       sx={{
-        padding: '80px 0',
+        padding: { xs: '60px 0', md: '80px 0' },
         backgroundColor: '#f8f9fa',
       }}
     >
@@ -13,13 +13,14 @@ const WelcomeSection = () => {
         <Typography 
           variant="h2"
           sx={{
-            fontSize: '2.5rem',
+            fontSize: { xs: '1.75rem', sm: '2rem', md: '2.5rem' },
             fontWeight: 700,
             textAlign: 'center',
-            marginBottom: '50px',
+            marginBottom: { xs: '40px', md: '50px' },
             color: '#333',
             position: 'relative',
             paddingBottom: '15px',
+            padding: { xs: '0 16px 15px', md: '0 0 15px' },
             '&::after': {
               content: '""',
               position: 'absolute',
@@ -49,14 +50,16 @@ const WelcomeSection = () => {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              minWidth: '280px',
+              minWidth: { xs: '100%', md: '280px' },
+              maxWidth: { xs: '280px', md: 'none' },
+              margin: { xs: '0 auto', md: '0' },
             }}
           >
             <Paper
               elevation={3}
               sx={{
-                width: '280px',
-                height: '350px',
+                width: { xs: '240px', sm: '280px' },
+                height: { xs: '300px', sm: '350px' },
                 overflow: 'hidden',
                 borderRadius: '12px',
                 boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
@@ -92,7 +95,7 @@ const WelcomeSection = () => {
               <Typography 
                 variant="h3"
                 sx={{
-                  fontSize: '1.4rem',
+                  fontSize: { xs: '1.1rem', sm: '1.4rem' },
                   fontWeight: 700,
                   color: '#2c3e50',
                   marginBottom: '4px',
@@ -103,7 +106,7 @@ const WelcomeSection = () => {
               <Typography 
                 variant="subtitle1"
                 sx={{
-                  fontSize: '1rem',
+                  fontSize: { xs: '0.9rem', sm: '1rem' },
                   color: '#7f8c8d',
                   fontStyle: 'italic',
                 }}
@@ -132,11 +135,12 @@ const WelcomeSection = () => {
             <Typography 
               variant="body1"
               sx={{
-                fontSize: '1.1rem',
+                fontSize: { xs: '0.95rem', sm: '1rem', md: '1.1rem' },
                 lineHeight: 1.8,
                 color: '#555',
                 marginBottom: '24px',
                 textAlign: 'justify',
+                padding: { xs: '0 16px', md: '0' },
               }}
             >
               Assalamu'alaikum Warahmatullahi Wabarakatuh. Puji syukur kehadirat Allah SWT 
@@ -149,10 +153,11 @@ const WelcomeSection = () => {
             <Typography 
               variant="body1"
               sx={{
-                fontSize: '1.1rem',
+                fontSize: { xs: '0.95rem', sm: '1rem', md: '1.1rem' },
                 lineHeight: 1.8,
                 color: '#555',
                 textAlign: 'justify',
+                padding: { xs: '0 16px', md: '0' },
               }}
             >
               Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor 

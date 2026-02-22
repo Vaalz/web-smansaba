@@ -56,7 +56,7 @@ const ExtracurricularSection = () => {
   return (
     <Box
       sx={{
-        padding: '80px 0',
+        padding: { xs: '60px 0', md: '80px 0' },
         backgroundColor: '#f8f9fa',
       }}
     >
@@ -64,13 +64,14 @@ const ExtracurricularSection = () => {
         <Typography 
           variant="h2"
           sx={{
-            fontSize: '2.5rem',
+            fontSize: { xs: '1.75rem', sm: '2rem', md: '2.5rem' },
             fontWeight: 700,
             textAlign: 'center',
-            marginBottom: '50px',
+            marginBottom: { xs: '40px', md: '50px' },
             color: '#333',
             position: 'relative',
             paddingBottom: '15px',
+            padding: { xs: '0 16px 15px', md: '0 0 15px' },
             '&::after': {
               content: '""',
               position: 'absolute',
