@@ -150,30 +150,14 @@ const PTNAcceptanceSection = () => {
                 borderRadius: '16px',
                 overflow: 'hidden',
                 position: 'relative',
-                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                cursor: 'pointer',
                 boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                 '&:hover': {
-                  transform: 'translateY(-12px) scale(1.02)',
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
-                  '& .student-photo': {
-                    transform: 'scale(1.1)',
-                  },
-                  '& .overlay': {
-                    opacity: 0.3,
-                  },
                   '& .university-badge': {
                     top: '16px',
                     left: '16px',
                     transform: 'translate(0, 0)',
                     textAlign: 'left',
                     textShadow: '3px 3px 8px rgba(0,0,0,0.5)',
-                  },
-                  '& .info-section': {
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    '& .MuiTypography-root': {
-                      color: '#fff',
-                    },
                   },
                 },
               }}
@@ -198,7 +182,6 @@ const PTNAcceptanceSection = () => {
                       : 'linear-gradient(135deg, #a8b5a0 0%, #8b9d83 100%)',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
                   }}
                 />
                 
@@ -213,7 +196,6 @@ const PTNAcceptanceSection = () => {
                     bottom: 0,
                     background: 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%)',
                     opacity: 0.5,
-                    transition: 'opacity 0.4s ease',
                   }}
                 />
 
@@ -285,7 +267,6 @@ const PTNAcceptanceSection = () => {
                   padding: '24px',
                   textAlign: 'center',
                   backgroundColor: '#fff',
-                  transition: 'all 0.4s ease',
                 }}
               >
                 <Typography
@@ -296,7 +277,6 @@ const PTNAcceptanceSection = () => {
                     color: '#2c3e50',
                     marginBottom: '8px',
                     minHeight: '28px',
-                    transition: 'color 0.4s ease',
                   }}
                 >
                   {student.name || '[Nama Siswa]'}
@@ -314,7 +294,6 @@ const PTNAcceptanceSection = () => {
                       width: '30px',
                       height: '2px',
                       backgroundColor: '#f39c12',
-                      transition: 'background-color 0.4s ease',
                     }}
                   />
                   <Typography
@@ -325,7 +304,6 @@ const PTNAcceptanceSection = () => {
                       fontWeight: 500,
                       textTransform: 'uppercase',
                       letterSpacing: '1px',
-                      transition: 'color 0.4s ease',
                     }}
                   >
                     Class {student.class}
@@ -335,7 +313,6 @@ const PTNAcceptanceSection = () => {
                       width: '30px',
                       height: '2px',
                       backgroundColor: '#f39c12',
-                      transition: 'background-color 0.4s ease',
                     }}
                   />
                 </Box>
