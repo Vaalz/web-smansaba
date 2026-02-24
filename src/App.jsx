@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import TentangPage from './pages/TentangPage';
 import GuruPage from './pages/GuruPage';
+import CoursePage from './pages/CoursePage';
 import PrestasiPage from './pages/PrestasiPage';
 import EkstrakurikulerPage from './pages/EkstrakurikulerPage';
 import DetailEkstrakurikulerPage from './pages/DetailEkstrakurikulerPage';
@@ -23,6 +24,7 @@ function App() {
           <Route path="/beranda" element={<LandingPage />} />
           <Route path="/tentang" element={<TentangPage />} />
           <Route path="/guru" element={<GuruPage />} />
+          <Route path="/course" element={<CoursePage />} />
           <Route path="/prestasi" element={<PrestasiPage />} />
           <Route path="/ekstrakurikuler" element={<EkstrakurikulerPage />} />
           <Route path="/ekstrakurikuler/detail-ekstrakurikuler/:id" element={<DetailEkstrakurikulerPage />} />

@@ -40,7 +40,7 @@ const GaleriPage = () => {
       id: 5,
       judul: 'Foto Galeri 5',
       foto: '',
-      kategori: 'BI CORNER',
+      kategori: 'UNIVERSITY CORNER',
     },
     {
       id: 6,
@@ -62,7 +62,7 @@ const GaleriPage = () => {
     },
   ];
 
-  const categories = ['ALL', 'SCHOOL', 'TEACHERS', 'STUDENTS', 'CEREMONY', 'BI CORNER'];
+  const categories = ['ALL', 'SCHOOL', 'TEACHERS', 'STUDENTS', 'CEREMONY', 'UNIVERSITY CORNER'];
 
   const filteredGaleri = selectedCategory === 'ALL' 
     ? galeriList 

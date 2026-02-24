@@ -16,8 +16,8 @@ const LandingPage = () => {
       <WelcomeSection />
       <ArticleSection />
       <ExtracurricularSection />
-      <PTNAcceptanceSection />
       <AchievementSection />
+      <PTNAcceptanceSection />
       <Footer />
     </Box>
   );

@@ -81,7 +81,7 @@ const ArticleSection = () => {
         </Typography>
         <Grid container spacing={4}>
           {articles.map((article) => (
-            <Grid item xs={12} sm={6} md={4} key={article.id}>
+            <Grid item xs={12} sm={6} md={6} key={article.id}>
               <Card
                 sx={{
                   height: '100%',
