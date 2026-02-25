@@ -387,7 +387,7 @@ const Footer = () => {
           >
             2026 © SMA Negeri 1 Bangsri, All Right Reserved. dikembangkan oleh:{' '}
             <Link
-              href="#"
+              href="https://www.instagram.com/valz.codes?igsh=bHVoZWN0YXdrbnk3"
               sx={{
                 color: '#34495e',
                 fontWeight: 600,
@@ -397,7 +397,7 @@ const Footer = () => {
                 },
               }}
             >
-              M. Reval Fahrizal Akbar
+              Muhammad Reval Fahrizal Akbar
             </Link>
           </Typography>
         </Box>
