@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -8,43 +9,49 @@ import {
   Chip,
   Grid,
   Button,
+  CircularProgress,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Person, CalendarToday } from '@mui/icons-material';
-
-// Dummy data untuk berita
-const articles = [
-  {
-    id: 1,
-    category: 'BERITA',
-    title: 'Judul Berita Terbaru dari SMA Negeri 1 Bangsri',
-    excerpt: 'Deskripsi singkat berita yang menjelaskan tentang kegiatan atau informasi penting seputar sekolah dan siswa. Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt.',
-    image: '/article1.jpg',
-    author: 'Nama Penulis',
-    date: 'Tanggal',
-  },
-  {
-    id: 2,
-    category: 'BERITA',
-    title: 'Judul Berita Terbaru dari SMA Negeri 1 Bangsri',
-    excerpt: 'Deskripsi singkat berita yang menjelaskan tentang kegiatan atau informasi penting seputar sekolah dan siswa. Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt.',
-    image: '/article2.jpg',
-    author: 'Nama Penulis',
-    date: 'Tanggal',
-  },
-  {
-    id: 3,
-    category: 'BERITA',
-    title: 'Judul Berita Terbaru dari SMA Negeri 1 Bangsri',
-    excerpt: 'Deskripsi singkat berita yang menjelaskan tentang kegiatan atau informasi penting seputar sekolah dan siswa. Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt.',
-    image: '/article3.jpg',
-    author: 'Nama Penulis',
-    date: 'Tanggal',
-  },
-];
+import { getBeritaList, getImageUrl } from '../services/api';
 
 const ArticleSection = () => {
   const navigate = useNavigate();
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        setLoading(true);
+        const response = await getBeritaList();
+        // Ambil 3 berita terbaru untuk ditampilkan dalam 1 baris
+        const latestArticles = (response.data.data || []).slice(0, 3);
+        setArticles(latestArticles);
+      } catch (error) {
+        console.error('Error fetching articles:', error);
+        setArticles([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, []);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('id-ID', { 
+      day: 'numeric', 
+      month: 'long', 
+      year: 'numeric' 
+    });
+  };
+
+  const truncateText = (text, maxLength) => {
+    if (!text) return '';
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  };
 
   return (
     <Box
@@ -79,152 +86,165 @@ const ArticleSection = () => {
         >
           Postingan Terbaru
         </Typography>
-        <Grid container spacing={4}>
-          {articles.map((article) => (
-            <Grid item xs={12} sm={6} md={6} key={article.id}>
-              <Card
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  borderRadius: '8px',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-8px)',
-                    boxShadow: '0 8px 16px rgba(0,0,0,0.15)',
-                  },
-                }}
-              >
-                <Box sx={{ position: 'relative' }}>
-                  <CardMedia
-                    image={article.image}
-                    title={article.title}
-                    sx={{
-                      height: 240,
-                      position: 'relative',
-                      backgroundColor: '#ddd',
-                      backgroundImage: article.image.startsWith('http') 
-                        ? `url(${article.image})` 
-                        : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    }}
-                  />
-                  <Chip 
-                    label={article.category}
-                    sx={{
-                      position: 'absolute',
-                      top: 15,
-                      left: 15,
-                      backgroundColor: '#e74c3c',
-                      color: '#ffffff',
-                      fontWeight: 600,
-                      fontSize: '12px',
-                      height: '28px',
-                    }}
-                  />
-                </Box>
-                <CardContent 
-                  sx={{ 
-                    flexGrow: 1, 
-                    display: 'flex', 
-                    flexDirection: 'column' 
+
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+            <CircularProgress />
+          </Box>
+        ) : articles.length === 0 ? (
+          <Typography sx={{ textAlign: 'center', py: 8, color: '#666' }}>
+            Belum ada berita
+          </Typography>
+        ) : (
+          <Grid container spacing={4} justifyContent="center" sx={{ maxWidth: '1049px', margin: '0 auto' }}>
+            {articles.map((article) => (
+              <Grid item xs={12} key={article.id} sx={{ display: 'flex' }}>
+                <Card
+                  onClick={() => navigate(`/berita/detail-berita/${article.slug || article.id}`)}
+                  sx={{
+                    width: '100%',
+                    height: '640px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    borderRadius: '12px',
+                    boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                    cursor: 'pointer',
+                    overflow: 'hidden',
+                    '&:hover': {
+                      transform: 'translateY(-8px)',
+                      boxShadow: '0 8px 16px rgba(0,0,0,0.15)',
+                    },
                   }}
                 >
-                  <Typography 
-                    variant="h3"
-                    sx={{
-                      fontSize: '1.25rem',
-                      fontWeight: 600,
-                      color: '#333',
-                      marginBottom: '12px',
-                      lineHeight: 1.4,
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
+                  <Box sx={{ position: 'relative', flexShrink: 0 }}>
+                    <CardMedia
+                      image={getImageUrl(article.foto)}
+                      title={article.judul}
+                      sx={{
+                        height: 350,
+                        width: '100%',
+                        backgroundColor: '#ddd',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundImage: article.foto 
+                          ? `url(${getImageUrl(article.foto)})` 
+                          : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      }}
+                    />
+                    <Chip 
+                      label={article.kategori || 'BERITA'}
+                      sx={{
+                        position: 'absolute',
+                        top: 15,
+                        left: 15,
+                        backgroundColor: '#e74c3c',
+                        color: '#ffffff',
+                        fontWeight: 600,
+                        fontSize: '12px',
+                        height: '28px',
+                      }}
+                    />
+                  </Box>
+                  <CardContent 
+                    sx={{ 
+                      display: 'flex', 
+                      flexDirection: 'column',
+                      padding: '24px',
+                      flexGrow: 1,
+                      '&:last-child': {
+                        paddingBottom: '24px',
+                      },
                     }}
                   >
-                    {article.title}
-                  </Typography>
-                  <Typography 
-                    variant="body2"
-                    sx={{
-                      fontSize: '0.95rem',
-                      color: '#666',
-                      marginBottom: '16px',
-                      lineHeight: 1.6,
-                      display: '-webkit-box',
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    {article.excerpt}
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      marginTop: 'auto',
-                      paddingTop: '12px',
-                      borderTop: '1px solid #eee',
-                    }}
-                  >
+                    <Box sx={{ flex: '1 1 auto' }}>
+                      <Typography 
+                        variant="h6"
+                        sx={{
+                          fontSize: '1.3rem',
+                          fontWeight: 700,
+                          color: '#333',
+                          marginBottom: '12px',
+                          lineHeight: 1.4,
+                          height: '72px',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
+                        {article.judul}
+                      </Typography>
+                      <Typography 
+                        variant="body2"
+                        sx={{
+                          fontSize: '0.95rem',
+                          color: '#666',
+                          marginBottom: '16px',
+                          lineHeight: 1.7,
+                          display: '-webkit-box',
+                          WebkitLineClamp: 3,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
+                        {truncateText(article.konten, 250)}
+                      </Typography>
+                    </Box>
                     <Box
                       sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '8px',
+                        justifyContent: 'space-between',
+                        paddingTop: '16px',
+                        marginTop: 'auto',
+                        borderTop: '1px solid #eee',
                       }}
                     >
-                      <Person sx={{ fontSize: 18, color: '#999' }} />
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                        }}
+                      >
+                        <Person sx={{ fontSize: 18, color: '#999', flexShrink: 0 }} />
+                        <Typography 
+                          variant="body2"
+                          sx={{
+                            fontSize: '0.9rem',
+                            color: '#555',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                          }}
+                        >
+                          {article.penulis}
+                        </Typography>
+                      </Box>
                       <Typography 
                         variant="body2"
                         sx={{
-                          fontSize: '0.85rem',
-                          color: '#555',
+                          fontSize: '0.9rem',
+                          color: '#999',
                           display: 'flex',
                           alignItems: 'center',
                           gap: '4px',
+                          flexShrink: 0,
                         }}
                       >
-                        {article.author}
-                        <Chip 
-                          label="guru" 
-                          size="small"
-                          sx={{
-                            backgroundColor: '#2c3e50',
-                            color: '#ffffff',
-                            height: '20px',
-                            fontSize: '11px',
-                            fontWeight: 600,
-                            '& .MuiChip-label': {
-                              padding: '0 8px',
-                            },
-                          }}
-                        />
+                        <CalendarToday sx={{ fontSize: 16 }} />
+                        {formatDate(article.tanggal)}
                       </Typography>
                     </Box>
-                    <Typography 
-                      variant="body2"
-                      sx={{
-                        fontSize: '0.85rem',
-                        color: '#999',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                      }}
-                    >
-                      <CalendarToday sx={{ fontSize: 16 }} />
-                      {article.date}
-                    </Typography>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        )}
         
         <Box
           sx={{

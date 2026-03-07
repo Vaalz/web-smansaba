@@ -1,98 +1,30 @@
-import { Box, Container, Typography, Card, CardContent, Grid, Avatar } from '@mui/material';
+import { Box, Container, Typography, Card, CardContent, Grid, Avatar, CircularProgress } from '@mui/material';
+import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import smansabaImage from '../assets/image/smansaba.jpg';
 import { Person } from '@mui/icons-material';
-
-// Dummy data untuk guru
-const guruList = [
-  {
-    id: 1,
-    nama: 'Nama Guru',
-    jabatan: 'Kepala Sekolah',
-    mapel: '',
-    foto: '',
-  },
-  {
-    id: 2,
-    nama: 'Nama Guru',
-    jabatan: 'Guru',
-    mapel: 'Matematika',
-    foto: '',
-  },
-  {
-    id: 3,
-    nama: 'Nama Guru',
-    jabatan: 'Guru',
-    mapel: 'Bahasa Indonesia',
-    foto: '',
-  },
-  {
-    id: 4,
-    nama: 'Nama Guru',
-    jabatan: 'Guru',
-    mapel: 'Bahasa Inggris',
-    foto: '',
-  },
-  {
-    id: 5,
-    nama: 'Nama Guru',
-    jabatan: 'Guru',
-    mapel: 'Fisika',
-    foto: '',
-  },
-  {
-    id: 6,
-    nama: 'Nama Guru',
-    jabatan: 'Guru',
-    mapel: 'Kimia',
-    foto: '',
-  },
-  {
-    id: 7,
-    nama: 'Nama Guru',
-    jabatan: 'Guru',
-    mapel: 'Biologi',
-    foto: '',
-  },
-  {
-    id: 8,
-    nama: 'Nama Guru',
-    jabatan: 'Guru',
-    mapel: 'Sejarah',
-    foto: '',
-  },
-  {
-    id: 9,
-    nama: 'Nama Guru',
-    jabatan: 'Guru',
-    mapel: 'Geografi',
-    foto: '',
-  },
-  {
-    id: 10,
-    nama: 'Nama Guru',
-    jabatan: 'Guru',
-    mapel: 'Ekonomi',
-    foto: '',
-  },
-  {
-    id: 11,
-    nama: 'Nama Guru',
-    jabatan: 'Guru',
-    mapel: 'Sosiologi',
-    foto: '',
-  },
-  {
-    id: 12,
-    nama: 'Nama Guru',
-    jabatan: 'Guru',
-    mapel: 'Seni Budaya',
-    foto: '',
-  },
-];
+import { getGuruList, getImageUrl } from '../services/api';
 
 const GuruPage = () => {
+  const [guruList, setGuruList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchGuru();
+  }, []);
+
+  const fetchGuru = async () => {
+    try {
+      const response = await getGuruList();
+      setGuruList(response.data.data || []);
+    } catch (error) {
+      console.error('Error fetching guru:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Box>
       <Navbar />
@@ -155,16 +87,27 @@ const GuruPage = () => {
             Daftar Guru
           </Typography>
 
+          {loading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+              <CircularProgress />
+            </Box>
+          ) : guruList.length === 0 ? (
+            <Typography sx={{ textAlign: 'center', py: 8, color: '#666' }}>
+              Belum ada data guru
+            </Typography>
+          ) : (
           <Grid container spacing={{ xs: 2, sm: 3, md: 4 }} justifyContent="center">
             {guruList.map((guru) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={guru.id} sx={{ display: 'flex' }}>
                 <Card
                   sx={{
                     height: '100%',
+                    minHeight: { xs: '320px', sm: '340px' },
                     width: '100%',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
+                    justifyContent: 'center',
                     padding: { xs: '24px 16px', md: '32px 20px' },
                     borderRadius: '12px',
                     boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
@@ -177,7 +120,7 @@ const GuruPage = () => {
                 >
                   {/* Foto Guru */}
                   <Avatar
-                    src={guru.foto}
+                    src={getImageUrl(guru.foto)}
                     sx={{
                       width: { xs: 120, md: 140 },
                       height: { xs: 120, md: 140 },
@@ -209,6 +152,12 @@ const GuruPage = () => {
                         color: '#333',
                         marginBottom: '8px',
                         lineHeight: 1.3,
+                        minHeight: '52px',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
                       }}
                     >
                       {guru.nama}
@@ -222,29 +171,40 @@ const GuruPage = () => {
                         color: '#666',
                         fontWeight: 600,
                         marginBottom: '4px',
+                        minHeight: '24px',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 1,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
                       }}
                     >
                       {guru.jabatan}
                     </Typography>
 
                     {/* Mapel */}
-                    {guru.mapel && (
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          fontSize: { xs: '0.85rem', md: '0.9rem' },
-                          color: '#888',
-                          fontStyle: 'italic',
-                        }}
-                      >
-                        {guru.mapel}
-                      </Typography>
-                    )}
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontSize: { xs: '0.85rem', md: '0.9rem' },
+                        color: '#888',
+                        fontStyle: 'italic',
+                        minHeight: '22px',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 1,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}
+                    >
+                      {guru.mapel || '-'}
+                    </Typography>
                   </CardContent>
                 </Card>
               </Grid>
             ))}
           </Grid>
+          )}
         </Container>
       </Box>
 

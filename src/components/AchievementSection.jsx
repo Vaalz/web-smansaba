@@ -1,41 +1,40 @@
-import { Box, Container, Typography, Card, CardContent, Button, Chip } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Box, Container, Typography, Card, CardContent, Button, CircularProgress } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-
-// Dummy data untuk prestasi - 3 Terbaik
-const achievements = [
-  {
-    id: 1,
-    rank: 'JUARA 1',
-    title: 'Juara 1',
-    category: 'Kategori Lomba',
-    description: 'Deskripsi lomba lengkap',
-    studentName: 'Nama Siswa',
-    year: '2025',
-    medalColor: '#FFD700', // Gold
-  },
-  {
-    id: 2,
-    rank: 'JUARA 2',
-    title: 'Juara 2',
-    category: 'Kategori Lomba',
-    description: 'Deskripsi lomba lengkap',
-    studentName: 'Nama Siswa',
-    year: '2025',
-    medalColor: '#C0C0C0', // Silver
-  },
-  {
-    id: 3,
-    rank: 'JUARA 3',
-    title: 'Juara 3',
-    category: 'Kategori Lomba',
-    description: 'Deskripsi lomba lengkap',
-    studentName: 'Nama Siswa',
-    year: '2025',
-    medalColor: '#CD7F32', // Bronze
-  },
-];
+import { getPrestasiList } from '../services/api';
 
 const AchievementSection = () => {
+  const navigate = useNavigate();
+  const [achievements, setAchievements] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchAchievements();
+  }, []);
+
+  const fetchAchievements = async () => {
+    try {
+      setLoading(true);
+      const response = await getPrestasiList();
+      // Ambil 3 prestasi terbaru
+      const top3 = response.data.data.slice(0, 3);
+      
+      // Map data dengan medal color
+      const achievementsWithMedal = top3.map((prestasi, index) => ({
+        ...prestasi,
+        rank: index === 0 ? 'JUARA 1' : index === 1 ? 'JUARA 2' : 'JUARA 3',
+        medalColor: index === 0 ? '#FFD700' : index === 1 ? '#C0C0C0' : '#CD7F32',
+      }));
+      
+      setAchievements(achievementsWithMedal);
+    } catch (error) {
+      console.error('Error fetching achievements:', error);
+      setAchievements([]);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Box
       sx={{
@@ -74,165 +73,178 @@ const AchievementSection = () => {
 
       {/* Achievement Cards Container */}
       <Container maxWidth="lg">
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'stretch',
-            gap: { xs: 2, md: 3 },
-            flexWrap: 'wrap',
-            padding: { xs: '0 16px', md: '0' },
-          }}
-        >
-          {achievements.map((achievement) => (
-            <Card
-              key={achievement.id}
-              sx={{
-                minWidth: { xs: '280px', sm: '320px' },
-                width: { xs: '100%', sm: '320px' },
-                maxWidth: { xs: '320px', sm: 'none' },
-                backgroundColor: 'transparent',
-                border: '2px solid rgba(255,255,255,0.2)',
-                borderRadius: '16px',
-                transition: 'all 0.3s ease',
-                cursor: 'pointer',
-                '&:hover': {
-                  transform: 'translateY(-8px)',
-                  borderColor: 'rgba(255,255,255,0.4)',
-                  boxShadow: '0 12px 32px rgba(0,0,0,0.3)',
-                  '& .medal-icon': {
-                    transform: 'scale(1.15) rotate(10deg)',
-                  },
-                },
-              }}
-            >
-              <CardContent
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+            <CircularProgress sx={{ color: '#fff' }} />
+          </Box>
+        ) : achievements.length === 0 ? (
+          <Typography sx={{ textAlign: 'center', py: 8, color: '#b8c5d6' }}>
+            Belum ada data prestasi
+          </Typography>
+        ) : (
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'stretch',
+              gap: { xs: 2, md: 3 },
+              flexWrap: 'wrap',
+              padding: { xs: '0 16px', md: '0' },
+            }}
+          >
+            {achievements.map((achievement) => (
+              <Card
+                key={achievement.id}
+                onClick={() => navigate(`/prestasi/detail-prestasi/${achievement.id}`)}
                 sx={{
-                  padding: '32px 24px',
-                  color: '#fff',
+                  minWidth: { xs: '280px', sm: '320px' },
+                  minHeight: { xs: '340px', sm: '360px' },
+                  width: { xs: '100%', sm: '320px' },
+                  maxWidth: { xs: '320px', sm: 'none' },
+                  backgroundColor: 'transparent',
+                  border: '2px solid rgba(255,255,255,0.2)',
+                  borderRadius: '16px',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  '&:hover': {
+                    transform: 'translateY(-8px)',
+                    borderColor: 'rgba(255,255,255,0.4)',
+                    boxShadow: '0 12px 32px rgba(0,0,0,0.3)',
+                    '& .medal-icon': {
+                      transform: 'scale(1.15) rotate(10deg)',
+                    },
+                  },
                 }}
               >
-                {/* Medal Icon with Rank */}
-                <Box
+                <CardContent
                   sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBottom: '24px',
+                    padding: '32px 24px',
+                    color: '#fff',
                   }}
                 >
+                  {/* Medal Icon with Rank */}
                   <Box
                     sx={{
-                      position: 'relative',
-                      display: 'inline-flex',
-                      alignItems: 'center',
+                      display: 'flex',
                       justifyContent: 'center',
+                      alignItems: 'center',
+                      marginBottom: '24px',
                     }}
                   >
                     <Box
                       sx={{
-                        width: '70px',
-                        height: '70px',
-                        borderRadius: '50%',
-                        backgroundColor: achievement.medalColor,
-                        display: 'flex',
+                        position: 'relative',
+                        display: 'inline-flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        boxShadow: `0 4px 16px ${achievement.medalColor}40`,
                       }}
                     >
-                      <EmojiEventsIcon
-                        className="medal-icon"
+                      <Box
                         sx={{
-                          fontSize: '2.5rem',
-                          color: '#1a2332',
-                          transition: 'transform 0.3s ease',
+                          width: '70px',
+                          height: '70px',
+                          borderRadius: '50%',
+                          backgroundColor: achievement.medalColor,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: `0 4px 16px ${achievement.medalColor}40`,
                         }}
-                      />
+                      >
+                        <EmojiEventsIcon
+                          className="medal-icon"
+                          sx={{
+                            fontSize: '2.5rem',
+                            color: '#1a2332',
+                            transition: 'transform 0.3s ease',
+                          }}
+                        />
+                      </Box>
                     </Box>
                   </Box>
-                </Box>
 
-                {/* Rank Badge */}
-                <Typography
-                  variant="h5"
-                  sx={{
-                    fontSize: '1.3rem',
-                    fontWeight: 700,
-                    textAlign: 'center',
-                    marginBottom: '16px',
-                    color: '#fff',
-                  }}
-                >
-                  {achievement.rank}
-                </Typography>
+                  {/* Rank Badge */}
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      fontSize: '1.3rem',
+                      fontWeight: 700,
+                      textAlign: 'center',
+                      marginBottom: '16px',
+                      color: '#fff',
+                      minHeight: '40px',
+                    }}
+                  >
+                    {achievement.rank}
+                  </Typography>
 
-                {/* Title */}
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontSize: '1.1rem',
-                    fontWeight: 600,
-                    marginBottom: '8px',
-                    color: '#fff',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  {achievement.title}
-                </Typography>
+                  {/* Title */}
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontSize: '1.1rem',
+                      fontWeight: 600,
+                      marginBottom: '8px',
+                      color: '#fff',
+                      textTransform: 'uppercase',
+                      minHeight: '66px',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {achievement.judul}
+                  </Typography>
 
-                {/* Category */}
-                <Typography
-                  variant="body1"
-                  sx={{
-                    fontSize: '1rem',
-                    marginBottom: '12px',
-                    color: '#e8eef5',
-                    fontWeight: 500,
-                  }}
-                >
-                  {achievement.category}
-                </Typography>
+                  {/* Category */}
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontSize: '1rem',
+                      marginBottom: '12px',
+                      color: '#e8eef5',
+                      fontWeight: 500,
+                      minHeight: '28px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {achievement.kategori} • {achievement.tingkat}
+                  </Typography>
 
-                {/* Description */}
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontSize: '0.95rem',
-                    marginBottom: '16px',
-                    color: '#b8c5d6',
-                    lineHeight: 1.6,
-                  }}
-                >
-                  {achievement.description}
-                </Typography>
+                  {/* Divider */}
+                  <Box
+                    sx={{
+                      width: '100%',
+                      height: '1px',
+                      backgroundColor: 'rgba(255,255,255,0.2)',
+                      marginY: '16px',
+                    }}
+                  />
 
-                {/* Divider */}
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '1px',
-                    backgroundColor: 'rgba(255,255,255,0.2)',
-                    marginY: '16px',
-                  }}
-                />
-
-                {/* Student Name */}
-                <Typography
-                  variant="body1"
-                  sx={{
-                    fontSize: '1rem',
-                    fontWeight: 600,
-                    color: '#fff',
-                    textAlign: 'center',
-                  }}
-                >
-                  {achievement.studentName}
-                </Typography>
-              </CardContent>
-            </Card>
-          ))}
-        </Box>
+                  {/* Year */}
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontSize: '1rem',
+                      fontWeight: 600,
+                      color: '#fff',
+                      textAlign: 'center',
+                    }}
+                  >
+                    Tahun {achievement.tahun}
+                  </Typography>
+                </CardContent>
+              </Card>
+            ))}
+          </Box>
+        )}
       </Container>
 
       {/* Button Lihat Prestasi Lainnya */}
@@ -245,6 +257,7 @@ const AchievementSection = () => {
       >
         <Button
           variant="outlined"
+          onClick={() => navigate('/prestasi')}
           sx={{
             color: '#fff',
             borderColor: 'rgba(255,255,255,0.3)',

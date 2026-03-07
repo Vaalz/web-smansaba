@@ -1,96 +1,36 @@
-import { Box, Container, Typography, Card, CardMedia, CardContent, Grid } from '@mui/material';
+import { Box, Container, Typography, Card, CardMedia, CardContent, Grid, CircularProgress } from '@mui/material';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import smansabaImage from '../assets/image/smansaba.jpg';
 import { Person, CalendarToday } from '@mui/icons-material';
-
-// Dummy data untuk berita
-const beritaList = [
-  {
-    id: 1,
-    judul: 'Judul Berita 1',
-    slug: 'judul-berita-1',
-    foto: '',
-    penulis: 'Nama Penulis',
-    tanggal: '22 Februari 2026',
-  },
-  {
-    id: 2,
-    judul: 'Judul Berita 2',
-    slug: 'judul-berita-2',
-    foto: '',
-    penulis: 'Nama Penulis',
-    tanggal: '21 Februari 2026',
-  },
-  {
-    id: 3,
-    judul: 'Judul Berita 3',
-    slug: 'judul-berita-3',
-    foto: '',
-    penulis: 'Nama Penulis',
-    tanggal: '20 Februari 2026',
-  },
-  {
-    id: 4,
-    judul: 'Judul Berita 4',
-    slug: 'judul-berita-4',
-    foto: '',
-    penulis: 'Nama Penulis',
-    tanggal: '19 Februari 2026',
-  },
-  {
-    id: 5,
-    judul: 'Judul Berita 5',
-    slug: 'judul-berita-5',
-    foto: '',
-    penulis: 'Nama Penulis',
-    tanggal: '18 Februari 2026',
-  },
-  {
-    id: 6,
-    judul: 'Judul Berita 6',
-    slug: 'judul-berita-6',
-    foto: '',
-    penulis: 'Nama Penulis',
-    tanggal: '17 Februari 2026',
-  },
-  {
-    id: 7,
-    judul: 'Judul Berita 7',
-    slug: 'judul-berita-7',
-    foto: '',
-    penulis: 'Nama Penulis',
-    tanggal: '16 Februari 2026',
-  },
-  {
-    id: 8,
-    judul: 'Judul Berita 8',
-    slug: 'judul-berita-8',
-    foto: '',
-    penulis: 'Nama Penulis',
-    tanggal: '15 Februari 2026',
-  },
-  {
-    id: 9,
-    judul: 'Judul Berita 9',
-    slug: 'judul-berita-9',
-    foto: '',
-    penulis: 'Nama Penulis',
-    tanggal: '14 Februari 2026',
-  },
-  {
-    id: 10,
-    judul: 'Judul Berita 10',
-    slug: 'judul-berita-10',
-    foto: '',
-    penulis: 'Nama Penulis',
-    tanggal: '13 Februari 2026',
-  },
-];
+import { getBeritaList, getImageUrl } from '../services/api';
 
 const BeritaPage = () => {
   const navigate = useNavigate();
+  const [beritaList, setBeritaList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchBerita();
+  }, []);
+
+  const fetchBerita = async () => {
+    try {
+      const response = await getBeritaList();
+      setBeritaList(response.data.data || []);
+    } catch (error) {
+      console.error('Error fetching berita:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('id-ID', options);
+  };
 
   return (
     <Box>
@@ -154,21 +94,31 @@ const BeritaPage = () => {
             Berita Terbaru
           </Typography>
 
-          <Grid 
-            container 
-            spacing={{ xs: 3, sm: 3, md: 4 }}
-            justifyContent="center"
-            sx={{
-              maxWidth: '1400px',
-              margin: '0 auto',
-            }}
-          >
-            {beritaList.map((berita) => (
-              <Grid item xs={12} sm={6} md={4} key={berita.id}>
+          {loading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+              <CircularProgress />
+            </Box>
+          ) : beritaList.length === 0 ? (
+            <Typography sx={{ textAlign: 'center', py: 8, color: '#666' }}>
+              Belum ada berita
+            </Typography>
+          ) : (
+            <Grid 
+              container 
+              spacing={{ xs: 3, sm: 3, md: 4 }}
+              justifyContent="center"
+              sx={{
+                maxWidth: '1400px',
+                margin: '0 auto',
+              }}
+            >
+              {beritaList.map((berita) => (
+              <Grid item xs={12} sm={6} md={4} key={berita.id} sx={{ display: 'flex' }}>
                 <Card
                   onClick={() => navigate(`/detail-berita/${berita.slug}`)}
                   sx={{
                     height: '100%',
+                    minHeight: { xs: '440px', sm: '460px' },
                     display: 'flex',
                     flexDirection: 'column',
                     borderRadius: '12px',
@@ -197,7 +147,7 @@ const BeritaPage = () => {
                     {berita.foto ? (
                       <Box
                         component="img"
-                        src={berita.foto}
+                        src={getImageUrl(berita.foto)}
                         alt={berita.judul}
                         sx={{
                           width: '100%',
@@ -216,9 +166,10 @@ const BeritaPage = () => {
                   <CardContent
                     sx={{
                       padding: { xs: '20px', md: '24px' },
-                      flexGrow: 1,
+                      height: { xs: '220px', sm: '240px' },
                       display: 'flex',
                       flexDirection: 'column',
+                      justifyContent: 'space-between',
                     }}
                   >
                     {/* Judul */}
@@ -230,6 +181,7 @@ const BeritaPage = () => {
                         color: '#333',
                         marginBottom: '16px',
                         lineHeight: 1.4,
+                        minHeight: { xs: '60px', md: '68px' },
                         display: '-webkit-box',
                         WebkitLineClamp: 2,
                         WebkitBoxOrient: 'vertical',
@@ -241,22 +193,34 @@ const BeritaPage = () => {
                     </Typography>
 
                     {/* Meta Info */}
-                    <Box sx={{ marginTop: 'auto' }}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        paddingTop: '12px',
+                        borderTop: '1px solid #eee',
+                        minHeight: '50px',
+                      }}
+                    >
                       {/* Penulis */}
                       <Box
                         sx={{
                           display: 'flex',
                           alignItems: 'center',
-                          gap: 1,
-                          marginBottom: '8px',
+                          gap: '8px',
+                          maxWidth: '50%',
                         }}
                       >
-                        <Person sx={{ fontSize: 18, color: '#666' }} />
+                        <Person sx={{ fontSize: 18, color: '#999', flexShrink: 0 }} />
                         <Typography
                           variant="body2"
                           sx={{
-                            fontSize: '0.9rem',
-                            color: '#666',
+                            fontSize: '0.85rem',
+                            color: '#555',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
                           }}
                         >
                           {berita.penulis}
@@ -264,30 +228,27 @@ const BeritaPage = () => {
                       </Box>
 
                       {/* Tanggal */}
-                      <Box
+                      <Typography
+                        variant="body2"
                         sx={{
+                          fontSize: '0.85rem',
+                          color: '#999',
                           display: 'flex',
                           alignItems: 'center',
-                          gap: 1,
+                          gap: '4px',
+                          flexShrink: 0,
                         }}
                       >
-                        <CalendarToday sx={{ fontSize: 18, color: '#666' }} />
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            fontSize: '0.9rem',
-                            color: '#666',
-                          }}
-                        >
-                          {berita.tanggal}
-                        </Typography>
-                      </Box>
+                        <CalendarToday sx={{ fontSize: 16 }} />
+                        {formatDate(berita.tanggal)}
+                      </Typography>
                     </Box>
                   </CardContent>
                 </Card>
               </Grid>
             ))}
           </Grid>
+          )}
         </Container>
       </Box>
 

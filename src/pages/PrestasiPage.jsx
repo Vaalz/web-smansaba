@@ -1,84 +1,30 @@
-import { Box, Container, Typography, Card, CardContent, Grid } from '@mui/material';
+import { Box, Container, Typography, Card, CardContent, Grid, CircularProgress } from '@mui/material';
+import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import smansabaImage from '../assets/image/smansaba.jpg';
 import { EmojiEvents } from '@mui/icons-material';
-
-// Dummy data untuk prestasi
-const prestasiList = [
-  {
-    id: 1,
-    judul: 'Judul Prestasi',
-    tingkat: 'Nasional',
-    tahun: '2024',
-    kategori: 'Akademik',
-  },
-  {
-    id: 2,
-    judul: 'Judul Prestasi',
-    tingkat: 'Provinsi',
-    tahun: '2024',
-    kategori: 'Olahraga',
-  },
-  {
-    id: 3,
-    judul: 'Judul Prestasi',
-    tingkat: 'Kabupaten',
-    tahun: '2024',
-    kategori: 'Seni',
-  },
-  {
-    id: 4,
-    judul: 'Judul Prestasi',
-    tingkat: 'Nasional',
-    tahun: '2023',
-    kategori: 'Akademik',
-  },
-  {
-    id: 5,
-    judul: 'Judul Prestasi',
-    tingkat: 'Provinsi',
-    tahun: '2023',
-    kategori: 'Olahraga',
-  },
-  {
-    id: 6,
-    judul: 'Judul Prestasi',
-    tingkat: 'Kabupaten',
-    tahun: '2023',
-    kategori: 'Seni',
-  },
-  {
-    id: 7,
-    judul: 'Judul Prestasi',
-    tingkat: 'Nasional',
-    tahun: '2023',
-    kategori: 'Akademik',
-  },
-  {
-    id: 8,
-    judul: 'Judul Prestasi',
-    tingkat: 'Provinsi',
-    tahun: '2023',
-    kategori: 'Olahraga',
-  },
-  {
-    id: 9,
-    judul: 'Judul Prestasi',
-    tingkat: 'Kabupaten',
-    tahun: '2023',
-    kategori: 'Seni',
-  },
-  {
-    id: 10,
-    judul: 'Judul Prestasi',
-    tingkat: 'Nasional',
-    tahun: '2023',
-    kategori: 'Akademik',
-  },
-];
+import { getPrestasiList } from '../services/api';
 
 const PrestasiPage = () => {
+  const [prestasiList, setPrestasiList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPrestasi();
+  }, []);
+
+  const fetchPrestasi = async () => {
+    try {
+      const response = await getPrestasiList();
+      setPrestasiList(response.data.data || []);
+    } catch (error) {
+      console.error('Error fetching prestasi:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Function to get color based on tingkat
   const getTingkatColor = (tingkat) => {
     switch (tingkat.toLowerCase()) {
@@ -155,12 +101,22 @@ const PrestasiPage = () => {
             Daftar Prestasi
           </Typography>
 
+          {loading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+              <CircularProgress />
+            </Box>
+          ) : prestasiList.length === 0 ? (
+            <Typography sx={{ textAlign: 'center', py: 8, color: '#666' }}>
+              Belum ada data prestasi
+            </Typography>
+          ) : (
           <Grid container spacing={{ xs: 2, sm: 3, md: 4 }} justifyContent="center">
             {prestasiList.map((prestasi) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={prestasi.id}>
                 <Card
                   sx={{
                     height: '100%',
+                    minHeight: { xs: '360px', sm: '380px' },
                     display: 'flex',
                     flexDirection: 'column',
                     borderRadius: '12px',
@@ -235,6 +191,12 @@ const PrestasiPage = () => {
                         color: '#333',
                         marginBottom: '12px',
                         lineHeight: 1.4,
+                        minHeight: { xs: '60px', md: '68px' },
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
                       }}
                     >
                       {prestasi.judul}
@@ -247,6 +209,12 @@ const PrestasiPage = () => {
                         fontSize: { xs: '0.9rem', md: '0.95rem' },
                         color: '#666',
                         marginBottom: '8px',
+                        minHeight: '24px',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 1,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
                       }}
                     >
                       {prestasi.kategori}
@@ -268,6 +236,7 @@ const PrestasiPage = () => {
               </Grid>
             ))}
           </Grid>
+          )}
         </Container>
       </Box>
 

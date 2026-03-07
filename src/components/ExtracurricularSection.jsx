@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -5,56 +6,54 @@ import {
   Card,
   CardContent,
   Button,
+  CircularProgress,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { Speed } from '@mui/icons-material';
-
-// Dummy data untuk ekstrakurikuler
-const extracurriculars = [
-  {
-    id: 1,
-    name: 'Ekstrakurikuler',
-    logo: '/ekskul-paskibra.png',
-  },
-  {
-    id: 2,
-    name: 'Ekstrakurikuler',
-    logo: '/ekskul-pramuka.png',
-  },
-  {
-    id: 3,
-    name: 'Ekstrakurikuler',
-    logo: '/ekskul-pmr.png',
-  },
-  {
-    id: 4,
-    name: 'Ekstrakurikuler',
-    logo: '/ekskul-futsal.png',
-  },
-  {
-    id: 5,
-    name: 'Ekstrakurikuler',
-    logo: '/ekskul-basket.png',
-  },
-  {
-    id: 6,
-    name: 'Ekstrakurikuler',
-    logo: '/ekskul-voli.png',
-  },
-  {
-    id: 7,
-    name: 'Ekstrakurikuler',
-    logo: '/ekskul-badminton.png',
-  },
-  {
-    id: 8,
-    name: 'Ekstrakurikuler',
-    logo: '/ekskul-musik.png',
-  },
-];
+import { 
+  Sports, 
+  MusicNote, 
+  Palette, 
+  Science, 
+  Language,
+  EmojiEvents,
+} from '@mui/icons-material';
+import { getEkstrakurikulerList } from '../services/api';
 
 const ExtracurricularSection = () => {
   const navigate = useNavigate();
+  const [extracurriculars, setExtracurriculars] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchExtracurriculars = async () => {
+      try {
+        setLoading(true);
+        const response = await getEkstrakurikulerList();
+        // Ambil hanya 6 ekstrakurikuler untuk landing page (lebih cepat)
+        const limitedData = (response.data.data || []).slice(0, 6);
+        setExtracurriculars(limitedData);
+      } catch (error) {
+        console.error('Error fetching extracurriculars:', error);
+        setExtracurriculars([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchExtracurriculars();
+  }, []);
+
+  const getIcon = (iconName) => {
+    const icons = {
+      Sports: Sports,
+      MusicNote: MusicNote,
+      Palette: Palette,
+      Science: Science,
+      Language: Language,
+      EmojiEvents: EmojiEvents,
+    };
+    return icons[iconName] || Sports;
+  };
 
   return (
     <Box
@@ -90,102 +89,131 @@ const ExtracurricularSection = () => {
           Ekstrakurikuler
         </Typography>
         
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 3,
-            overflowX: 'auto',
-            overflowY: 'hidden',
-            paddingBottom: '20px',
-            '&::-webkit-scrollbar': {
-              height: '8px',
-            },
-            '&::-webkit-scrollbar-track': {
-              backgroundColor: '#f1f1f1',
-              borderRadius: '10px',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              backgroundColor: '#888',
-              borderRadius: '10px',
-              '&:hover': {
-                backgroundColor: '#555',
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+            <CircularProgress />
+          </Box>
+        ) : extracurriculars.length === 0 ? (
+          <Typography sx={{ textAlign: 'center', py: 8, color: '#666' }}>
+            Belum ada data ekstrakurikuler
+          </Typography>
+        ) : (
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 3,
+              overflowX: 'auto',
+              overflowY: 'hidden',
+              paddingBottom: '20px',
+              '&::-webkit-scrollbar': {
+                height: '8px',
               },
-            },
-          }}
-        >
-          {extracurriculars.map((ekskul) => (
-            <Card
-              key={ekskul.id}
-              sx={{
-                minWidth: '220px',
-                maxWidth: '220px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                borderRadius: '12px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                padding: '24px',
-              }}
-            >
-                <Box
+              '&::-webkit-scrollbar-track': {
+                backgroundColor: '#f1f1f1',
+                borderRadius: '10px',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                backgroundColor: '#888',
+                borderRadius: '10px',
+                '&:hover': {
+                  backgroundColor: '#555',
+                },
+              },
+            }}
+          >
+            {extracurriculars.map((ekskul) => {
+              const IconComponent = getIcon(ekskul.icon);
+              
+              return (
+                <Card
+                  key={ekskul.id}
+                  onClick={() => navigate(`/ekstrakurikuler/detail-ekstrakurikuler/${ekskul.id}`)}
                   sx={{
-                    width: '120px',
-                    height: '120px',
-                    borderRadius: '50%',
-                    backgroundColor: '#e0e0e0',
-                    backgroundImage: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    minWidth: '220px',
+                    maxWidth: '220px',
+                    minHeight: '280px',
                     display: 'flex',
+                    flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginBottom: '20px',
-                    position: 'relative',
-                    overflow: 'hidden',
+                    borderRadius: '12px',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                    padding: '24px',
+                    cursor: 'pointer',
+                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                    '&:hover': {
+                      transform: 'translateY(-4px)',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                    },
                   }}
                 >
                   <Box
-                    component="img"
-                    src={ekskul.logo}
-                    alt={ekskul.name}
                     sx={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                    }}
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                    }}
-                  />
-                  <Speed 
-                    sx={{
-                      fontSize: '64px',
-                      color: '#ffffff',
-                      opacity: 0.5,
-                      position: 'absolute',
-                    }}
-                  />
-                </Box>
-                
-                <CardContent 
-                  sx={{ 
-                    textAlign: 'center',
-                    padding: 0,
-                    width: '100%',
-                  }}
-                >
-                  <Typography 
-                    variant="h4"
-                    sx={{
-                      fontSize: '1.25rem',
-                      fontWeight: 600,
-                      color: '#333',
+                      width: '120px',
+                      height: '120px',
+                      borderRadius: '50%',
+                      backgroundColor: '#e0e0e0',
+                      backgroundImage: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: '20px',
+                      position: 'relative',
+                      overflow: 'hidden',
                     }}
                   >
-                    {ekskul.name}
-                  </Typography>
-                </CardContent>
-              </Card>
-          ))}
-        </Box>
+                    <IconComponent 
+                      sx={{
+                        fontSize: '64px',
+                        color: '#ffffff',
+                      }}
+                    />
+                  </Box>
+                  
+                  <CardContent 
+                    sx={{ 
+                      textAlign: 'center',
+                      padding: 0,
+                      width: '100%',
+                    }}
+                  >
+                    <Typography 
+                      variant="h4"
+                      sx={{
+                        fontSize: '1.1rem',
+                        fontWeight: 600,
+                        color: '#333',
+                        marginBottom: '8px',
+                        minHeight: '56px',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {ekskul.nama}
+                    </Typography>
+                    <Typography 
+                      variant="body2"
+                      sx={{
+                        fontSize: '0.85rem',
+                        color: '#666',
+                        minHeight: '20px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {ekskul.kategori}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </Box>
+        )}
 
         <Box
           sx={{

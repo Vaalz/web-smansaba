@@ -1,7 +1,10 @@
 import { Box, Container, Typography, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import smansabaImage from '../assets/image/smansaba.jpg';
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -23,50 +26,75 @@ const Hero = () => {
             textAlign: 'center',
             color: '#ffffff',
             zIndex: 1,
+            padding: { xs: '20px', md: '40px' },
           }}
         >
           <Typography 
             variant="h1"
             sx={{
-              fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.5rem' },
-              fontWeight: 700,
-              marginBottom: { xs: '16px', md: '20px' },
-              textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-              lineHeight: { xs: 1.2, md: 1.3 },
+              fontSize: { xs: '2rem', sm: '2.75rem', md: '4rem' },
+              fontWeight: 800,
+              marginBottom: { xs: '24px', md: '32px' },
+              textShadow: '3px 3px 6px rgba(0,0,0,0.4)',
+              lineHeight: 1.2,
+              letterSpacing: { xs: '-0.5px', md: '-1px' },
+              fontFamily: '"Inter", "Segoe UI", "Roboto", sans-serif',
             }}
           >
             Selamat Datang di SMANSABA
           </Typography>
-          <Typography 
-            variant="body1"
+          
+          <Box
             sx={{
-              fontSize: { xs: '0.95rem', sm: '1.1rem', md: '1.25rem' },
-              fontWeight: 400,
-              marginBottom: '30px',
-              lineHeight: 1.6,
-              maxWidth: '800px',
-              margin: '0 auto 30px',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
-              padding: { xs: '0 8px', md: '0' },
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              backdropFilter: 'blur(3px)',
+              borderRadius: '16px',
+              padding: { xs: '20px', sm: '28px', md: '36px' },
+              maxWidth: '900px',
+              margin: '0 auto 40px',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
             }}
           >
-            Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua enim ad minim veniam quis nostrud exercitation
-          </Typography>
+            <Typography 
+              variant="body1"
+              sx={{
+                fontSize: { xs: '0.95rem', sm: '1.05rem', md: '1.15rem' },
+                fontWeight: 500,
+                lineHeight: { xs: 1.8, md: 2 },
+                letterSpacing: '0.3px',
+                textAlign: 'center',
+                textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+                fontFamily: '"Inter", "Segoe UI", "Roboto", sans-serif',
+                color: '#ffffff',
+              }}
+            >
+              TERWUJUDNYA LULUSAN YANG SANTUN, BERIMAN, BERTAQWA, BERAKHLAK MULIA. MANDIRI, BERTANGGUNG JAWAB, PARTISIPATIF, BERGOTONG ROYONG, TOLERANSI, BERKEBHINEKAAN GLOBAL, INTELEK, BERNALAR KRITIS, KREATIF, DAN BERWAWASAN LINGKUNGAN
+            </Typography>
+          </Box>
+
           <Button 
             variant="contained"
+            onClick={() => navigate('/tentang')}
             sx={{
-              backgroundColor: 'rgba(52, 73, 94, 0.9)',
-              color: '#ffffff',
-              padding: { xs: '10px 28px', md: '12px 40px' },
+              backgroundColor: '#ffffff',
+              color: '#1a1a1a',
+              padding: { xs: '12px 32px', md: '14px 48px' },
               fontSize: { xs: '14px', md: '16px' },
-              fontWeight: 600,
-              borderRadius: '4px',
+              fontWeight: 700,
+              borderRadius: '50px',
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3)',
+              transition: 'all 0.3s ease',
               '&:hover': {
-                backgroundColor: 'rgba(44, 62, 80, 1)',
+                backgroundColor: '#f0f0f0',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 6px 20px rgba(0, 0, 0, 0.4)',
               },
             }}
           >
-            LIHAT SELENGKAPNYA
+            Lihat Selengkapnya
           </Button>
         </Box>
       </Container>

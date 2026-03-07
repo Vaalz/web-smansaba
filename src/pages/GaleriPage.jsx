@@ -1,68 +1,34 @@
-import { Box, Container, Typography, Grid, Paper, Tabs, Tab, Modal, IconButton } from '@mui/material';
-import { useState } from 'react';
+import { Box, Container, Typography, Grid, Paper, Tabs, Tab, Modal, IconButton, CircularProgress } from '@mui/material';
+import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import smansabaImage from '../assets/image/smansaba.jpg';
 import { Close as CloseIcon } from '@mui/icons-material';
+import { getGaleriList, getImageUrl } from '../services/api';
 
 const GaleriPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [openModal, setOpenModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-
-  // Dummy data untuk galeri - nanti akan diambil dari API
-  const galeriList = [
-    {
-      id: 1,
-      judul: 'Foto Galeri 1',
-      foto: '', // Path foto
-      kategori: 'SCHOOL',
-    },
-    {
-      id: 2,
-      judul: 'Foto Galeri 2',
-      foto: '',
-      kategori: 'TEACHERS',
-    },
-    {
-      id: 3,
-      judul: 'Foto Galeri 3',
-      foto: '',
-      kategori: 'STUDENTS',
-    },
-    {
-      id: 4,
-      judul: 'Foto Galeri 4',
-      foto: '',
-      kategori: 'CEREMONY',
-    },
-    {
-      id: 5,
-      judul: 'Foto Galeri 5',
-      foto: '',
-      kategori: 'UNIVERSITY CORNER',
-    },
-    {
-      id: 6,
-      judul: 'Foto Galeri 6',
-      foto: '',
-      kategori: 'SCHOOL',
-    },
-    {
-      id: 7,
-      judul: 'Foto Galeri 7',
-      foto: '',
-      kategori: 'TEACHERS',
-    },
-    {
-      id: 8,
-      judul: 'Foto Galeri 8',
-      foto: '',
-      kategori: 'STUDENTS',
-    },
-  ];
+  const [galeriList, setGaleriList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const categories = ['ALL', 'SCHOOL', 'TEACHERS', 'STUDENTS', 'CEREMONY', 'UNIVERSITY CORNER'];
+
+  useEffect(() => {
+    fetchGaleri();
+  }, []);
+
+  const fetchGaleri = async () => {
+    try {
+      const response = await getGaleriList();
+      setGaleriList(response.data.data || []);
+    } catch (error) {
+      console.error('Error fetching galeri:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredGaleri = selectedCategory === 'ALL' 
     ? galeriList 
@@ -191,6 +157,11 @@ const GaleriPage = () => {
           </Box>
 
           {/* Gallery Grid */}
+          {loading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+              <CircularProgress />
+            </Box>
+          ) : (
           <Grid 
             container 
             spacing={{ xs: 2, sm: 3, md: 3 }}
@@ -224,7 +195,7 @@ const GaleriPage = () => {
                     {item.foto ? (
                       <Box
                         component="img"
-                        src={item.foto}
+                        src={getImageUrl(item.foto)}
                         alt={item.judul}
                         sx={{
                           position: 'absolute',
@@ -258,9 +229,10 @@ const GaleriPage = () => {
               </Grid>
             ))}
           </Grid>
+          )}
 
           {/* Empty State */}
-          {filteredGaleri.length === 0 && (
+          {!loading && filteredGaleri.length === 0 && (
             <Box
               sx={{
                 textAlign: 'center',
@@ -319,7 +291,7 @@ const GaleriPage = () => {
           {selectedImage?.foto ? (
             <Box
               component="img"
-              src={selectedImage.foto}
+              src={getImageUrl(selectedImage.foto)}
               alt={selectedImage.judul}
               sx={{
                 maxWidth: '100%',

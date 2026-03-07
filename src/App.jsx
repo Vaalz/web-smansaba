@@ -12,6 +12,24 @@ import DetailBeritaPage from './pages/DetailBeritaPage';
 import GaleriPage from './pages/GaleriPage';
 import KontakPage from './pages/KontakPage';
 import ScrollToTop from './components/ScrollToTop';
+
+// Admin imports
+import AdminLayout from './components/admin/AdminLayout';
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminBerita from './pages/admin/AdminBerita';
+import AdminGaleri from './pages/admin/AdminGaleri';
+import AdminGuru from './pages/admin/AdminGuru';
+import AdminPrestasi from './pages/admin/AdminPrestasi';
+import AdminEkstrakurikuler from './pages/admin/AdminEkstrakurikuler';
+import AdminCourse from './pages/admin/AdminCourse';
+import AdminSambutan from './pages/admin/AdminSambutan';
+import AdminSettings from './pages/admin/AdminSettings';
+import AdminManagement from './pages/admin/AdminManagement';
+import ChangePassword from './pages/admin/ChangePassword';
+import ChangeEmail from './pages/admin/ChangeEmail';
+import ProtectedRoute from './components/admin/ProtectedRoute';
+
 import './App.css';
 
 function App() {
@@ -21,6 +39,7 @@ function App() {
       <BrowserRouter>
         <ScrollToTop />
         <Routes>
+          {/* Public Routes */}
           <Route path="/beranda" element={<LandingPage />} />
           <Route path="/tentang" element={<TentangPage />} />
           <Route path="/guru" element={<GuruPage />} />
@@ -32,6 +51,26 @@ function App() {
           <Route path="/detail-berita/:slug" element={<DetailBeritaPage />} />
           <Route path="/galeri" element={<GaleriPage />} />
           <Route path="/kontak" element={<KontakPage />} />
+          
+          {/* Admin Login */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          
+          {/* Admin Routes (Protected) */}
+          <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="berita" element={<AdminBerita />} />
+            <Route path="galeri" element={<AdminGaleri />} />
+            <Route path="guru" element={<AdminGuru />} />
+            <Route path="prestasi" element={<AdminPrestasi />} />
+            <Route path="ekstrakurikuler" element={<AdminEkstrakurikuler />} />
+            <Route path="course" element={<AdminCourse />} />
+            <Route path="sambutan" element={<AdminSambutan />} />
+            <Route path="settings" element={<AdminSettings />} />
+            <Route path="admins" element={<AdminManagement />} />
+            <Route path="change-password" element={<ChangePassword />} />
+            <Route path="change-email" element={<ChangeEmail />} />
+          </Route>
+          
           <Route path="/" element={<Navigate to="/beranda" replace />} />
         </Routes>
       </BrowserRouter>

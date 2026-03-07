@@ -13,7 +13,7 @@ const Footer = () => {
     { label: 'Tentang', href: '/tentang' },
     { label: 'Guru', href: '/guru' },
     { label: 'Prestasi', href: '/prestasi' },
-    { label: 'Ekstrakurikuler', href: '/ekstrakurikuler' },
+    { label: 'Radar Ekstrakurikuler', href: '/ekstrakurikuler' },
     { label: 'Kontak', href: '/kontak' },
   ];
 
@@ -150,7 +150,7 @@ const Footer = () => {
                 </IconButton>
                 <IconButton
                   component="a"
-                  href="#"
+                  href="https://www.youtube.com/@sman1bangsriofficial881"
                   target="_blank"
                   sx={{
                     backgroundColor: '#fff',

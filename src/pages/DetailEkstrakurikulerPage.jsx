@@ -1,39 +1,59 @@
-import { Box, Container, Typography, Paper, Grid, Card, CardMedia } from '@mui/material';
+import { Box, Container, Typography, Paper, Grid, Card, CardMedia, CircularProgress } from '@mui/material';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { ArrowBack, Person, EmojiEvents } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
+import { getEkstrakurikulerBySlug, getImageUrl } from '../services/api';
 
 const DetailEkstrakurikulerPage = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
+  const [ekstrakurikuler, setEkstrakurikuler] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Dummy data - nanti akan diambil dari API berdasarkan ID
-  const ekstrakurikuler = {
-    id: id,
-    nama: 'Nama Ekstrakurikuler',
-    logo: '', // Path logo ekstrakurikuler
-    pembina: 'Nama Pembina',
-    tentang: 'Deskripsi lengkap tentang ekstrakurikuler ini. Konten akan dikelola melalui sistem admin.',
-    sejarah: 'Sejarah dan perkembangan ekstrakurikuler ini dari awal berdiri hingga sekarang. Konten akan dikelola melalui sistem admin.',
-    kegiatan: [
-      'Kegiatan 1 - Deskripsi kegiatan',
-      'Kegiatan 2 - Deskripsi kegiatan',
-      'Kegiatan 3 - Deskripsi kegiatan',
-    ],
-    galeri: [
-      { id: 1, image: '', caption: 'Foto Kegiatan 1' },
-      { id: 2, image: '', caption: 'Foto Kegiatan 2' },
-      { id: 3, image: '', caption: 'Foto Kegiatan 3' },
-      { id: 4, image: '', caption: 'Foto Kegiatan 4' },
-    ],
-    prestasi: [
-      { id: 1, judul: 'Judul Prestasi', tingkat: 'Nasional', tahun: '2024' },
-      { id: 2, judul: 'Judul Prestasi', tingkat: 'Provinsi', tahun: '2024' },
-      { id: 3, judul: 'Judul Prestasi', tingkat: 'Kabupaten', tahun: '2023' },
-    ],
+  useEffect(() => {
+    fetchEkstrakurikuler();
+  }, [slug]);
+
+  const fetchEkstrakurikuler = async () => {
+    try {
+      const response = await getEkstrakurikulerBySlug(slug);
+      setEkstrakurikuler(response.data.data);
+    } catch (error) {
+      console.error('Error fetching ekstrakurikuler:', error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <Box>
+        <Navbar />
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 20 }}>
+          <CircularProgress />
+        </Box>
+        <Footer />
+      </Box>
+    );
+  }
+
+  if (!ekstrakurikuler) {
+    return (
+      <Box>
+        <Navbar />
+        <Container maxWidth="lg" sx={{ py: 10, textAlign: 'center' }}>
+          <Typography variant="h4" sx={{ mb: 2 }}>Ekstrakurikuler tidak ditemukan</Typography>
+          <IconButton onClick={() => navigate('/ekstrakurikuler')}>
+            <ArrowBack /> Kembali
+          </IconButton>
+        </Container>
+        <Footer />
+      </Box>
+    );
+  }
 
   return (
     <Box>
@@ -90,7 +110,7 @@ const DetailEkstrakurikulerPage = () => {
               {ekstrakurikuler.logo ? (
                 <Box
                   component="img"
-                  src={ekstrakurikuler.logo}
+                  src={getImageUrl(ekstrakurikuler.logo)}
                   alt={ekstrakurikuler.nama}
                   sx={{
                     width: '80%',

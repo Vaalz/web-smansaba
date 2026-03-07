@@ -1,7 +1,40 @@
-import { Box, Container, Typography, Paper } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Box, Container, Typography, Paper, CircularProgress } from '@mui/material';
 import { FormatQuote } from '@mui/icons-material';
+import { getSambutan, getImageUrl } from '../services/api';
 
 const WelcomeSection = () => {
+  const [sambutan, setSambutan] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchSambutan();
+  }, []);
+
+  const fetchSambutan = async () => {
+    try {
+      setLoading(true);
+      const response = await getSambutan();
+      setSambutan(response.data.data);
+    } catch (error) {
+      console.error('Error fetching sambutan:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <Box sx={{ padding: '60px 0', display: 'flex', justifyContent: 'center', backgroundColor: '#f8f9fa' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (!sambutan) {
+    return null; // Don't show section if no data
+  }
+
   return (
     <Box
       sx={{
@@ -69,19 +102,21 @@ const WelcomeSection = () => {
                 marginBottom: '20px',
               }}
             >
-              <Box
-                component="img"
-                src="/principal.jpg"
-                alt="Kepala Sekolah"
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }}
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                }}
-              />
+              {sambutan.foto && (
+                <Box
+                  component="img"
+                  src={getImageUrl(sambutan.foto)}
+                  alt={sambutan.nama}
+                  sx={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              )}
             </Paper>
             
             <Box
@@ -101,7 +136,7 @@ const WelcomeSection = () => {
                   marginBottom: '4px',
                 }}
               >
-                Drs. [Nama Kepala Sekolah]
+                {sambutan.nama}
               </Typography>
               <Typography 
                 variant="subtitle1"
@@ -111,7 +146,7 @@ const WelcomeSection = () => {
                   fontStyle: 'italic',
                 }}
               >
-                Kepala SMAN 1 Bangsri
+                {sambutan.jabatan}
               </Typography>
             </Box>
           </Box>
@@ -138,31 +173,12 @@ const WelcomeSection = () => {
                 fontSize: { xs: '0.95rem', sm: '1rem', md: '1.1rem' },
                 lineHeight: 1.8,
                 color: '#555',
-                marginBottom: '24px',
                 textAlign: 'justify',
                 padding: { xs: '0 16px', md: '0' },
+                whiteSpace: 'pre-line',
               }}
             >
-              Assalamu'alaikum Warahmatullahi Wabarakatuh. Puji syukur kehadirat Allah SWT 
-              yang telah melimpahkan rahmat dan karunia-Nya. Lorem ipsum dolor sit amet 
-              consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et 
-              dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco 
-              laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-            </Typography>
-            <Typography 
-              variant="body1"
-              sx={{
-                fontSize: { xs: '0.95rem', sm: '1rem', md: '1.1rem' },
-                lineHeight: 1.8,
-                color: '#555',
-                textAlign: 'justify',
-                padding: { xs: '0 16px', md: '0' },
-              }}
-            >
-              Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor 
-              incididunt ut labore et dolore magna aliqua enim ad minim veniam quis nostrud 
-              exercitation ullamco laboris nisi aliquip commodo consequat duis aute irure.
+              {sambutan.sambutan}
             </Typography>
           </Box>
         </Box>

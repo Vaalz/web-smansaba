@@ -1,30 +1,64 @@
-import { Box, Container, Typography, Paper, Chip } from '@mui/material';
+import { Box, Container, Typography, Paper, Chip, CircularProgress } from '@mui/material';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { ArrowBack, Person, CalendarToday } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
+import { getBeritaBySlug, getImageUrl } from '../services/api';
 
 const DetailBeritaPage = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const [berita, setBerita] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Dummy data - nanti akan diambil dari API berdasarkan slug
-  const berita = {
-    slug: slug,
-    judul: 'Judul Berita Lengkap',
-    foto: '', // Path foto berita
-    penulis: 'Nama Penulis',
-    tanggal: '22 Februari 2026',
-    kategori: 'Kategori Berita',
-    konten: `Konten berita lengkap akan ditampilkan di sini. Ini adalah paragraf pertama dari berita.
+  useEffect(() => {
+    fetchBerita();
+  }, [slug]);
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
-
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-Konten akan dikelola melalui sistem admin.`,
+  const fetchBerita = async () => {
+    try {
+      const response = await getBeritaBySlug(slug);
+      setBerita(response.data.data);
+    } catch (error) {
+      console.error('Error fetching berita:', error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('id-ID', options);
+  };
+
+  if (loading) {
+    return (
+      <Box>
+        <Navbar />
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 20 }}>
+          <CircularProgress />
+        </Box>
+        <Footer />
+      </Box>
+    );
+  }
+
+  if (!berita) {
+    return (
+      <Box>
+        <Navbar />
+        <Container maxWidth="md" sx={{ py: 10, textAlign: 'center' }}>
+          <Typography variant="h4" sx={{ mb: 2 }}>Berita tidak ditemukan</Typography>
+          <IconButton onClick={() => navigate('/berita')}>
+            <ArrowBack /> Kembali
+          </IconButton>
+        </Container>
+        <Footer />
+      </Box>
+    );
+  }
 
   return (
     <Box>
@@ -58,7 +92,7 @@ Konten akan dikelola melalui sistem admin.`,
 
           {/* Kategori Badge */}
           <Chip
-            label={berita.kategori}
+            label={berita.kategori || 'Berita'}
             sx={{
               backgroundColor: '#1976d2',
               color: '#fff',
@@ -131,7 +165,7 @@ Konten akan dikelola melalui sistem admin.`,
           {berita.foto ? (
             <Box
               component="img"
-              src={berita.foto}
+              src={getImageUrl(berita.foto)}
               alt={berita.judul}
               sx={{
                 width: '100%',

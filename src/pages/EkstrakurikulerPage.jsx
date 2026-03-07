@@ -1,72 +1,31 @@
-import { Box, Container, Typography, Card, CardContent, Grid } from '@mui/material';
+import { Box, Container, Typography, Card, CardContent, Grid, CircularProgress } from '@mui/material';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import smansabaImage from '../assets/image/smansaba.jpg';
 import { Sports, MusicNote, Palette, Science, MenuBook, Group, EmojiEvents, Language } from '@mui/icons-material';
-
-// Dummy data untuk ekstrakurikuler
-const ekstrakurikulerList = [
-  {
-    id: 1,
-    nama: 'Nama Ekstrakurikuler',
-    kategori: 'Olahraga',
-    deskripsi: 'Deskripsi singkat ekstrakurikuler',
-    icon: 'Sports',
-  },
-  {
-    id: 2,
-    nama: 'Nama Ekstrakurikuler',
-    kategori: 'Seni',
-    deskripsi: 'Deskripsi singkat ekstrakurikuler',
-    icon: 'MusicNote',
-  },
-  {
-    id: 3,
-    nama: 'Nama Ekstrakurikuler',
-    kategori: 'Seni',
-    deskripsi: 'Deskripsi singkat ekstrakurikuler',
-    icon: 'Palette',
-  },
-  {
-    id: 4,
-    nama: 'Nama Ekstrakurikuler',
-    kategori: 'Akademik',
-    deskripsi: 'Deskripsi singkat ekstrakurikuler',
-    icon: 'Science',
-  },
-  {
-    id: 5,
-    nama: 'Nama Ekstrakurikuler',
-    kategori: 'Akademik',
-    deskripsi: 'Deskripsi singkat ekstrakurikuler',
-    icon: 'MenuBook',
-  },
-  {
-    id: 6,
-    nama: 'Nama Ekstrakurikuler',
-    kategori: 'Organisasi',
-    deskripsi: 'Deskripsi singkat ekstrakurikuler',
-    icon: 'Group',
-  },
-  {
-    id: 7,
-    nama: 'Nama Ekstrakurikuler',
-    kategori: 'Olahraga',
-    deskripsi: 'Deskripsi singkat ekstrakurikuler',
-    icon: 'EmojiEvents',
-  },
-  {
-    id: 8,
-    nama: 'Nama Ekstrakurikuler',
-    kategori: 'Akademik',
-    deskripsi: 'Deskripsi singkat ekstrakurikuler',
-    icon: 'Language',
-  },
-];
+import { getEkstrakurikulerList } from '../services/api';
 
 const EkstrakurikulerPage = () => {
   const navigate = useNavigate();
+  const [ekstrakurikulerList, setEkstrakurikulerList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchEkstrakurikuler();
+  }, []);
+
+  const fetchEkstrakurikuler = async () => {
+    try {
+      const response = await getEkstrakurikulerList();
+      setEkstrakurikulerList(response.data.data || []);
+    } catch (error) {
+      console.error('Error fetching ekstrakurikuler:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Function to get icon component based on icon name
   const getIcon = (iconName) => {
@@ -145,16 +104,26 @@ const EkstrakurikulerPage = () => {
             Daftar Ekstrakurikuler
           </Typography>
 
+          {loading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+              <CircularProgress />
+            </Box>
+          ) : ekstrakurikulerList.length === 0 ? (
+            <Typography sx={{ textAlign: 'center', py: 8, color: '#666' }}>
+              Belum ada data ekstrakurikuler
+            </Typography>
+          ) : (
           <Grid container spacing={{ xs: 2, sm: 3, md: 4 }} justifyContent="center">
             {ekstrakurikulerList.map((ekskul) => {
               const IconComponent = getIcon(ekskul.icon);
               
               return (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={ekskul.id}>
+                <Grid item xs={12} sm={6} md={4} key={ekskul.id}>
                   <Card
                     onClick={() => navigate(`/ekstrakurikuler/detail-ekstrakurikuler/${ekskul.id}`)}
                     sx={{
-                      height: '100%',
+                      height: '220px',
+                      width: '200px',
                       display: 'flex',
                       flexDirection: 'column',
                       borderRadius: '12px',
@@ -164,37 +133,37 @@ const EkstrakurikulerPage = () => {
                       borderTop: '4px solid #1976d2',
                       cursor: 'pointer',
                       '&:hover': {
-                        transform: 'scale(1.02)',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
+                        transform: 'translateY(-8px)',
+                        boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
                       },
                     }}
                   >
                     <CardContent
                       sx={{
-                        padding: { xs: '24px 20px', md: '28px 24px' },
+                        padding: '20px 16px',
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                         textAlign: 'center',
-                        flexGrow: 1,
+                        height: '100%',
                       }}
                     >
                       {/* Icon/Logo Ekstrakurikuler */}
                       <Box
                         sx={{
-                          width: 80,
-                          height: 80,
+                          width: 50,
+                          height: 70,
                           borderRadius: '50%',
                           backgroundColor: '#f5f5f5',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          marginBottom: '20px',
+                          marginBottom: '12px',
                         }}
                       >
                         <IconComponent 
                           sx={{ 
-                            fontSize: 48, 
+                            fontSize: 35, 
                             color: '#757575',
                           }} 
                         />
@@ -205,11 +174,11 @@ const EkstrakurikulerPage = () => {
                         sx={{
                           backgroundColor: '#e0e0e0',
                           color: '#555',
-                          padding: '6px 16px',
+                          padding: '4px 12px',
                           borderRadius: '20px',
-                          fontSize: '0.85rem',
+                          fontSize: '0.75rem',
                           fontWeight: 600,
-                          marginBottom: '16px',
+                          marginBottom: '10px',
                           textTransform: 'uppercase',
                           letterSpacing: '0.5px',
                         }}
@@ -221,11 +190,17 @@ const EkstrakurikulerPage = () => {
                       <Typography
                         variant="h6"
                         sx={{
-                          fontSize: { xs: '1.1rem', md: '1.2rem' },
+                          fontSize: '1.1rem',
                           fontWeight: 700,
                           color: '#333',
-                          marginBottom: '12px',
-                          lineHeight: 1.4,
+                          marginBottom: '8px',
+                          lineHeight: 1.3,
+                          height: '55px',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
                         }}
                       >
                         {ekskul.nama}
@@ -235,9 +210,15 @@ const EkstrakurikulerPage = () => {
                       <Typography
                         variant="body2"
                         sx={{
-                          fontSize: { xs: '0.9rem', md: '0.95rem' },
+                          fontSize: '0.9rem',
                           color: '#666',
-                          lineHeight: 1.6,
+                          lineHeight: 1.5,
+                          height: '81px',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 4,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
                         }}
                       >
                         {ekskul.deskripsi}
@@ -248,6 +229,7 @@ const EkstrakurikulerPage = () => {
               );
             })}
           </Grid>
+          )}
         </Container>
       </Box>
 

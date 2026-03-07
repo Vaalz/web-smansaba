@@ -37,7 +37,7 @@ const Navbar = () => {
       ]
     },
     { label: 'Prestasi', path: '/prestasi' },
-    { label: 'Ekstrakurikuler', path: '/ekstrakurikuler' },
+    { label: 'Radar Ekstrakurikuler', path: '/ekstrakurikuler' },
     { label: 'Berita', path: '/berita' },
     { label: 'Galeri', path: '/galeri' },
     { label: 'Kontak', path: '/kontak' },
@@ -50,9 +50,19 @@ const Navbar = () => {
     }
   };
 
-  const handleMenuClick = (item) => {
-    // Untuk menu biasa (non-dropdown), langsung navigate
-    if (!item.dropdown && item.path !== '#') {
+  const handleMenuClick = (item, event) => {
+    // Untuk menu dengan dropdown, toggle dropdown saat klik
+    if (item.dropdown) {
+      if (openDropdown === item.label) {
+        // Jika sudah terbuka, tutup
+        handleCloseDropdown();
+      } else {
+        // Jika belum terbuka, buka
+        setAnchorEl(event.currentTarget);
+        setOpenDropdown(item.label);
+      }
+    } else if (item.path !== '#') {
+      // Untuk menu biasa (non-dropdown), langsung navigate
       navigate(item.path);
       setMobileOpen(false);
       handleCloseDropdown();
@@ -247,7 +257,7 @@ const Navbar = () => {
                   onMouseLeave={item.dropdown ? undefined : handleCloseDropdown}
                 >
                   <Button 
-                    onClick={() => handleMenuClick(item)}
+                    onClick={(e) => handleMenuClick(item, e)}
                     endIcon={item.dropdown ? <ExpandMoreIcon /> : null}
                     sx={{
                       color: scrolled ? '#333' : '#ffffff',
