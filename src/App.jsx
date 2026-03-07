@@ -24,6 +24,7 @@ import AdminPrestasi from './pages/admin/AdminPrestasi';
 import AdminEkstrakurikuler from './pages/admin/AdminEkstrakurikuler';
 import AdminCourse from './pages/admin/AdminCourse';
 import AdminSambutan from './pages/admin/AdminSambutan';
+import AdminTentang from './pages/admin/AdminTentang';
 import AdminSettings from './pages/admin/AdminSettings';
 import AdminManagement from './pages/admin/AdminManagement';
 import ChangePassword from './pages/admin/ChangePassword';
@@ -65,6 +66,7 @@ function App() {
             <Route path="ekstrakurikuler" element={<AdminEkstrakurikuler />} />
             <Route path="course" element={<AdminCourse />} />
             <Route path="sambutan" element={<AdminSambutan />} />
+            <Route path="tentang" element={<AdminTentang />} />
             <Route path="settings" element={<AdminSettings />} />
             <Route path="admins" element={<AdminManagement />} />
             <Route path="change-password" element={<ChangePassword />} />

@@ -21,11 +21,29 @@ function AdminBerita() {
   const [formData, setFormData] = useState({});
   const [editingId, setEditingId] = useState(null);
 
+  // Format tanggal
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    
+    const date = new Date(dateString);
+    
+    // Cek apakah date valid
+    if (isNaN(date.getTime())) return dateString;
+    
+    // Format tanggal ke Indonesia
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('id-ID', options);
+  };
+
   const columns = [
     { field: 'judul', headerName: 'Judul' },
     { field: 'kategori', headerName: 'Kategori' },
     { field: 'penulis', headerName: 'Penulis' },
-    { field: 'tanggal', headerName: 'Tanggal' },
+    { 
+      field: 'tanggal', 
+      headerName: 'Tanggal',
+      render: (value) => formatDate(value)
+    },
   ];
 
   // Fetch data dari API

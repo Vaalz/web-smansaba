@@ -29,8 +29,17 @@ const DetailBeritaPage = () => {
   };
 
   const formatDate = (dateString) => {
+    if (!dateString) return '';
+    
+    // Parse tanggal dan handle berbagai format
+    const date = new Date(dateString);
+    
+    // Cek apakah date valid
+    if (isNaN(date.getTime())) return dateString;
+    
+    // Format tanggal ke Indonesia
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('id-ID', options);
+    return date.toLocaleDateString('id-ID', options);
   };
 
   if (loading) {
@@ -151,7 +160,7 @@ const DetailBeritaPage = () => {
                   fontWeight: 500,
                 }}
               >
-                {berita.tanggal}
+                {formatDate(berita.tanggal)}
               </Typography>
             </Box>
           </Box>

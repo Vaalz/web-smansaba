@@ -245,6 +245,15 @@ export const deleteSambutan = (id) => api.delete(`/admin/sambutan/${id}`);
 // Public Sambutan
 export const getSambutan = () => api.get('/public/sambutan');
 
+// Tentang (About)
+export const getTentang = () => api.get('/public/tentang');
+
+// Admin Tentang
+export const getAdminTentang = () => api.get('/admin/tentang');
+export const updateTentang = (data) => {
+  return api.put('/admin/tentang', data);
+};
+
 // Helper function untuk mendapatkan URL gambar
 export const getImageUrl = (path) => {
   if (!path) return '';
