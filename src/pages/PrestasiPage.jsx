@@ -215,7 +215,7 @@ const PrestasiPage = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         marginBottom: '24px',
-                        boxShadow: `0 4px 16px ${getJuaraColor(prestasi.juara) || getTingkatColor(prestasi.tingkat)}40`,
+                        boxShadow: `0 4px 16px ${(getJuaraColor(prestasi.juara) || getTingkatColor(prestasi.tingkat))}40`,
                       }}
                     >
                       <EmojiEvents 

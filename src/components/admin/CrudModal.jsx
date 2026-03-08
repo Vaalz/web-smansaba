@@ -63,11 +63,16 @@ function CrudModal({ open, onClose, onSubmit, title, fields, formData, setFormDa
             value={formData[field.name] || ''}
             onChange={handleChange(field.name)}
           >
-            {field.options.map((option) => (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            ))}
+            {field.options.map((option) => {
+              // Support both string options and {value, label} objects
+              const optionValue = typeof option === 'string' ? option : option.value;
+              const optionLabel = typeof option === 'string' ? option : option.label;
+              return (
+                <MenuItem key={optionValue} value={optionValue}>
+                  {optionLabel}
+                </MenuItem>
+              );
+            })}
           </Select>
         </FormControl>
       );
@@ -123,6 +128,7 @@ function CrudModal({ open, onClose, onSubmit, title, fields, formData, setFormDa
         required={field.required !== false}
         value={formData[field.name] || ''}
         onChange={handleChange(field.name)}
+        placeholder={field.placeholder || ''}
         fullWidth
         InputLabelProps={field.type === 'date' ? { shrink: true } : undefined}
       />

@@ -1,6 +1,8 @@
 import { Box, Container, Typography, Paper, Card, CardContent, CardMedia, Chip } from '@mui/material';
 import { keyframes } from '@mui/system';
 import SchoolIcon from '@mui/icons-material/School';
+import { useState, useEffect } from 'react';
+import { getSiswaPtnList, getImageUrl } from '../services/api';
 
 // Animasi scroll horizontal
 const scroll = keyframes`
@@ -12,77 +14,32 @@ const scroll = keyframes`
   }
 `;
 
-// Dummy data untuk siswa diterima PTN
-const ptnStudents = [
-  {
-    id: 1,
-    photo: '',
-    university: 'PTN',
-    program: 'Jurusan',
-    name: '',
-    class: 'XII.6',
-  },
-  {
-    id: 2,
-    photo: '',
-    university: 'PTN',
-    program: 'Jurusan',
-    name: '',
-    class: 'XII.5',
-  },
-  {
-    id: 3,
-    photo: '',
-    university: 'PTN',
-    program: 'Jurusan',
-    name: '',
-    class: 'XII.5',
-  },
-  {
-    id: 4,
-    photo: '',
-    university: 'PTN',
-    program: 'Jurusan',
-    name: '',
-    class: 'XII.4',
-  },
-  {
-    id: 5,
-    photo: '',
-    university: 'PTN',
-    program: 'Jurusan',
-    name: '',
-    class: 'XII.3',
-  },
-  {
-    id: 6,
-    photo: '',
-    university: 'PTN',
-    program: 'Jurusan',
-    name: '',
-    class: 'XII.2',
-  },
-  {
-    id: 7,
-    photo: '',
-    university: 'PTN',
-    program: 'Jurusan',
-    name: '',
-    class: 'XII.1',
-  },
-  {
-    id: 8,
-    photo: '',
-    university: 'PTN',
-    program: 'Jurusan',
-    name: '',
-    class: 'XII.4',
-  },
-];
-
 const PTNAcceptanceSection = () => {
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStudents();
+  }, []);
+
+  const fetchStudents = async () => {
+    try {
+      const response = await getSiswaPtnList({ per_page: 100 });
+      const data = response.data.data || [];
+      setStudents(data);
+    } catch (error) {
+      console.error('Error fetching siswa PTN:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Duplikasi data untuk seamless loop
-  const duplicatedStudents = [...ptnStudents, ...ptnStudents];
+  const duplicatedStudents = [...students, ...students];
+
+  if (loading || students.length === 0) {
+    return null; // Don't show section if loading or no data
+  }
 
   return (
     <Box
@@ -153,8 +110,9 @@ const PTNAcceptanceSection = () => {
                 boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                 '&:hover': {
                   '& .university-badge': {
-                    top: '16px',
+                    bottom: '16px',
                     left: '16px',
+                    top: 'auto',
                     transform: 'translate(0, 0)',
                     textAlign: 'left',
                     textShadow: '3px 3px 8px rgba(0,0,0,0.5)',
@@ -177,8 +135,8 @@ const PTNAcceptanceSection = () => {
                     width: '100%',
                     height: '100%',
                     backgroundColor: '#c5b8a5',
-                    backgroundImage: student.photo
-                      ? `url(${student.photo})`
+                    backgroundImage: student.foto_siswa
+                      ? `url(${getImageUrl(student.foto_siswa)})`
                       : 'linear-gradient(135deg, #a8b5a0 0%, #8b9d83 100%)',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
@@ -199,6 +157,37 @@ const PTNAcceptanceSection = () => {
                   }}
                 />
 
+                {/* Logo PTN Badge - Top Left */}
+                {student.logo_ptn && (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: '16px',
+                      left: '16px',
+                      width: '60px',
+                      height: '60px',
+                      backgroundColor: 'rgba(255,255,255,0.95)',
+                      borderRadius: '12px',
+                      padding: '8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                      zIndex: 3,
+                    }}
+                  >
+                    <img
+                      src={getImageUrl(student.logo_ptn)}
+                      alt={student.nama_ptn}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'contain',
+                      }}
+                    />
+                  </Box>
+                )}
+
                 {/* University Badge */}
                 <Box
                   className="university-badge"
@@ -215,37 +204,37 @@ const PTNAcceptanceSection = () => {
                 >
                   <SchoolIcon
                     sx={{
-                      fontSize: '2.5rem',
-                      marginBottom: '8px',
+                      fontSize: '1.8rem',
+                      marginBottom: '6px',
                       filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
                     }}
                   />
                   <Typography
                     variant="h3"
                     sx={{
-                      fontSize: '2.2rem',
+                      fontSize: '1.5rem',
                       fontWeight: 700,
-                      marginBottom: '8px',
+                      marginBottom: '6px',
                       textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
                     }}
                   >
-                    {student.university}
+                    {student.nama_ptn}
                   </Typography>
                   <Typography
                     variant="body2"
                     sx={{
-                      fontSize: '1rem',
+                      fontSize: '0.85rem',
                       fontWeight: 500,
                       textShadow: '1px 1px 3px rgba(0,0,0,0.3)',
                     }}
                   >
-                    {student.program}
+                    {student.jurusan}
                   </Typography>
                 </Box>
 
                 {/* Class Badge - Top Right */}
                 <Chip
-                  label={student.class}
+                  label={student.kelas}
                   sx={{
                     position: 'absolute',
                     top: '16px',
@@ -279,7 +268,7 @@ const PTNAcceptanceSection = () => {
                     minHeight: '28px',
                   }}
                 >
-                  {student.name || '[Nama Siswa]'}
+                  {student.nama_siswa}
                 </Typography>
                 <Box
                   sx={{
@@ -306,7 +295,7 @@ const PTNAcceptanceSection = () => {
                       letterSpacing: '1px',
                     }}
                   >
-                    Class {student.class}
+                    Class {student.kelas}
                   </Typography>
                   <Box
                     sx={{

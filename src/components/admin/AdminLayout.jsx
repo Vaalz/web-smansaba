@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Box, Drawer, AppBar, Toolbar, Typography, IconButton, List, ListItem, ListItemIcon, ListItemText, ListItemButton, Divider } from '@mui/material';
-import { Menu as MenuIcon, Dashboard, Article, Photo, People, EmojiEvents, Sports, School, RecordVoiceOver, Info, Settings, ExitToApp, SupervisorAccount } from '@mui/icons-material';
+import { Menu as MenuIcon, Dashboard, Article, Photo, People, EmojiEvents, Sports, School, RecordVoiceOver, Info, Settings, ExitToApp, SupervisorAccount, WorkspacePremium } from '@mui/icons-material';
 import { useNavigate, Outlet, useLocation } from 'react-router-dom';
 import authService from '../../services/authService';
 
@@ -25,6 +25,7 @@ function AdminLayout() {
     { text: 'Course', icon: <School />, path: '/admin/course' },
     { text: 'Sambutan', icon: <RecordVoiceOver />, path: '/admin/sambutan' },
     { text: 'Tentang', icon: <Info />, path: '/admin/tentang' },
+    { text: 'Siswa PTN', icon: <WorkspacePremium />, path: '/admin/siswa-ptn' },
     { text: 'Pengaturan', icon: <Settings />, path: '/admin/settings' },
   ];
 

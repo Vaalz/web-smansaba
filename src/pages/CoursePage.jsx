@@ -38,6 +38,7 @@ const CoursePage = () => {
     <Grid item xs={12} sm={6} md={4}>
       <Card
         sx={{
+          width: '320px',
           height: { xs: 'auto', sm: '420px' },
           minHeight: { xs: '380px', sm: '420px' },
           borderRadius: { xs: '10px', md: '12px' },
@@ -213,6 +214,7 @@ const CoursePage = () => {
                 <Grid item xs={12} sm={6} md={4} key={course.id}>
                   <Card
                     sx={{
+                      width: '320px',
                       height: { xs: 'auto', sm: '420px' },
                       minHeight: { xs: '380px', sm: '420px' },
                       display: 'flex',

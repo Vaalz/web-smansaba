@@ -27,6 +27,7 @@ import AdminSambutan from './pages/admin/AdminSambutan';
 import AdminTentang from './pages/admin/AdminTentang';
 import AdminSettings from './pages/admin/AdminSettings';
 import AdminManagement from './pages/admin/AdminManagement';
+import AdminSiswaPtn from './pages/admin/AdminSiswaPtn';
 import ChangePassword from './pages/admin/ChangePassword';
 import ChangeEmail from './pages/admin/ChangeEmail';
 import ProtectedRoute from './components/admin/ProtectedRoute';
@@ -67,6 +68,7 @@ function App() {
             <Route path="course" element={<AdminCourse />} />
             <Route path="sambutan" element={<AdminSambutan />} />
             <Route path="tentang" element={<AdminTentang />} />
+            <Route path="siswa-ptn" element={<AdminSiswaPtn />} />
             <Route path="settings" element={<AdminSettings />} />
             <Route path="admins" element={<AdminManagement />} />
             <Route path="change-password" element={<ChangePassword />} />
