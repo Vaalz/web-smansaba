@@ -1,4 +1,4 @@
-import { Box, Container, Typography, Card, CardContent, Grid, CircularProgress } from '@mui/material';
+import { Box, Container, Typography, Card, CardContent, Grid, CircularProgress, Skeleton } from '@mui/material';
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -38,6 +38,43 @@ const PrestasiPage = () => {
         return '#757575'; // Gray
     }
   };
+
+  // Function to get medal color based on juara
+  const getJuaraColor = (juara) => {
+    if (!juara) return null;
+    const juaraLower = juara.toLowerCase();
+    if (juaraLower.includes('juara 1') || juaraLower === '1') {
+      return '#FFD700'; // Gold
+    } else if (juaraLower.includes('juara 2') || juaraLower === '2') {
+      return '#C0C0C0'; // Silver
+    } else if (juaraLower.includes('juara 3') || juaraLower === '3') {
+      return '#CD7F32'; // Bronze
+    }
+    return '#757575'; // Gray for other rankings
+  };
+
+  // Skeleton Loading Component
+  const SkeletonCard = () => (
+    <Card
+      sx={{
+        minWidth: { xs: '280px', sm: '320px' },
+        minHeight: '420px',
+        width: { xs: '100%', sm: '320px' },
+        maxWidth: { xs: '320px', sm: 'none' },
+        borderRadius: '16px',
+        overflow: 'hidden',
+      }}
+    >
+      <CardContent sx={{ padding: '32px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Skeleton variant="circular" width={70} height={70} sx={{ mb: 3 }} />
+        <Skeleton variant="text" width="60%" height={36} sx={{ mb: 2 }} />
+        <Skeleton variant="text" width="80%" height={28} sx={{ mb: 1 }} />
+        <Skeleton variant="text" width="90%" height={24} sx={{ mb: 1 }} />
+        <Skeleton variant="text" width="50%" height={24} sx={{ mb: 2 }} />
+        <Skeleton variant="rectangular" width="100%" height={40} sx={{ mt: 2, borderRadius: '8px' }} />
+      </CardContent>
+    </Card>
+  );
 
   return (
     <Box>
@@ -102,31 +139,55 @@ const PrestasiPage = () => {
           </Typography>
 
           {loading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-              <CircularProgress />
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'stretch',
+                gap: { xs: 2, md: 3 },
+                flexWrap: 'wrap',
+                padding: { xs: '0 16px', md: '0' },
+              }}
+            >
+              {[1, 2, 3, 4, 5, 6].map((item) => (
+                <SkeletonCard key={item} />
+              ))}
             </Box>
           ) : prestasiList.length === 0 ? (
             <Typography sx={{ textAlign: 'center', py: 8, color: '#666' }}>
               Belum ada data prestasi
             </Typography>
           ) : (
-          <Grid container spacing={{ xs: 2, sm: 3, md: 4 }} justifyContent="center">
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'stretch',
+              gap: { xs: 2, md: 3 },
+              flexWrap: 'wrap',
+              padding: { xs: '0 16px', md: '0' },
+            }}
+          >
             {prestasiList.map((prestasi) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={prestasi.id}>
                 <Card
+                  key={prestasi.id}
                   sx={{
-                    height: '100%',
-                    minHeight: { xs: '360px', sm: '380px' },
+                    minWidth: { xs: '280px', sm: '320px' },
+                    minHeight: '420px',
+                    width: { xs: '100%', sm: '320px' },
+                    maxWidth: { xs: '320px', sm: 'none' },
                     display: 'flex',
                     flexDirection: 'column',
-                    borderRadius: '12px',
+                    borderRadius: '16px',
                     boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-                    transition: 'box-shadow 0.3s ease, transform 0.3s ease',
+                    transition: 'all 0.3s ease',
                     overflow: 'hidden',
-                    borderTop: `4px solid ${getTingkatColor(prestasi.tingkat)}`,
+                    border: '1px solid #e0e0e0',
+                    cursor: 'pointer',
                     '&:hover': {
-                      transform: 'scale(1.02)',
-                      boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
+                      transform: 'translateY(-8px)',
+                      boxShadow: '0 12px 28px rgba(0,0,0,0.2)',
+                      borderColor: '#1976d2',
                       '& .trophy-icon': {
                         transform: 'scale(1.15) rotate(10deg)',
                       },
@@ -135,65 +196,72 @@ const PrestasiPage = () => {
                 >
                   <CardContent
                     sx={{
-                      padding: { xs: '24px 20px', md: '28px 24px' },
+                      padding: '32px 24px',
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
                       textAlign: 'center',
+                      flexGrow: 1,
                     }}
                   >
                     {/* Icon Piala */}
                     <Box
                       sx={{
-                        width: 80,
-                        height: 80,
+                        width: '70px',
+                        height: '70px',
                         borderRadius: '50%',
-                        backgroundColor: `${getTingkatColor(prestasi.tingkat)}15`,
+                        backgroundColor: getJuaraColor(prestasi.juara) || getTingkatColor(prestasi.tingkat),
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        marginBottom: '20px',
+                        marginBottom: '24px',
+                        boxShadow: `0 4px 16px ${getJuaraColor(prestasi.juara) || getTingkatColor(prestasi.tingkat)}40`,
                       }}
                     >
                       <EmojiEvents 
                         className="trophy-icon"
                         sx={{ 
-                          fontSize: 48, 
-                          color: getTingkatColor(prestasi.tingkat),
+                          fontSize: '2.5rem',
+                          color: '#fff',
                           transition: 'transform 0.3s ease',
                         }} 
                       />
                     </Box>
 
-                    {/* Badge Tingkat */}
-                    <Box
-                      sx={{
-                        backgroundColor: getTingkatColor(prestasi.tingkat),
-                        color: '#fff',
-                        padding: '6px 16px',
-                        borderRadius: '20px',
-                        fontSize: '0.85rem',
-                        fontWeight: 600,
-                        marginBottom: '16px',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.5px',
-                      }}
-                    >
-                      {prestasi.tingkat}
-                    </Box>
+                    {/* Badge Juara (if exists) */}
+                    {prestasi.juara && (
+                      <Typography
+                        variant="h5"
+                        sx={{
+                          fontSize: '1.3rem',
+                          fontWeight: 700,
+                          textAlign: 'center',
+                          marginBottom: '16px',
+                          color: '#333',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.5px',
+                        }}
+                      >
+                        {prestasi.juara}
+                      </Typography>
+                    )}
+
+                    {/* Badge Tingkat - removed, shown in Category section below */}
 
                     {/* Judul Prestasi */}
                     <Typography
                       variant="h6"
                       sx={{
-                        fontSize: { xs: '1.1rem', md: '1.2rem' },
-                        fontWeight: 700,
+                        fontSize: '1.1rem',
+                        fontWeight: 600,
                         color: '#333',
-                        marginBottom: '12px',
-                        lineHeight: 1.4,
-                        minHeight: { xs: '60px', md: '68px' },
+                        marginBottom: '8px',
+                        lineHeight: 1.5,
+                        textAlign: 'center',
+                        textTransform: 'uppercase',
+                        minHeight: '66px',
                         display: '-webkit-box',
-                        WebkitLineClamp: 2,
+                        WebkitLineClamp: 3,
                         WebkitBoxOrient: 'vertical',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
@@ -204,38 +272,48 @@ const PrestasiPage = () => {
 
                     {/* Kategori */}
                     <Typography
-                      variant="body2"
+                      variant="body1"
                       sx={{
-                        fontSize: { xs: '0.9rem', md: '0.95rem' },
+                        fontSize: '1rem',
                         color: '#666',
-                        marginBottom: '8px',
-                        minHeight: '24px',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 1,
-                        WebkitBoxOrient: 'vertical',
+                        marginBottom: '12px',
+                        fontWeight: 500,
+                        textAlign: 'center',
+                        minHeight: '28px',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
                       }}
                     >
-                      {prestasi.kategori}
+                      {prestasi.kategori} • {prestasi.tingkat}
                     </Typography>
+
+                    {/* Divider */}
+                    <Box
+                      sx={{
+                        width: '100%',
+                        height: '1px',
+                        backgroundColor: '#e0e0e0',
+                        marginY: '16px',
+                      }}
+                    />
 
                     {/* Tahun */}
                     <Typography
                       variant="body2"
                       sx={{
-                        fontSize: { xs: '0.85rem', md: '0.9rem' },
-                        color: '#999',
-                        fontStyle: 'italic',
+                        fontSize: '1rem',
+                        fontWeight: 600,
+                        color: '#333',
+                        textAlign: 'center',
                       }}
                     >
                       Tahun {prestasi.tahun}
                     </Typography>
                   </CardContent>
                 </Card>
-              </Grid>
             ))}
-          </Grid>
+          </Box>
           )}
         </Container>
       </Box>

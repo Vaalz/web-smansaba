@@ -1,4 +1,4 @@
-import { Box, Container, Typography, Paper, CircularProgress } from '@mui/material';
+import { Box, Container, Typography, Paper, CircularProgress, Skeleton } from '@mui/material';
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -43,6 +43,28 @@ const TentangPage = () => {
       </Typography>
     ));
   };
+
+  // Skeleton Loading Component
+  const SkeletonSection = ({ borderColor }) => (
+    <Paper
+      elevation={0}
+      sx={{
+        padding: { xs: '24px 20px', md: '40px 48px' },
+        backgroundColor: '#ffffff',
+        borderRadius: '12px',
+        margin: '0 auto',
+        borderLeft: `4px solid ${borderColor}`,
+        boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+      }}
+    >
+      <Skeleton variant="text" width="30%" height={40} sx={{ mb: 3 }} />
+      <Skeleton variant="text" width="100%" height={24} sx={{ mb: 1.5 }} />
+      <Skeleton variant="text" width="95%" height={24} sx={{ mb: 1.5 }} />
+      <Skeleton variant="text" width="98%" height={24} sx={{ mb: 1.5 }} />
+      <Skeleton variant="text" width="90%" height={24} sx={{ mb: 1.5 }} />
+      <Skeleton variant="text" width="85%" height={24} />
+    </Paper>
+  );
 
   return (
     <Box>
@@ -94,9 +116,7 @@ const TentangPage = () => {
       >
         <Container maxWidth="md">
           {loading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-              <CircularProgress />
-            </Box>
+            <SkeletonSection borderColor="#1976d2" />
           ) : (
             <Paper
               elevation={0}
@@ -155,9 +175,7 @@ const TentangPage = () => {
       >
         <Container maxWidth="md">
           {loading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-              <CircularProgress />
-            </Box>
+            <SkeletonSection borderColor="#2e7d32" />
           ) : (
             <Paper
               elevation={0}
@@ -216,9 +234,7 @@ const TentangPage = () => {
       >
         <Container maxWidth="md">
           {loading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-              <CircularProgress />
-            </Box>
+            <SkeletonSection borderColor="#ed6c02" />
           ) : (
             <Paper
               elevation={0}
@@ -277,9 +293,7 @@ const TentangPage = () => {
       >
         <Container maxWidth="md">
           {loading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-              <CircularProgress />
-            </Box>
+            <SkeletonSection borderColor="#9c27b0" />
           ) : (
             <Paper
               elevation={0}

@@ -1,4 +1,4 @@
-import { Box, Container, Typography, Card, CardContent, Grid, Avatar, CircularProgress } from '@mui/material';
+import { Box, Container, Typography, Card, CardContent, Avatar, CircularProgress, Skeleton } from '@mui/material';
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -24,6 +24,31 @@ const GuruPage = () => {
       setLoading(false);
     }
   };
+
+  // Skeleton Loading Component
+  const SkeletonCard = () => (
+    <Card
+      sx={{
+        minWidth: { xs: '180px', sm: '230px' },
+        minHeight: { xs: '300px', sm: '320px' },
+        width: { xs: '100%', sm: '230px' },
+        maxWidth: { xs: '230px', sm: 'none' },
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: { xs: '20px 12px', md: '24px 16px' },
+        borderRadius: '12px',
+      }}
+    >
+      <Skeleton variant="circular" width={{ xs: 80, md: 100 }} height={{ xs: 80, md: 100 }} sx={{ mb: 2 }} />
+      <CardContent sx={{ padding: 0, textAlign: 'center', width: '100%' }}>
+        <Skeleton variant="text" width="80%" height={28} sx={{ mx: 'auto', mb: 0.75 }} />
+        <Skeleton variant="text" width="60%" height={20} sx={{ mx: 'auto', mb: 0.5 }} />
+        <Skeleton variant="text" width="50%" height={18} sx={{ mx: 'auto' }} />
+      </CardContent>
+    </Card>
+  );
 
   return (
     <Box>
@@ -73,7 +98,7 @@ const GuruPage = () => {
           backgroundColor: '#ffffff',
         }}
       >
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           <Typography
             variant="h2"
             sx={{
@@ -88,33 +113,56 @@ const GuruPage = () => {
           </Typography>
 
           {loading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-              <CircularProgress />
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'stretch',
+                gap: { xs: 2, md: 2 },
+                flexWrap: 'wrap',
+                padding: { xs: '0 16px', md: '0' },
+              }}
+            >
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
+                <SkeletonCard key={item} />
+              ))}
             </Box>
           ) : guruList.length === 0 ? (
             <Typography sx={{ textAlign: 'center', py: 8, color: '#666' }}>
               Belum ada data guru
             </Typography>
           ) : (
-          <Grid container spacing={{ xs: 2, sm: 3, md: 4 }} justifyContent="center">
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'stretch',
+              gap: { xs: 2, md: 2 },
+              flexWrap: 'wrap',
+              padding: { xs: '0 16px', md: '0' },
+            }}
+          >
             {guruList.map((guru) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={guru.id} sx={{ display: 'flex' }}>
                 <Card
+                  key={guru.id}
                   sx={{
-                    height: '100%',
-                    minHeight: { xs: '320px', sm: '340px' },
-                    width: '100%',
+                    minWidth: { xs: '180px', sm: '230px' },
+                    minHeight: { xs: '300px', sm: '320px' },
+                    width: { xs: '100%', sm: '230px' },
+                    maxWidth: { xs: '230px', sm: 'none' },
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: { xs: '24px 16px', md: '32px 20px' },
+                    padding: { xs: '20px 12px', md: '24px 16px' },
                     borderRadius: '12px',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                    transition: 'box-shadow 0.3s ease, transform 0.3s ease',
+                    boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                    transition: 'all 0.3s ease',
+                    border: '1px solid #e0e0e0',
                     '&:hover': {
-                      transform: 'scale(1.02)',
-                      boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+                      transform: 'translateY(-8px)',
+                      boxShadow: '0 12px 28px rgba(0,0,0,0.2)',
+                      borderColor: '#1976d2',
                     },
                   }}
                 >
@@ -122,15 +170,15 @@ const GuruPage = () => {
                   <Avatar
                     src={getImageUrl(guru.foto)}
                     sx={{
-                      width: { xs: 120, md: 140 },
-                      height: { xs: 120, md: 140 },
-                      marginBottom: '20px',
+                      width: { xs: 80, md: 100 },
+                      height: { xs: 80, md: 100 },
+                      marginBottom: '16px',
                       backgroundColor: '#e0e0e0',
-                      border: '4px solid #f5f5f5',
-                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                      border: '3px solid #f5f5f5',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                     }}
                   >
-                    <Person sx={{ fontSize: { xs: 60, md: 70 }, color: '#999' }} />
+                    <Person sx={{ fontSize: { xs: 40, md: 50 }, color: '#999' }} />
                   </Avatar>
 
                   <CardContent
@@ -147,12 +195,12 @@ const GuruPage = () => {
                     <Typography
                       variant="h6"
                       sx={{
-                        fontSize: { xs: '1.1rem', md: '1.2rem' },
+                        fontSize: { xs: '0.95rem', md: '1rem' },
                         fontWeight: 700,
                         color: '#333',
-                        marginBottom: '8px',
+                        marginBottom: '6px',
                         lineHeight: 1.3,
-                        minHeight: '52px',
+                        minHeight: '42px',
                         display: '-webkit-box',
                         WebkitLineClamp: 2,
                         WebkitBoxOrient: 'vertical',
@@ -167,11 +215,11 @@ const GuruPage = () => {
                     <Typography
                       variant="body2"
                       sx={{
-                        fontSize: { xs: '0.9rem', md: '0.95rem' },
+                        fontSize: { xs: '0.8rem', md: '0.85rem' },
                         color: '#666',
                         fontWeight: 600,
                         marginBottom: '4px',
-                        minHeight: '24px',
+                        minHeight: '20px',
                         display: '-webkit-box',
                         WebkitLineClamp: 1,
                         WebkitBoxOrient: 'vertical',
@@ -186,10 +234,10 @@ const GuruPage = () => {
                     <Typography
                       variant="body2"
                       sx={{
-                        fontSize: { xs: '0.85rem', md: '0.9rem' },
+                        fontSize: { xs: '0.75rem', md: '0.8rem' },
                         color: '#888',
                         fontStyle: 'italic',
-                        minHeight: '22px',
+                        minHeight: '18px',
                         display: '-webkit-box',
                         WebkitLineClamp: 1,
                         WebkitBoxOrient: 'vertical',
@@ -201,9 +249,8 @@ const GuruPage = () => {
                     </Typography>
                   </CardContent>
                 </Card>
-              </Grid>
             ))}
-          </Grid>
+          </Box>
           )}
         </Container>
       </Box>

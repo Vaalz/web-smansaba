@@ -7,9 +7,9 @@ import {
   CardMedia,
   CardContent,
   Chip,
-  Grid,
   Button,
   CircularProgress,
+  Skeleton,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Person, CalendarToday } from '@mui/icons-material';
@@ -25,7 +25,7 @@ const ArticleSection = () => {
       try {
         setLoading(true);
         const response = await getBeritaList();
-        // Ambil 3 berita terbaru untuk ditampilkan dalam 1 baris
+        // Ambil 3 berita terbaru untuk ditampilkan dalam 3 baris vertikal
         const latestArticles = (response.data.data || []).slice(0, 3);
         setArticles(latestArticles);
       } catch (error) {
@@ -52,6 +52,30 @@ const ArticleSection = () => {
     if (!text) return '';
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
   };
+
+  // Skeleton Loading Component
+  const SkeletonCard = () => (
+    <Card
+      sx={{
+        width: '100%',
+        height: { xs: 'auto', md: '640px' },
+        borderRadius: '12px',
+        overflow: 'hidden',
+      }}
+    >
+      <Skeleton variant="rectangular" width="100%" height={{ xs: 250, md: 350 }} />
+      <CardContent sx={{ padding: { xs: '20px', md: '24px' } }}>
+        <Skeleton variant="text" width="80%" height={36} sx={{ mb: 1.5 }} />
+        <Skeleton variant="text" width="90%" height={24} sx={{ mb: 0.5 }} />
+        <Skeleton variant="text" width="85%" height={24} sx={{ mb: 0.5 }} />
+        <Skeleton variant="text" width="70%" height={24} sx={{ mb: 2 }} />
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+          <Skeleton variant="text" width="30%" height={20} />
+          <Skeleton variant="text" width="35%" height={20} />
+        </Box>
+      </CardContent>
+    </Card>
+  );
 
   return (
     <Box
@@ -88,22 +112,42 @@ const ArticleSection = () => {
         </Typography>
 
         {loading ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-            <CircularProgress />
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: { xs: 3, md: 4 },
+              maxWidth: '1049px',
+              margin: '0 auto',
+              padding: { xs: '0 16px', md: '0' },
+            }}
+          >
+            {[1, 2, 3].map((item) => (
+              <SkeletonCard key={item} />
+            ))}
           </Box>
         ) : articles.length === 0 ? (
           <Typography sx={{ textAlign: 'center', py: 8, color: '#666' }}>
             Belum ada berita
           </Typography>
         ) : (
-          <Grid container spacing={4} justifyContent="center" sx={{ maxWidth: '1049px', margin: '0 auto' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: { xs: 3, md: 4 },
+              maxWidth: '1049px',
+              margin: '0 auto',
+              padding: { xs: '0 16px', md: '0' },
+            }}
+          >
             {articles.map((article) => (
-              <Grid item xs={12} key={article.id} sx={{ display: 'flex' }}>
                 <Card
+                  key={article.id}
                   onClick={() => navigate(`/berita/detail-berita/${article.slug || article.id}`)}
                   sx={{
                     width: '100%',
-                    height: '640px',
+                    height: { xs: 'auto', md: '640px' },
                     display: 'flex',
                     flexDirection: 'column',
                     borderRadius: '12px',
@@ -114,15 +158,19 @@ const ArticleSection = () => {
                     '&:hover': {
                       transform: 'translateY(-8px)',
                       boxShadow: '0 8px 16px rgba(0,0,0,0.15)',
+                      '& .article-image': {
+                        transform: 'scale(1.1)',
+                      },
                     },
                   }}
                 >
-                  <Box sx={{ position: 'relative', flexShrink: 0 }}>
+                  <Box sx={{ position: 'relative', flexShrink: 0, overflow: 'hidden' }}>
                     <CardMedia
                       image={getImageUrl(article.foto)}
                       title={article.judul}
+                      className="article-image"
                       sx={{
-                        height: 350,
+                        height: { xs: 250, md: 350 },
                         width: '100%',
                         backgroundColor: '#ddd',
                         backgroundSize: 'cover',
@@ -130,6 +178,7 @@ const ArticleSection = () => {
                         backgroundImage: article.foto 
                           ? `url(${getImageUrl(article.foto)})` 
                           : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        transition: 'transform 0.5s ease',
                       }}
                     />
                     <Chip 
@@ -150,10 +199,10 @@ const ArticleSection = () => {
                     sx={{ 
                       display: 'flex', 
                       flexDirection: 'column',
-                      padding: '24px',
+                      padding: { xs: '20px', md: '24px' },
                       flexGrow: 1,
                       '&:last-child': {
-                        paddingBottom: '24px',
+                        paddingBottom: { xs: '20px', md: '24px' },
                       },
                     }}
                   >
@@ -161,12 +210,12 @@ const ArticleSection = () => {
                       <Typography 
                         variant="h6"
                         sx={{
-                          fontSize: '1.3rem',
+                          fontSize: { xs: '1.15rem', md: '1.3rem' },
                           fontWeight: 700,
                           color: '#333',
                           marginBottom: '12px',
                           lineHeight: 1.4,
-                          height: '72px',
+                          minHeight: { xs: 'auto', md: '72px' },
                           display: '-webkit-box',
                           WebkitLineClamp: 2,
                           WebkitBoxOrient: 'vertical',
@@ -179,7 +228,7 @@ const ArticleSection = () => {
                       <Typography 
                         variant="body2"
                         sx={{
-                          fontSize: '0.95rem',
+                          fontSize: { xs: '0.9rem', md: '0.95rem' },
                           color: '#666',
                           marginBottom: '16px',
                           lineHeight: 1.7,
@@ -198,6 +247,8 @@ const ArticleSection = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
+                        flexWrap: { xs: 'wrap', sm: 'nowrap' },
+                        gap: { xs: '8px', sm: '0' },
                         paddingTop: '16px',
                         marginTop: 'auto',
                         borderTop: '1px solid #eee',
@@ -214,7 +265,7 @@ const ArticleSection = () => {
                         <Typography 
                           variant="body2"
                           sx={{
-                            fontSize: '0.9rem',
+                            fontSize: { xs: '0.85rem', md: '0.9rem' },
                             color: '#555',
                             display: 'flex',
                             alignItems: 'center',
@@ -227,7 +278,7 @@ const ArticleSection = () => {
                       <Typography 
                         variant="body2"
                         sx={{
-                          fontSize: '0.9rem',
+                          fontSize: { xs: '0.85rem', md: '0.9rem' },
                           color: '#999',
                           display: 'flex',
                           alignItems: 'center',
@@ -241,9 +292,8 @@ const ArticleSection = () => {
                     </Box>
                   </CardContent>
                 </Card>
-              </Grid>
             ))}
-          </Grid>
+          </Box>
         )}
         
         <Box

@@ -1,4 +1,4 @@
-import { Box, Container, Typography, Grid, Paper, Tabs, Tab, Modal, IconButton, CircularProgress } from '@mui/material';
+import { Box, Container, Typography, Grid, Paper, Tabs, Tab, Modal, IconButton, CircularProgress, Skeleton } from '@mui/material';
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -47,6 +47,37 @@ const GaleriPage = () => {
     setOpenModal(false);
     setSelectedImage(null);
   };
+
+  // Skeleton Loading Component
+  const SkeletonCard = () => (
+    <Grid item xs={6} sm={4} md={3}>
+      <Paper
+        sx={{
+          borderRadius: '12px',
+          overflow: 'hidden',
+        }}
+      >
+        <Box
+          sx={{
+            width: '100%',
+            paddingTop: '100%',
+            position: 'relative',
+          }}
+        >
+          <Skeleton
+            variant="rectangular"
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+            }}
+          />
+        </Box>
+      </Paper>
+    </Grid>
+  );
 
   return (
     <Box>
@@ -158,9 +189,11 @@ const GaleriPage = () => {
 
           {/* Gallery Grid */}
           {loading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-              <CircularProgress />
-            </Box>
+            <Grid container spacing={{ xs: 2, sm: 3, md: 3 }} justifyContent="center">
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item) => (
+                <SkeletonCard key={item} />
+              ))}
+            </Grid>
           ) : (
           <Grid 
             container 

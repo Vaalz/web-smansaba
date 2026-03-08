@@ -2,7 +2,7 @@ import { Box, Container, Typography, Grid, IconButton, Link } from '@mui/materia
 import { Link as RouterLink } from 'react-router-dom';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import YouTubeIcon from '@mui/icons-material/YouTube';
-import TikTokIcon from '@mui/icons-material/MusicNote';
+import FacebookIcon from '@mui/icons-material/Facebook';
 import XIcon from '@mui/icons-material/X';
 import PhoneIcon from '@mui/icons-material/Phone';
 import logo from '../assets/image/logo.png';
@@ -179,14 +179,14 @@ const Footer = () => {
                     height: '40px',
                     transition: 'all 0.3s ease',
                     '&:hover': {
-                      backgroundColor: '#000',
-                      borderColor: '#000',
+                      backgroundColor: '#1877F2',
+                      borderColor: '#1877F2',
                       color: '#fff',
                       transform: 'translateY(-3px)',
                     },
                   }}
                 >
-                  <TikTokIcon sx={{ fontSize: '1.3rem' }} />
+                  <FacebookIcon sx={{ fontSize: '1.3rem' }} />
                 </IconButton>
                 <IconButton
                   component="a"

@@ -1,4 +1,4 @@
-import { Box, Container, Typography, Grid, Card, CardContent, CardMedia, Chip, Button, Avatar, CircularProgress } from '@mui/material';
+import { Box, Container, Typography, Grid, Card, CardContent, CardMedia, Chip, Button, Avatar, CircularProgress, Skeleton } from '@mui/material';
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -32,6 +32,29 @@ const CoursePage = () => {
   const filteredCourses = selectedSubject === 'ALL' 
     ? courses 
     : courses.filter(course => course.mapel === selectedSubject);
+
+  // Skeleton Loading Component
+  const SkeletonCard = () => (
+    <Grid item xs={12} sm={6} md={4}>
+      <Card
+        sx={{
+          height: { xs: 'auto', sm: '420px' },
+          minHeight: { xs: '380px', sm: '420px' },
+          borderRadius: { xs: '10px', md: '12px' },
+        }}
+      >
+        <Skeleton variant="rectangular" width="100%" height={{ xs: 160, sm: 170, md: 180 }} />
+        <CardContent sx={{ padding: { xs: '16px', sm: '18px', md: '20px' } }}>
+          <Skeleton variant="rectangular" width="40%" height={24} sx={{ mb: 1.5, borderRadius: '12px' }} />
+          <Skeleton variant="text" width="90%" height={28} sx={{ mb: 1 }} />
+          <Skeleton variant="text" width="85%" height={28} sx={{ mb: 2 }} />
+          <Skeleton variant="text" width="100%" height={20} sx={{ mb: 0.5 }} />
+          <Skeleton variant="text" width="95%" height={20} sx={{ mb: 2 }} />
+          <Skeleton variant="rectangular" width="100%" height={40} sx={{ borderRadius: '8px' }} />
+        </CardContent>
+      </Card>
+    </Grid>
+  );
 
   return (
     <Box>
@@ -170,6 +193,17 @@ const CoursePage = () => {
 
           {/* Course Grid */}
           <Box sx={{ padding: { xs: '0 16px', sm: '0' } }}>
+            {loading ? (
+              <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }} justifyContent="center">
+                {[1, 2, 3, 4, 5, 6].map((item) => (
+                  <SkeletonCard key={item} />
+                ))}
+              </Grid>
+            ) : filteredCourses.length === 0 ? (
+              <Typography sx={{ textAlign: 'center', py: 8, color: '#666' }}>
+                Belum ada materi untuk mata pelajaran ini
+              </Typography>
+            ) : (
             <Grid 
               container 
               spacing={{ xs: 2, sm: 2.5, md: 3 }}
@@ -196,10 +230,12 @@ const CoursePage = () => {
                   <CardMedia
                     sx={{
                       height: { xs: 160, sm: 170, md: 180 },
-                      backgroundColor: course.thumbnail ? 'transparent' : '#667eea',
-                      backgroundImage: course.thumbnail 
-                        ? `url(${course.thumbnail})` 
+                      backgroundColor: course.file ? 'transparent' : '#667eea',
+                      backgroundImage: course.file 
+                        ? `url(${getImageUrl(course.file)})` 
                         : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -207,11 +243,11 @@ const CoursePage = () => {
                       flexShrink: 0,
                     }}
                   >
-                    {!course.thumbnail && (
+                    {!course.file && (
                       <Book sx={{ fontSize: { xs: 50, md: 60 }, color: 'rgba(255,255,255,0.3)' }} />
                     )}
                     <Chip 
-                      label={course.level}
+                      label={course.kelas || 'Umum'}
                       size="small"
                       sx={{
                         position: 'absolute',
@@ -238,7 +274,7 @@ const CoursePage = () => {
                   >
                     {/* Subject Badge */}
                     <Chip 
-                      label={course.subject}
+                      label={course.mapel || 'Mata Pelajaran'}
                       size="small"
                       sx={{
                         alignSelf: 'flex-start',
@@ -267,14 +303,14 @@ const CoursePage = () => {
                         overflow: 'hidden',
                       }}
                     >
-                      {course.title || 'Judul Materi'}
+                      {course.judul || 'Judul Materi'}
                     </Typography>
 
                     {/* Description Placeholder */}
                     <Typography 
                       variant="body2"
                       sx={{
-                        color: course.description ? '#666' : '#ccc',
+                        color: course.deskripsi ? '#666' : '#ccc',
                         marginBottom: { xs: '14px', md: '16px' },
                         lineHeight: 1.5,
                         height: { xs: '40px', md: '42px' },
@@ -285,7 +321,7 @@ const CoursePage = () => {
                         fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.875rem' },
                       }}
                     >
-                      {course.description || 'Deskripsi materi akan ditampilkan di sini'}
+                      {course.deskripsi || 'Deskripsi materi akan ditampilkan di sini'}
                     </Typography>
 
                     {/* Action Button */}
@@ -293,8 +329,13 @@ const CoursePage = () => {
                       variant="contained"
                       endIcon={<ArrowForward sx={{ fontSize: { xs: 18, md: 20 } }} />}
                       fullWidth
+                      component={course.link ? "a" : "button"}
+                      href={course.link || undefined}
+                      target={course.link ? "_blank" : undefined}
+                      rel={course.link ? "noopener noreferrer" : undefined}
+                      disabled={!course.link}
                       sx={{
-                        backgroundColor: '#34495e',
+                        backgroundColor: course.link ? '#34495e' : '#ccc',
                         color: '#ffffff',
                         textTransform: 'none',
                         fontWeight: 600,
@@ -304,39 +345,19 @@ const CoursePage = () => {
                         fontSize: { xs: '0.85rem', md: '0.9rem' },
                         marginTop: 'auto',
                         '&:hover': {
-                          backgroundColor: '#2c3e50',
+                          backgroundColor: course.link ? '#2c3e50' : '#ccc',
                         },
                       }}
                     >
-                      Lihat Materi
+                      {course.link ? 'Lihat Materi' : 'Link Belum Tersedia'}
                     </Button>
                   </CardContent>
                 </Card>
               </Grid>
             ))}
             </Grid>
+            )}
           </Box>
-
-          {/* Empty State */}
-          {filteredCourses.length === 0 && (
-            <Box
-              sx={{
-                textAlign: 'center',
-                padding: { xs: '30px 16px', sm: '40px 20px', md: '60px 40px' },
-              }}
-            >
-              <Typography
-                variant="h6"
-                sx={{
-                  fontSize: { xs: '1rem', sm: '1.1rem', md: '1.3rem' },
-                  color: '#999',
-                  fontWeight: 500,
-                }}
-              >
-                Belum ada materi untuk mata pelajaran ini
-              </Typography>
-            </Box>
-          )}
         </Container>
       </Box>
 

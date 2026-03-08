@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Container, Typography, Card, CardContent, Button, CircularProgress } from '@mui/material';
+import { Box, Container, Typography, Card, CardContent, Button, CircularProgress, Skeleton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import { getPrestasiList } from '../services/api';
@@ -20,12 +20,34 @@ const AchievementSection = () => {
       // Ambil 3 prestasi terbaru
       const top3 = response.data.data.slice(0, 3);
       
-      // Map data dengan medal color
-      const achievementsWithMedal = top3.map((prestasi, index) => ({
-        ...prestasi,
-        rank: index === 0 ? 'JUARA 1' : index === 1 ? 'JUARA 2' : 'JUARA 3',
-        medalColor: index === 0 ? '#FFD700' : index === 1 ? '#C0C0C0' : '#CD7F32',
-      }));
+      // Map data dengan medal color berdasarkan juara field atau fallback ke index
+      const achievementsWithMedal = top3.map((prestasi, index) => {
+        let rank = prestasi.juara || (index === 0 ? 'JUARA 1' : index === 1 ? 'JUARA 2' : 'JUARA 3');
+        let medalColor;
+        
+        // Determine medal color based on juara field or index
+        if (prestasi.juara) {
+          const juaraLower = prestasi.juara.toLowerCase();
+          if (juaraLower.includes('juara 1') || juaraLower === '1') {
+            medalColor = '#FFD700'; // Gold
+          } else if (juaraLower.includes('juara 2') || juaraLower === '2') {
+            medalColor = '#C0C0C0'; // Silver
+          } else if (juaraLower.includes('juara 3') || juaraLower === '3') {
+            medalColor = '#CD7F32'; // Bronze
+          } else {
+            medalColor = '#757575'; // Gray for other rankings
+          }
+        } else {
+          // Fallback to index-based coloring
+          medalColor = index === 0 ? '#FFD700' : index === 1 ? '#C0C0C0' : '#CD7F32';
+        }
+        
+        return {
+          ...prestasi,
+          rank: rank.toUpperCase(),
+          medalColor,
+        };
+      });
       
       setAchievements(achievementsWithMedal);
     } catch (error) {
@@ -35,6 +57,33 @@ const AchievementSection = () => {
       setLoading(false);
     }
   };
+
+  // Skeleton Loading Component
+  const SkeletonCard = () => (
+    <Card
+      sx={{
+        minWidth: { xs: '280px', sm: '320px' },
+        minHeight: { xs: '340px', sm: '360px' },
+        width: { xs: '100%', sm: '320px' },
+        maxWidth: { xs: '320px', sm: 'none' },
+        backgroundColor: 'transparent',
+        border: '2px solid rgba(255,255,255,0.2)',
+        borderRadius: '16px',
+      }}
+    >
+      <CardContent sx={{ padding: '32px 24px' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+          <Skeleton variant="circular" width={70} height={70} sx={{ bgcolor: 'rgba(255,255,255,0.1)' }} />
+        </Box>
+        <Skeleton variant="text" width="60%" height={36} sx={{ mx: 'auto', mb: 2, bgcolor: 'rgba(255,255,255,0.1)' }} />
+        <Skeleton variant="text" width="80%" height={28} sx={{ mx: 'auto', mb: 1, bgcolor: 'rgba(255,255,255,0.1)' }} />
+        <Skeleton variant="text" width="90%" height={24} sx={{ mx: 'auto', mb: 1, bgcolor: 'rgba(255,255,255,0.1)' }} />
+        <Skeleton variant="text" width="50%" height={24} sx={{ mx: 'auto', mb: 2, bgcolor: 'rgba(255,255,255,0.1)' }} />
+        <Skeleton variant="rectangular" width="100%" height={40} sx={{ mt: 2, borderRadius: '8px', bgcolor: 'rgba(255,255,255,0.1)' }} />
+      </CardContent>
+    </Card>
+  );
+
   return (
     <Box
       sx={{
@@ -74,8 +123,19 @@ const AchievementSection = () => {
       {/* Achievement Cards Container */}
       <Container maxWidth="lg">
         {loading ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-            <CircularProgress sx={{ color: '#fff' }} />
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'stretch',
+              gap: { xs: 2, md: 3 },
+              flexWrap: 'wrap',
+              padding: { xs: '0 16px', md: '0' },
+            }}
+          >
+            {[1, 2, 3].map((item) => (
+              <SkeletonCard key={item} />
+            ))}
           </Box>
         ) : achievements.length === 0 ? (
           <Typography sx={{ textAlign: 'center', py: 8, color: '#b8c5d6' }}>

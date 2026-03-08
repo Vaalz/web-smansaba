@@ -9,8 +9,8 @@ const formFields = [
   { name: 'mapel', label: 'Kode Mata Pelajaran', required: true },
   { name: 'kelas', label: 'Kelas', required: true },
   { name: 'deskripsi', label: 'Deskripsi', multiline: true, rows: 3, required: false },
-  { name: 'konten', label: 'Konten', multiline: true, rows: 4, required: false },
-  { name: 'file', label: 'File Silabus', type: 'file', required: false },
+  { name: 'file', label: 'File Silabus/Gambar', type: 'file', accept: '.pdf,.doc,.docx,.jpg,.jpeg,.png,.gif', fileTypes: 'PDF, DOC, DOCX, JPG, PNG, GIF', maxSize: '5 MB', required: false },
+  { name: 'link', label: 'Link Materi (Google Drive, Classroom, dll)', required: false },
 ];
 
 function AdminCourse() {

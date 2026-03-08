@@ -14,6 +14,13 @@ const formFields = [
     required: true 
   },
   { name: 'kategori', label: 'Kategori', required: true },
+  { 
+    name: 'juara', 
+    label: 'Juara (Opsional)', 
+    type: 'select',
+    options: ['Juara 1', 'Juara 2', 'Juara 3', 'Juara Harapan 1', 'Juara Harapan 2'],
+    required: false 
+  },
   { name: 'tahun', label: 'Tahun', required: true },
 ];
 
@@ -39,6 +46,24 @@ function AdminPrestasi() {
       },
     },
     { field: 'kategori', headerName: 'Kategori' },
+    {
+      field: 'juara',
+      headerName: 'Juara',
+      render: (value) => {
+        if (!value) return '-';
+        let color = 'default';
+        if (value === 'Juara 1') {
+          color = 'warning'; // Gold
+        } else if (value === 'Juara 2') {
+          color = 'default'; // Silver
+        } else if (value === 'Juara 3') {
+          color = 'info'; // Bronze
+        }
+        return <Chip label={value} color={color} size="small" sx={{
+          fontWeight: value.startsWith('Juara ') && ['1', '2', '3'].includes(value.slice(-1)) ? 600 : 400
+        }} />;
+      },
+    },
     { field: 'tahun', headerName: 'Tahun' },
   ];
 

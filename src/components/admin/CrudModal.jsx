@@ -75,8 +75,8 @@ function CrudModal({ open, onClose, onSubmit, title, fields, formData, setFormDa
 
     if (field.type === 'file') {
       const isImageFile = !field.accept || field.accept.includes('image');
-      const maxSize = isImageFile ? '2 MB' : '5 MB';
-      const fileTypes = isImageFile ? 'JPG, PNG, GIF' : 'PDF, DOC, DOCX';
+      const maxSize = field.maxSize || (isImageFile ? '2 MB' : '5 MB');
+      const fileTypes = field.fileTypes || (isImageFile ? 'JPG, PNG, GIF' : 'PDF, DOC, DOCX');
       
       return (
         <Box key={field.name}>

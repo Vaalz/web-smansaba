@@ -51,12 +51,6 @@ const BeritaPage = () => {
     return diffDays <= 7; // Berita baru jika kurang dari 7 hari
   };
 
-  const stripHtml = (html) => {
-    const tmp = document.createElement('DIV');
-    tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || '';
-  };
-
   // Pagination
   const totalPages = Math.ceil(beritaList.length / itemsPerPage);
   const startIndex = (page - 1) * itemsPerPage;
@@ -69,19 +63,24 @@ const BeritaPage = () => {
 
   // Skeleton Loading Component
   const SkeletonCard = () => (
-    <Grid item xs={12} sm={6} md={4}>
-      <Card sx={{ borderRadius: '12px', overflow: 'hidden' }}>
-        <Skeleton variant="rectangular" height={225} />
-        <CardContent sx={{ padding: '20px' }}>
-          <Skeleton variant="text" height={32} />
-          <Skeleton variant="text" height={24} width="80%" />
-          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
-            <Skeleton variant="text" width="40%" />
-            <Skeleton variant="text" width="30%" />
-          </Box>
-        </CardContent>
-      </Card>
-    </Grid>
+    <Card sx={{ 
+      minWidth: { xs: '280px', sm: '320px' },
+      width: { xs: '100%', sm: '320px' },
+      maxWidth: { xs: '320px', sm: 'none' },
+      borderRadius: '16px', 
+      overflow: 'hidden',
+    }}>
+      <Skeleton variant="rectangular" width="100%" height={180} />
+      <CardContent sx={{ padding: '16px' }}>
+        <Skeleton variant="text" height={28} width="90%" sx={{ mb: 1 }} />
+        <Skeleton variant="text" height={28} width="85%" sx={{ mb: 1 }} />
+        <Skeleton variant="text" height={28} width="80%" sx={{ mb: 2 }} />
+        <Box sx={{ mt: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Skeleton variant="text" width="40%" height={20} />
+          <Skeleton variant="text" width="35%" height={20} />
+        </Box>
+      </CardContent>
+    </Card>
   );
 
   return (
@@ -128,7 +127,7 @@ const BeritaPage = () => {
       {/* Berita Content Section */}
       <Box
         sx={{
-          padding: { xs: '40px 16px 60px', md: '60px 0 80px' },
+          padding: { xs: '40px 0 60px', md: '60px 0 80px' },
           backgroundColor: '#fafafa',
         }}
       >
@@ -147,49 +146,57 @@ const BeritaPage = () => {
           </Typography>
 
           {loading ? (
-            <Grid 
-              container 
-              spacing={{ xs: 2, sm: 2.5, md: 3 }}
-              justifyContent="center"
-              sx={{ maxWidth: '1400px', margin: '0 auto' }}
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'stretch',
+                gap: { xs: 2, md: 3 },
+                flexWrap: 'wrap',
+                padding: { xs: '0 16px', md: '0' },
+              }}
             >
               {[1, 2, 3, 4, 5, 6].map((item) => (
                 <SkeletonCard key={item} />
               ))}
-            </Grid>
+            </Box>
           ) : beritaList.length === 0 ? (
             <Typography sx={{ textAlign: 'center', py: 8, color: '#666' }}>
               Belum ada berita
             </Typography>
           ) : (
             <>
-            <Grid 
-              container 
-              spacing={{ xs: 2, sm: 2.5, md: 3 }}
-              justifyContent="center"
+            <Box
               sx={{
-                maxWidth: '1400px',
-                margin: '0 auto',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'stretch',
+                gap: { xs: 2, md: 3 },
+                flexWrap: 'wrap',
+                padding: { xs: '0 16px', md: '0' },
               }}
             >
               {currentBerita.map((berita) => (
-              <Grid item xs={12} sm={6} md={4} key={berita.id}>
                 <Card
+                  key={berita.id}
                   onClick={() => navigate(`/detail-berita/${berita.slug}`)}
                   sx={{
-                    height: '100%',
-                    minHeight: { xs: '400px', sm: '420px' },
+                    minWidth: { xs: '280px', sm: '320px' },
+                    minHeight: '420px',
+                    width: { xs: '100%', sm: '320px' },
+                    maxWidth: { xs: '320px', sm: 'none' },
                     display: 'flex',
                     flexDirection: 'column',
-                    borderRadius: '12px',
+                    borderRadius: '16px',
                     boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
                     transition: 'all 0.3s ease',
                     overflow: 'hidden',
                     cursor: 'pointer',
-                    position: 'relative',
+                    border: '1px solid #e0e0e0',
                     '&:hover': {
                       transform: 'translateY(-8px)',
                       boxShadow: '0 12px 28px rgba(0,0,0,0.2)',
+                      borderColor: '#1976d2',
                       '& .card-image': {
                         transform: 'scale(1.08)',
                       },
@@ -203,9 +210,7 @@ const BeritaPage = () => {
                   <Box sx={{ 
                     position: 'relative', 
                     overflow: 'hidden', 
-                    height: 180,
-                    minHeight: 180,
-                    maxHeight: 180,
+                    height: { xs: 180, sm: 190, md: 200 },
                     flexShrink: 0,
                   }}>
                     <CardMedia
@@ -215,7 +220,7 @@ const BeritaPage = () => {
                       className="card-image"
                       sx={{
                         width: '100%',
-                        height: 180,
+                        height: { xs: 180, sm: 190, md: 200 },
                         objectFit: 'cover',
                         objectPosition: 'center',
                         backgroundColor: '#e0e0e0',
@@ -244,12 +249,12 @@ const BeritaPage = () => {
                       size="small"
                       sx={{
                         position: 'absolute',
-                        top: 12,
-                        left: 12,
+                        top: { xs: 10, md: 12 },
+                        left: { xs: 10, md: 12 },
                         backgroundColor: 'rgba(255, 255, 255, 0.95)',
                         color: '#1976d2',
                         fontWeight: 600,
-                        fontSize: '0.75rem',
+                        fontSize: { xs: '0.7rem', md: '0.75rem' },
                         textTransform: 'uppercase',
                         letterSpacing: '0.5px',
                         boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
@@ -260,16 +265,16 @@ const BeritaPage = () => {
                     {/* Badge Berita Baru */}
                     {isNewBerita(berita.tanggal) && (
                       <Chip
-                        icon={<FiberNew sx={{ fontSize: 18 }} />}
+                        icon={<FiberNew sx={{ fontSize: { xs: 16, md: 18 } }} />}
                         label="Baru"
                         size="small"
                         color="error"
                         sx={{
                           position: 'absolute',
-                          top: 12,
-                          right: 12,
+                          top: { xs: 10, md: 12 },
+                          right: { xs: 10, md: 12 },
                           fontWeight: 600,
-                          fontSize: '0.75rem',
+                          fontSize: { xs: '0.7rem', md: '0.75rem' },
                           boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
                           zIndex: 1,
                         }}
@@ -280,7 +285,7 @@ const BeritaPage = () => {
                   {/* Content */}
                   <CardContent
                     sx={{
-                      padding: '14px',
+                      padding: { xs: '16px', md: '20px' },
                       flexGrow: 1,
                       display: 'flex',
                       flexDirection: 'column',
@@ -291,14 +296,14 @@ const BeritaPage = () => {
                       <Typography
                         variant="h6"
                         sx={{
-                          fontSize: '1rem',
+                          fontSize: { xs: '1rem', md: '1.05rem' },
                           fontWeight: 700,
                           color: '#333',
-                          marginBottom: '6px',
+                          marginBottom: { xs: '10px', md: '12px' },
                           lineHeight: 1.4,
-                          minHeight: '56px',
+                          minHeight: { xs: '56px', md: '63px' },
                           display: '-webkit-box',
-                          WebkitLineClamp: 2,
+                          WebkitLineClamp: 3,
                           WebkitBoxOrient: 'vertical',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
@@ -310,27 +315,6 @@ const BeritaPage = () => {
                       >
                         {berita.judul}
                       </Typography>
-
-                      {/* Excerpt Konten */}
-                      {berita.konten && (
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            fontSize: '0.85rem',
-                            color: '#666',
-                            lineHeight: 1.5,
-                            marginBottom: '8px',
-                            minHeight: '42px',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                          }}
-                        >
-                          {stripHtml(berita.konten)}
-                        </Typography>
-                      )}
                     </Box>
 
                     {/* Meta Info */}
@@ -339,8 +323,9 @@ const BeritaPage = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        paddingTop: '6px',
-                        borderTop: '1px solid #eee',
+                        paddingTop: { xs: '10px', md: '12px' },
+                        marginTop: 'auto',
+                        borderTop: '1px solid #e0e0e0',
                       }}
                     >
                       {/* Penulis */}
@@ -352,11 +337,11 @@ const BeritaPage = () => {
                           maxWidth: '50%',
                         }}
                       >
-                        <Person sx={{ fontSize: 16, color: '#999', flexShrink: 0 }} />
+                        <Person sx={{ fontSize: { xs: 16, md: 18 }, color: '#999', flexShrink: 0 }} />
                         <Typography
                           variant="body2"
                           sx={{
-                            fontSize: '0.8rem',
+                            fontSize: { xs: '0.8rem', md: '0.85rem' },
                             color: '#666',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
@@ -376,12 +361,12 @@ const BeritaPage = () => {
                           flexShrink: 0,
                         }}
                       >
-                        <CalendarToday sx={{ fontSize: 14, color: '#999' }} />
+                        <CalendarToday sx={{ fontSize: { xs: 14, md: 16 }, color: '#999' }} />
                         <Typography
                           variant="body2"
                           sx={{
-                            fontSize: '0.8rem',
-                            color: '#999',
+                            fontSize: { xs: '0.8rem', md: '0.85rem' },
+                            color: '#666',
                           }}
                         >
                           {formatDate(berita.tanggal)}
@@ -390,9 +375,8 @@ const BeritaPage = () => {
                     </Box>
                   </CardContent>
                 </Card>
-              </Grid>
             ))}
-          </Grid>
+          </Box>
 
           {/* Pagination */}
           {totalPages > 1 && (

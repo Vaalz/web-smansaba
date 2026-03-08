@@ -9,7 +9,6 @@ const formFields = [
   { name: 'kategori', label: 'Kategori', required: true },
   { name: 'penulis', label: 'Penulis', required: true },
   { name: 'tanggal', label: 'Tanggal', type: 'date', required: true },
-  { name: 'konten', label: 'Konten', multiline: true, rows: 4, required: true },
   { name: 'foto', label: 'Gambar', type: 'file', required: false },
 ];
 

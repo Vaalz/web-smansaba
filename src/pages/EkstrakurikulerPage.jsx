@@ -1,4 +1,4 @@
-import { Box, Container, Typography, Card, CardContent, Grid, CircularProgress } from '@mui/material';
+import { Box, Container, Typography, Card, CardContent, Grid, CircularProgress, Skeleton } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -41,6 +41,39 @@ const EkstrakurikulerPage = () => {
     };
     return icons[iconName] || Sports;
   };
+
+  // Skeleton Loading Component
+  const SkeletonCard = () => (
+    <Grid item xs={12} sm={6} md={4}>
+      <Card
+        sx={{
+          height: '220px',
+          width: '200px',
+          borderRadius: '12px',
+          borderTop: '4px solid #1976d2',
+          overflow: 'hidden',
+        }}
+      >
+        <CardContent
+          sx={{
+            padding: '20px 16px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center',
+            height: '100%',
+          }}
+        >
+          <Skeleton variant="circular" width={70} height={70} sx={{ mb: 1.5 }} />
+          <Skeleton variant="rectangular" width="60%" height={24} sx={{ mb: 1.25, borderRadius: '20px' }} />
+          <Skeleton variant="text" width="90%" height={28} sx={{ mb: 1 }} />
+          <Skeleton variant="text" width="100%" height={20} sx={{ mb: 0.5 }} />
+          <Skeleton variant="text" width="95%" height={20} sx={{ mb: 0.5 }} />
+          <Skeleton variant="text" width="85%" height={20} />
+        </CardContent>
+      </Card>
+    </Grid>
+  );
 
   return (
     <Box>
@@ -105,9 +138,11 @@ const EkstrakurikulerPage = () => {
           </Typography>
 
           {loading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-              <CircularProgress />
-            </Box>
+            <Grid container spacing={{ xs: 2, sm: 3, md: 4 }} justifyContent="center">
+              {[1, 2, 3, 4, 5, 6].map((item) => (
+                <SkeletonCard key={item} />
+              ))}
+            </Grid>
           ) : ekstrakurikulerList.length === 0 ? (
             <Typography sx={{ textAlign: 'center', py: 8, color: '#666' }}>
               Belum ada data ekstrakurikuler
