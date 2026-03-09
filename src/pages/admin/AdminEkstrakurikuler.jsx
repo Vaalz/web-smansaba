@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Box, CircularProgress, Alert, Tabs, Tab, Typography, MenuItem } from '@mui/material';
+import { Box, CircularProgress, Alert, Tabs, Tab, Typography, MenuItem, Avatar } from '@mui/material';
 import CrudTable from '../../components/admin/CrudTable';
 import CrudModal from '../../components/admin/CrudModal';
 import { 
   getAdminEkstrakurikuler, createEkstrakurikuler, updateEkstrakurikuler, deleteEkstrakurikuler,
   getAdminJadwalEkstrakurikuler, createJadwalEkstrakurikuler, updateJadwalEkstrakurikuler, deleteJadwalEkstrakurikuler,
   getAdminStrukturEkstrakurikuler, createStrukturEkstrakurikuler, updateStrukturEkstrakurikuler, deleteStrukturEkstrakurikuler,
-  getAdminPrestasiEkstrakurikuler, createPrestasiEkstrakurikuler, updatePrestasiEkstrakurikuler, deletePrestasiEkstrakurikuler
+  getAdminPrestasiEkstrakurikuler, createPrestasiEkstrakurikuler, updatePrestasiEkstrakurikuler, deletePrestasiEkstrakurikuler,
+  getImageUrl
 } from '../../services/api';
 
 function TabPanel({ children, value, index }) {
@@ -23,6 +24,7 @@ const ekskulFormFields = [
   { name: 'pembina', label: 'Pembina', required: true },
   { name: 'deskripsi', label: 'Deskripsi', multiline: true, rows: 4, required: false },
   { name: 'icon', label: 'Icon (Sports/MusicNote/Palette/Science/Language)', required: false },
+  { name: 'logo', label: 'Logo Ekstrakurikuler', type: 'file', required: false, accept: 'image/*' },
 ];
 
 function AdminEkstrakurikuler() {
@@ -42,6 +44,17 @@ function AdminEkstrakurikuler() {
     { field: 'nama', headerName: 'Nama' },
     { field: 'kategori', headerName: 'Kategori' },
     { field: 'pembina', headerName: 'Pembina' },
+    { 
+      field: 'logo', 
+      headerName: 'Logo', 
+      render: (value) => value ? (
+        <Avatar 
+          src={getImageUrl(value)} 
+          variant="rounded" 
+          sx={{ width: 50, height: 50 }}
+        />
+      ) : '-'
+    },
   ];
 
   const jadwalColumns = [

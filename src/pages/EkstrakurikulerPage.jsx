@@ -19,9 +19,12 @@ const EkstrakurikulerPage = () => {
   const fetchEkstrakurikuler = async () => {
     try {
       const response = await getEkstrakurikulerList();
+      console.log('API Response:', response);
+      console.log('Ekstrakurikuler Data:', response.data.data);
       setEkstrakurikulerList(response.data.data || []);
     } catch (error) {
       console.error('Error fetching ekstrakurikuler:', error);
+      console.error('Error details:', error.response || error.message);
     } finally {
       setLoading(false);
     }
