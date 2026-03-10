@@ -1,19 +1,46 @@
-import { Box, Container, Typography, Grid, Paper, Tabs, Tab, Modal, IconButton, CircularProgress, Skeleton } from '@mui/material';
 import { useState, useEffect } from 'react';
+import {
+  Box,
+  Container,
+  Typography,
+  Grid,
+  Card,
+  CardMedia,
+  Chip,
+  CircularProgress,
+  Alert,
+  Modal,
+  IconButton,
+} from '@mui/material';
+import { Close } from '@mui/icons-material';
+import { getGaleriList, getImageUrl } from '../services/api';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import smansabaImage from '../assets/image/smansaba.jpg';
-import { Close as CloseIcon } from '@mui/icons-material';
-import { getGaleriList, getImageUrl } from '../services/api';
 
 const GaleriPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState('ALL');
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
   const [galeriList, setGaleriList] = useState([]);
+  const [categories, setCategories] = useState(['ALL']);
+  const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
 
-  const categories = ['ALL', 'SCHOOL', 'TEACHERS', 'STUDENTS', 'CEREMONY', 'UNIVERSITY CORNER'];
+  const handleImageClick = (item) => {
+    setSelectedImage(item);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSelectedImage(null);
+  };
+
+  useEffect(() => {
+    const uniqueCategories = [...new Set(galeriList.map(item => item.kategori).filter(Boolean))];
+    setCategories(['ALL', ...uniqueCategories]);
+  }, [galeriList]);
 
   useEffect(() => {
     fetchGaleri();
@@ -21,10 +48,19 @@ const GaleriPage = () => {
 
   const fetchGaleri = async () => {
     try {
-      const response = await getGaleriList();
-      setGaleriList(response.data.data || []);
+      setLoading(true);
+      console.log('Fetching galeri...');
+      const response = await getGaleriList({ per_page: 100 });
+      
+      console.log('API Response:', response);
+      
+      const data = response?.data?.data || response?.data || [];
+      
+      setGaleriList(data);
     } catch (error) {
       console.error('Error fetching galeri:', error);
+      setGaleriList([]);
+      setError('Gagal memuat galeri. Silakan coba lagi nanti.');
     } finally {
       setLoading(false);
     }
@@ -34,53 +70,8 @@ const GaleriPage = () => {
     ? galeriList 
     : galeriList.filter(item => item.kategori === selectedCategory);
 
-  const handleCategoryChange = (event, newValue) => {
-    setSelectedCategory(newValue);
-  };
-
-  const handleImageClick = (image) => {
-    setSelectedImage(image);
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setSelectedImage(null);
-  };
-
-  // Skeleton Loading Component
-  const SkeletonCard = () => (
-    <Grid item xs={6} sm={4} md={3}>
-      <Paper
-        sx={{
-          borderRadius: '12px',
-          overflow: 'hidden',
-        }}
-      >
-        <Box
-          sx={{
-            width: '100%',
-            paddingTop: '100%',
-            position: 'relative',
-          }}
-        >
-          <Skeleton
-            variant="rectangular"
-            sx={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-            }}
-          />
-        </Box>
-      </Paper>
-    </Grid>
-  );
-
   return (
-    <Box>
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Navbar />
       
       {/* Hero Section */}
@@ -101,8 +92,7 @@ const GaleriPage = () => {
           <Box
             sx={{
               textAlign: 'center',
-              color: '#ffffff',
-              padding: { xs: '0 16px', md: '0' },
+              color: 'white',
             }}
           >
             <Typography
@@ -114,180 +104,261 @@ const GaleriPage = () => {
                 letterSpacing: '2px',
               }}
             >
-              GALERI SMANSABA
+              Galeri Foto
             </Typography>
           </Box>
         </Container>
       </Box>
 
-      {/* Galeri Content Section */}
-      <Box
-        sx={{
-          padding: { xs: '40px 16px 60px', md: '60px 0 80px' },
-          backgroundColor: '#fafafa',
-          minHeight: '50vh',
-        }}
-      >
-        <Container maxWidth="lg">
-          <Typography
-            variant="h2"
-            sx={{
-              fontSize: { xs: '1.75rem', sm: '2rem', md: '2.25rem' },
-              fontWeight: 700,
-              textAlign: 'center',
-              marginBottom: { xs: '30px', md: '40px' },
-              color: '#333',
-            }}
-          >
-            Galeri Foto
-          </Typography>
-
-          {/* Category Tabs */}
-          <Box sx={{ marginBottom: { xs: '30px', md: '40px' }, display: 'flex', justifyContent: 'center' }}>
-            <Paper
-              elevation={0}
-              sx={{
-                backgroundColor: '#ffffff',
-                borderRadius: '12px',
-                padding: '8px',
-                boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-              }}
-            >
-              <Tabs
-                value={selectedCategory}
-                onChange={handleCategoryChange}
-                variant="scrollable"
-                scrollButtons="auto"
-                sx={{
-                  '& .MuiTab-root': {
-                    minHeight: '48px',
-                    fontSize: { xs: '0.85rem', sm: '0.9rem', md: '0.95rem' },
-                    fontWeight: 600,
-                    textTransform: 'none',
-                    color: '#666',
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      color: '#1976d2',
-                    },
-                  },
-                  '& .Mui-selected': {
-                    color: '#1976d2 !important',
-                  },
-                  '& .MuiTabs-indicator': {
-                    backgroundColor: '#1976d2',
-                    height: '3px',
-                    borderRadius: '3px 3px 0 0',
-                  },
-                }}
-              >
-                {categories.map((category) => (
-                  <Tab key={category} label={category} value={category} />
-                ))}
-              </Tabs>
-            </Paper>
-          </Box>
-
-          {/* Gallery Grid */}
-          {loading ? (
-            <Grid container spacing={{ xs: 2, sm: 3, md: 3 }} justifyContent="center">
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item) => (
-                <SkeletonCard key={item} />
-              ))}
-            </Grid>
-          ) : (
-          <Grid 
-            container 
-            spacing={{ xs: 2, sm: 3, md: 3 }}
-            justifyContent="center"
-          >
-            {filteredGaleri.map((item) => (
-              <Grid item xs={6} sm={4} md={3} key={item.id}>
-                <Paper
-                  onClick={() => handleImageClick(item)}
-                  sx={{
-                    borderRadius: '12px',
-                    overflow: 'hidden',
-                    boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                    cursor: 'pointer',
-                    backgroundColor: '#ffffff',
-                    '&:hover': {
-                      transform: 'translateY(-4px)',
-                      boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-                    },
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: '100%',
-                      paddingTop: '100%', // 1:1 aspect ratio
-                      position: 'relative',
-                      backgroundColor: '#e0e0e0',
-                    }}
-                  >
-                    {item.foto ? (
-                      <Box
-                        component="img"
-                        src={getImageUrl(item.foto)}
-                        alt={item.judul}
-                        sx={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                        }}
-                      />
-                    ) : (
-                      <Box
-                        sx={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          width: '100%',
-                          height: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Typography sx={{ color: '#999', fontSize: '0.85rem' }}>
-                          {item.judul}
-                        </Typography>
-                      </Box>
-                    )}
-                  </Box>
-                </Paper>
-              </Grid>
-            ))}
-          </Grid>
-          )}
-
-          {/* Empty State */}
-          {!loading && filteredGaleri.length === 0 && (
+      {/* Category Filter */}
+      {!loading && !error && categories.length > 1 && (
+        <Box
+          sx={{
+            backgroundColor: '#f8f9fa',
+            borderBottom: '1px solid #e0e0e0',
+            py: 3,
+          }}
+        >
+          <Container maxWidth="lg">
             <Box
               sx={{
-                textAlign: 'center',
-                padding: { xs: '40px 20px', md: '60px 40px' },
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: 1,
+                justifyContent: 'center',
               }}
             >
-              <Typography
-                variant="h6"
-                sx={{
-                  fontSize: { xs: '1.1rem', md: '1.3rem' },
-                  color: '#999',
-                  fontWeight: 500,
-                }}
-              >
-                Belum ada foto di kategori ini
+              {categories.map((category) => (
+                <Chip
+                  key={category}
+                  label={category}
+                  onClick={() => setSelectedCategory(category)}
+                  color={selectedCategory === category ? 'primary' : 'default'}
+                  sx={{
+                    fontWeight: selectedCategory === category ? 600 : 400,
+                    fontSize: '0.9rem',
+                    px: 1,
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      transform: 'translateY(-2px)',
+                      boxShadow: 2,
+                    },
+                  }}
+                />
+              ))}
+            </Box>
+          </Container>
+        </Box>
+      )}
+
+      {/* Content Section */}
+      <Container maxWidth="lg" sx={{ py: 6, flex: 1 }}>
+        {error && (
+          <Alert severity="error" sx={{ mb: 3 }}>
+            {error}
+          </Alert>
+        )}
+
+        {loading ? (
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: 400,
+            }}
+          >
+            <Box sx={{ textAlign: 'center' }}>
+              <CircularProgress size={60} />
+              <Typography variant="body1" sx={{ mt: 2, color: 'text.secondary' }}>
+                Memuat galeri...
               </Typography>
             </Box>
-          )}
-        </Container>
-      </Box>
+          </Box>
+        ) : filteredGaleri.length > 0 ? (
+          <Grid 
+            container 
+            spacing={{ xs: 2, sm: 2.5, md: 3 }}
+            justifyContent="center"
+          >
+            {filteredGaleri.map((item) => {
+              const imageUrl = item.foto 
+                ? getImageUrl(item.foto)
+                : 'https://via.placeholder.com/600x400?text=No+Image';
 
-      {/* Modal untuk Full Image */}
+              return (
+                <Grid item xs={12} sm={6} md={4} key={item.id} sx={{ display: 'flex', justifyContent: 'center' }}>
+                  <Card
+                    sx={{
+                      width: '320px',
+                      height: { xs: 'auto', sm: '420px' },
+                      minHeight: { xs: '380px', sm: '420px' },
+                      display: 'flex',
+                      flexDirection: 'column',
+                      borderRadius: { xs: '10px', md: '12px' },
+                      boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                      transition: 'all 0.3s ease',
+                      overflow: 'hidden',
+                      border: '1px solid #e0e0e0',
+                      '&:hover': {
+                        transform: { xs: 'translateY(-4px)', md: 'translateY(-8px)' },
+                        boxShadow: '0 12px 28px rgba(0,0,0,0.2)',
+                        borderColor: '#1976d2',
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        position: 'relative',
+                        overflow: 'hidden',
+                        cursor: 'pointer',
+                        height: { xs: 160, sm: 170, md: 180 },
+                        minHeight: { xs: 160, sm: 170, md: 180 },
+                        maxHeight: { xs: 160, sm: 170, md: 180 },
+                        flexShrink: 0,
+                      }}
+                      onClick={() => handleImageClick(item)}
+                    >
+                      <CardMedia
+                        component="img"
+                        image={imageUrl}
+                        alt={item.judul || 'Galeri Image'}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = 'https://via.placeholder.com/600x400?text=Image+Not+Found';
+                        }}
+                        sx={{
+                          objectFit: 'cover',
+                          objectPosition: 'center',
+                          transition: 'transform 0.3s ease',
+                          width: '100%',
+                          height: '100%',
+                          display: 'block',
+                          '&:hover': {
+                            transform: 'scale(1.1)',
+                          },
+                        }}
+                      />
+                    </Box>
+                    <Box 
+                      sx={{ 
+                        height: { xs: 'auto', sm: '240px' },
+                        minHeight: { xs: '220px', sm: '240px' },
+                        padding: { xs: '16px', sm: '18px', md: '20px' },
+                        display: 'flex', 
+                        flexDirection: 'column',
+                        overflow: 'hidden',
+                        flexGrow: 1,
+                      }}
+                    >
+                      <Typography
+                        variant="h3"
+                        component="h3"
+                        sx={{
+                          fontWeight: 700,
+                          color: '#333',
+                          marginBottom: { xs: '12px', md: '16px' },
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          fontSize: { xs: '1rem', sm: '1.05rem', md: '1.1rem' },
+                          lineHeight: 1.3,
+                        }}
+                      >
+                        {item.judul}
+                      </Typography>
+
+                      {item.caption && (
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{
+                            marginBottom: { xs: '12px', md: '16px' },
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 3,
+                            WebkitBoxOrient: 'vertical',
+                            fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.9rem' },
+                            lineHeight: 1.5,
+                            flexGrow: 1,
+                          }}
+                        >
+                          {item.caption}
+                        </Typography>
+                      )}
+
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          mt: 'auto',
+                          flexWrap: 'wrap',
+                          gap: 1,
+                        }}
+                      >
+                        {item.kategori && (
+                          <Chip
+                            label={item.kategori}
+                            size="small"
+                            sx={{
+                              backgroundColor: '#e3f2fd',
+                              color: '#1976d2',
+                              fontWeight: 600,
+                              fontSize: { xs: '0.7rem', md: '0.75rem' },
+                              height: { xs: '22px', md: '24px' },
+                            }}
+                          />
+                        )}
+                        {item.tanggal && (
+                          <Typography 
+                            variant="caption" 
+                            color="text.secondary" 
+                            sx={{ 
+                              fontSize: { xs: '0.7rem', md: '0.75rem' },
+                              fontWeight: 500,
+                            }}
+                          >
+                            {new Date(item.tanggal).toLocaleDateString('id-ID', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                            })}
+                          </Typography>
+                        )}
+                      </Box>
+                    </Box>
+                  </Card>
+                </Grid>
+              );
+            })}
+          </Grid>
+        ) : (
+          <Box
+            sx={{
+              textAlign: 'center',
+              py: 8,
+            }}
+          >
+            <Typography variant="h6" color="text.secondary" gutterBottom>
+              Belum ada foto dalam galeri
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {selectedCategory !== 'ALL' 
+                ? `Tidak ada foto untuk kategori "${selectedCategory}"`
+                : 'Galeri akan segera diperbarui'}
+            </Typography>
+          </Box>
+        )}
+      </Container>
+
+      <Footer />
+
+      {/* Modal untuk menampilkan gambar full screen */}
       <Modal
         open={openModal}
         onClose={handleCloseModal}
@@ -295,6 +366,7 @@ const GaleriPage = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          p: 2,
         }}
       >
         <Box
@@ -309,50 +381,32 @@ const GaleriPage = () => {
             onClick={handleCloseModal}
             sx={{
               position: 'absolute',
-              top: { xs: -40, md: -50 },
-              right: { xs: 0, md: 0 },
-              color: '#ffffff',
-              backgroundColor: 'rgba(0,0,0,0.5)',
+              top: 10,
+              right: 10,
+              color: 'white',
+              bgcolor: 'rgba(0, 0, 0, 0.5)',
               '&:hover': {
-                backgroundColor: 'rgba(0,0,0,0.7)',
+                bgcolor: 'rgba(0, 0, 0, 0.7)',
               },
               zIndex: 1,
             }}
           >
-            <CloseIcon />
+            <Close />
           </IconButton>
-          {selectedImage?.foto ? (
-            <Box
-              component="img"
+          {selectedImage && (
+            <img
               src={getImageUrl(selectedImage.foto)}
               alt={selectedImage.judul}
-              sx={{
-                maxWidth: '100%',
+              style={{
+                maxWidth: '90vw',
                 maxHeight: '90vh',
                 objectFit: 'contain',
-                borderRadius: '8px',
+                display: 'block',
               }}
             />
-          ) : (
-            <Paper
-              sx={{
-                padding: { xs: '40px 30px', md: '60px 80px' },
-                textAlign: 'center',
-                borderRadius: '12px',
-              }}
-            >
-              <Typography sx={{ color: '#666', fontSize: '1rem' }}>
-                {selectedImage?.judul}
-              </Typography>
-              <Typography sx={{ color: '#999', fontSize: '0.9rem', marginTop: '8px' }}>
-                Preview foto akan ditampilkan di sini
-              </Typography>
-            </Paper>
           )}
         </Box>
       </Modal>
-
-      <Footer />
     </Box>
   );
 };

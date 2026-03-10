@@ -1,11 +1,11 @@
-import { Box, Container, Typography, Card, CardContent, Grid, CircularProgress, Skeleton } from '@mui/material';
+import { Box, Container, Typography, Card, CardContent, CircularProgress, Skeleton } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import smansabaImage from '../assets/image/smansaba.jpg';
 import { Sports, MusicNote, Palette, Science, MenuBook, Group, EmojiEvents, Language } from '@mui/icons-material';
-import { getEkstrakurikulerList } from '../services/api';
+import { getEkstrakurikulerList, getImageUrl } from '../services/api';
 
 const EkstrakurikulerPage = () => {
   const navigate = useNavigate();
@@ -47,35 +47,28 @@ const EkstrakurikulerPage = () => {
 
   // Skeleton Loading Component
   const SkeletonCard = () => (
-    <Grid item xs={12} sm={6} md={4}>
-      <Card
-        sx={{
-          height: '220px',
-          width: '200px',
-          borderRadius: '12px',
-          borderTop: '4px solid #1976d2',
-          overflow: 'hidden',
-        }}
-      >
-        <CardContent
-          sx={{
-            padding: '20px 16px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            height: '100%',
-          }}
-        >
-          <Skeleton variant="circular" width={70} height={70} sx={{ mb: 1.5 }} />
-          <Skeleton variant="rectangular" width="60%" height={24} sx={{ mb: 1.25, borderRadius: '20px' }} />
-          <Skeleton variant="text" width="90%" height={28} sx={{ mb: 1 }} />
-          <Skeleton variant="text" width="100%" height={20} sx={{ mb: 0.5 }} />
-          <Skeleton variant="text" width="95%" height={20} sx={{ mb: 0.5 }} />
-          <Skeleton variant="text" width="85%" height={20} />
-        </CardContent>
-      </Card>
-    </Grid>
+    <Card
+      sx={{
+        minWidth: { xs: '180px', sm: '230px' },
+        minHeight: { xs: '300px', sm: '320px' },
+        width: { xs: '100%', sm: '230px' },
+        maxWidth: { xs: '230px', sm: 'none' },
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: { xs: '20px 12px', md: '24px 16px' },
+        borderRadius: '12px',
+      }}
+    >
+      <Skeleton variant="circular" width={{ xs: 80, md: 100 }} height={{ xs: 80, md: 100 }} sx={{ mb: 2 }} />
+      <CardContent sx={{ padding: 0, textAlign: 'center', width: '100%' }}>
+        <Skeleton variant="rectangular" width="60%" height={24} sx={{ mx: 'auto', mb: 1.25, borderRadius: '20px' }} />
+        <Skeleton variant="text" width="90%" height={28} sx={{ mx: 'auto', mb: 1 }} />
+        <Skeleton variant="text" width="100%" height={20} sx={{ mx: 'auto', mb: 0.5 }} />
+        <Skeleton variant="text" width="95%" height={20} sx={{ mx: 'auto' }} />
+      </CardContent>
+    </Card>
   );
 
   return (
@@ -141,132 +134,191 @@ const EkstrakurikulerPage = () => {
           </Typography>
 
           {loading ? (
-            <Grid container spacing={{ xs: 2, sm: 3, md: 4 }} justifyContent="center">
-              {[1, 2, 3, 4, 5, 6].map((item) => (
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'stretch',
+                gap: { xs: 2, md: 2 },
+                flexWrap: 'wrap',
+                padding: { xs: '0 16px', md: '0' },
+              }}
+            >
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
                 <SkeletonCard key={item} />
               ))}
-            </Grid>
+            </Box>
           ) : ekstrakurikulerList.length === 0 ? (
             <Typography sx={{ textAlign: 'center', py: 8, color: '#666' }}>
               Belum ada data ekstrakurikuler
             </Typography>
           ) : (
-          <Grid container spacing={{ xs: 2, sm: 3, md: 4 }} justifyContent="center">
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'stretch',
+              gap: { xs: 2, md: 2 },
+              flexWrap: 'wrap',
+              padding: { xs: '0 16px', md: '0' },
+            }}
+          >
             {ekstrakurikulerList.map((ekskul) => {
               const IconComponent = getIcon(ekskul.icon);
               
               return (
-                <Grid item xs={12} sm={6} md={4} key={ekskul.id}>
-                  <Card
-                    onClick={() => navigate(`/ekstrakurikuler/detail-ekstrakurikuler/${ekskul.id}`)}
+                <Card
+                  key={ekskul.id}
+                  onClick={() => navigate(`/ekstrakurikuler/detail-ekstrakurikuler/${ekskul.id}`)}
+                  sx={{
+                    minWidth: { xs: '180px', sm: '230px' },
+                    minHeight: { xs: '300px', sm: '320px' },
+                    width: { xs: '100%', sm: '230px' },
+                    maxWidth: { xs: '230px', sm: 'none' },
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'flex-start',
+                    padding: { xs: '20px 12px', md: '24px 16px' },
+                    borderRadius: '12px',
+                    boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                    transition: 'all 0.3s ease',
+                    border: '1px solid #e0e0e0',
+                    cursor: 'pointer',
+                    '&:hover': {
+                      transform: 'translateY(-8px)',
+                      boxShadow: '0 12px 28px rgba(0,0,0,0.2)',
+                      borderColor: '#1976d2',
+                    },
+                  }}
+                >
+                  {/* Logo Ekstrakurikuler */}
+                  {ekskul.logo ? (
+                    <Box
+                      sx={{
+                        width: { xs: 80, md: 100 },
+                        height: { xs: 80, md: 100 },
+                        borderRadius: '50%',
+                        overflow: 'hidden',
+                        marginBottom: '16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: '#f5f5f5',
+                        border: '3px solid #f5f5f5',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                      }}
+                    >
+                      <img
+                        src={getImageUrl(ekskul.logo)}
+                        alt={`Logo ${ekskul.nama}`}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                        }}
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.parentElement.innerHTML = `
+                            <svg style="width: 50px; height: 50px; fill: #757575;">
+                              <use href="#fallback-icon" />
+                            </svg>
+                          `;
+                        }}
+                      />
+                    </Box>
+                  ) : (
+                    <Box
+                      sx={{
+                        width: { xs: 80, md: 100 },
+                        height: { xs: 80, md: 100 },
+                        borderRadius: '50%',
+                        backgroundColor: '#f5f5f5',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginBottom: '16px',
+                        border: '3px solid #f5f5f5',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                      }}
+                    >
+                      <IconComponent 
+                        sx={{ 
+                          fontSize: { xs: 40, md: 50 }, 
+                          color: '#999',
+                        }} 
+                      />
+                    </Box>
+                  )}
+
+                  <CardContent
                     sx={{
-                      height: '220px',
-                      width: '200px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      borderRadius: '12px',
-                      boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-                      transition: 'box-shadow 0.3s ease, transform 0.3s ease',
-                      overflow: 'hidden',
-                      borderTop: '4px solid #1976d2',
-                      cursor: 'pointer',
-                      '&:hover': {
-                        transform: 'translateY(-8px)',
-                        boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
+                      padding: 0,
+                      textAlign: 'center',
+                      width: '100%',
+                      '&:last-child': {
+                        paddingBottom: 0,
                       },
                     }}
                   >
-                    <CardContent
+                    {/* Badge Kategori */}
+                    <Box
                       sx={{
-                        padding: '20px 16px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        height: '100%',
+                        backgroundColor: '#e0e0e0',
+                        color: '#555',
+                        padding: '4px 12px',
+                        borderRadius: '20px',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        marginBottom: '10px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px',
+                        display: 'inline-block',
                       }}
                     >
-                      {/* Icon/Logo Ekstrakurikuler */}
-                      <Box
-                        sx={{
-                          width: 50,
-                          height: 70,
-                          borderRadius: '50%',
-                          backgroundColor: '#f5f5f5',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          marginBottom: '12px',
-                        }}
-                      >
-                        <IconComponent 
-                          sx={{ 
-                            fontSize: 35, 
-                            color: '#757575',
-                          }} 
-                        />
-                      </Box>
+                      {ekskul.kategori}
+                    </Box>
 
-                      {/* Badge Kategori */}
-                      <Box
-                        sx={{
-                          backgroundColor: '#e0e0e0',
-                          color: '#555',
-                          padding: '4px 12px',
-                          borderRadius: '20px',
-                          fontSize: '0.75rem',
-                          fontWeight: 600,
-                          marginBottom: '10px',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.5px',
-                        }}
-                      >
-                        {ekskul.kategori}
-                      </Box>
+                    {/* Nama Ekstrakurikuler */}
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontSize: { xs: '0.95rem', md: '1rem' },
+                        fontWeight: 700,
+                        color: '#333',
+                        marginBottom: '8px',
+                        lineHeight: 1.3,
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}
+                    >
+                      {ekskul.nama}
+                    </Typography>
 
-                      {/* Nama Ekstrakurikuler */}
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          fontSize: '1.1rem',
-                          fontWeight: 700,
-                          color: '#333',
-                          marginBottom: '8px',
-                          lineHeight: 1.3,
-                          height: '55px',
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                        }}
-                      >
-                        {ekskul.nama}
-                      </Typography>
-
-                      {/* Deskripsi */}
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          fontSize: '0.9rem',
-                          color: '#666',
-                          lineHeight: 1.5,
-                          height: '81px',
-                          display: '-webkit-box',
-                          WebkitLineClamp: 4,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                        }}
-                      >
-                        {ekskul.deskripsi}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
+                    {/* Deskripsi */}
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontSize: '0.85rem',
+                        color: '#666',
+                        lineHeight: 1.4,
+                        display: '-webkit-box',
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}
+                    >
+                      {ekskul.deskripsi}
+                    </Typography>
+                  </CardContent>
+                </Card>
               );
             })}
-          </Grid>
+          </Box>
           )}
         </Container>
       </Box>

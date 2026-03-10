@@ -3,7 +3,6 @@ import { Article, Photo, People, EmojiEvents, Sports, School, TrendingUp, FiberM
 
 const statCards = [
   { title: 'Total Berita', value: '45', icon: <Article />, color: '#1976d2', gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-  { title: 'Total Galeri', value: '120', icon: <Photo />, color: '#2e7d32', gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
   { title: 'Total Guru', value: '35', icon: <People />, color: '#ed6c02', gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
   { title: 'Total Prestasi', value: '28', icon: <EmojiEvents />, color: '#9c27b0', gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' },
   { title: 'Ekstrakurikuler', value: '12', icon: <Sports />, color: '#d32f2f', gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
@@ -12,7 +11,6 @@ const statCards = [
 
 const recentActivities = [
   { action: 'Berita baru ditambahkan', time: '2 jam yang lalu' },
-  { action: 'Galeri diupdate', time: '5 jam yang lalu' },
   { action: 'Data guru ditambahkan', time: '1 hari yang lalu' },
   { action: 'Prestasi baru ditambahkan', time: '2 hari yang lalu' },
 ];
@@ -208,7 +206,6 @@ function AdminDashboard() {
             <Box>
               {[
                 { label: 'Berita Published', value: 85, color: 'primary.main', bgColor: '#e3f2fd', gradient: 'linear-gradient(90deg, #1976d2 0%, #42a5f5 100%)' },
-                { label: 'Galeri Published', value: 92, color: 'success.main', bgColor: '#e8f5e9', gradient: 'linear-gradient(90deg, #2e7d32 0%, #66bb6a 100%)' },
                 { label: 'Data Completion', value: 78, color: 'warning.main', bgColor: '#fff3e0', gradient: 'linear-gradient(90deg, #ed6c02 0%, #ff9800 100%)' },
               ].map((stat, index, array) => (
                 <Box key={stat.label} sx={{ mb: index !== array.length - 1 ? 3.5 : 0 }}>

@@ -130,7 +130,7 @@ const Footer = () => {
               >
                 <IconButton
                   component="a"
-                  href="#"
+                  href="https://www.instagram.com/smansatubangsri?igsh=dWJmNHg5dHhreXE3"
                   target="_blank"
                   sx={{
                     backgroundColor: '#fff',
@@ -170,7 +170,7 @@ const Footer = () => {
                 </IconButton>
                 <IconButton
                   component="a"
-                  href="#"
+                  href="https://www.facebook.com/smansatubangsri"
                   target="_blank"
                   sx={{
                     backgroundColor: '#fff',
@@ -190,7 +190,7 @@ const Footer = () => {
                 </IconButton>
                 <IconButton
                   component="a"
-                  href="#"
+                  href="https://x.com/sman_bangsri"
                   target="_blank"
                   sx={{
                     backgroundColor: '#fff',

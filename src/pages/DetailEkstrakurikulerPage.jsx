@@ -1,4 +1,4 @@
-import { Box, Container, Typography, Paper, Grid, Card, CardMedia, CircularProgress, Avatar, Chip } from '@mui/material';
+import { Box, Container, Typography, Paper, Grid, Card, CardMedia, CircularProgress, Avatar, Chip, Skeleton } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -49,9 +49,202 @@ const DetailEkstrakurikulerPage = () => {
     return (
       <Box>
         <Navbar />
-        <Box sx={{ display: 'flex', justifyContent: 'center', py: 20 }}>
-          <CircularProgress />
+        
+        {/* Header Skeleton */}
+        <Box
+          sx={{
+            backgroundColor: '#1976d2',
+            color: '#fff',
+            padding: { xs: '100px 16px 40px', md: '120px 0 60px' },
+            position: 'relative',
+          }}
+        >
+          <Container maxWidth="lg">
+            <Skeleton 
+              variant="circular" 
+              width={40} 
+              height={40} 
+              sx={{ 
+                position: 'absolute',
+                top: { xs: '80px', md: '100px' },
+                left: { xs: '16px', md: '24px' },
+                backgroundColor: 'rgba(255,255,255,0.2)'
+              }} 
+            />
+            
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', md: 'row' },
+                alignItems: 'center',
+                gap: 4,
+              }}
+            >
+              <Skeleton 
+                variant="circular" 
+                width={{ xs: 140, md: 180 }} 
+                height={{ xs: 140, md: 180 }}
+                sx={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
+              />
+              <Box sx={{ textAlign: { xs: 'center', md: 'left' }, width: '100%' }}>
+                <Skeleton 
+                  variant="text" 
+                  width={{ xs: '80%', md: '60%' }} 
+                  height={60}
+                  sx={{ 
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    mx: { xs: 'auto', md: 0 }
+                  }}
+                />
+                <Skeleton 
+                  variant="rounded" 
+                  width={{ xs: '60%', md: '40%' }} 
+                  height={40}
+                  sx={{ 
+                    backgroundColor: 'rgba(255,255,255,0.15)',
+                    mx: { xs: 'auto', md: 0 },
+                    mt: 2,
+                    borderRadius: '8px'
+                  }}
+                />
+              </Box>
+            </Box>
+          </Container>
         </Box>
+
+        {/* Content Skeleton */}
+        <Box sx={{ backgroundColor: '#fafafa', padding: { xs: '40px 16px', md: '60px 0' } }}>
+          <Container maxWidth="md">
+            {/* Deskripsi Skeleton */}
+            <Box sx={{ mb: { xs: 5, md: 6 } }}>
+              <Paper
+                elevation={0}
+                sx={{
+                  padding: { xs: '24px 20px', md: '40px 48px' },
+                  backgroundColor: '#ffffff',
+                  borderRadius: '12px',
+                  borderLeft: '4px solid #1976d2',
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                }}
+              >
+                <Skeleton variant="text" width="30%" height={40} sx={{ mb: 3 }} />
+                <Skeleton variant="text" width="100%" height={20} sx={{ mb: 1 }} />
+                <Skeleton variant="text" width="100%" height={20} sx={{ mb: 1 }} />
+                <Skeleton variant="text" width="100%" height={20} sx={{ mb: 1 }} />
+                <Skeleton variant="text" width="95%" height={20} sx={{ mb: 1 }} />
+                <Skeleton variant="text" width="90%" height={20} />
+              </Paper>
+            </Box>
+
+            {/* Jadwal Skeleton */}
+            <Box sx={{ mb: { xs: 5, md: 6 } }}>
+              <Paper
+                elevation={0}
+                sx={{
+                  padding: { xs: '24px 20px', md: '40px 48px' },
+                  backgroundColor: '#ffffff',
+                  borderRadius: '12px',
+                  borderLeft: '4px solid #2e7d32',
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                }}
+              >
+                <Skeleton variant="text" width="40%" height={40} sx={{ mb: 3 }} />
+                <Grid container spacing={3}>
+                  {[1, 2, 3, 4].map((item) => (
+                    <Grid item xs={12} sm={6} key={item}>
+                      <Box
+                        sx={{
+                          padding: '20px',
+                          backgroundColor: '#f5f9f5',
+                          borderRadius: '12px',
+                          border: '1px solid #c8e6c9',
+                        }}
+                      >
+                        <Skeleton variant="rounded" width={80} height={24} sx={{ mb: 1.5, borderRadius: '12px' }} />
+                        <Skeleton variant="text" width="70%" height={20} sx={{ mb: 1 }} />
+                        <Skeleton variant="text" width="90%" height={20} sx={{ mb: 1 }} />
+                        <Skeleton variant="text" width="85%" height={16} />
+                      </Box>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Paper>
+            </Box>
+
+            {/* Struktur Skeleton */}
+            <Box sx={{ mb: { xs: 5, md: 6 } }}>
+              <Paper
+                elevation={0}
+                sx={{
+                  padding: { xs: '24px 20px', md: '40px 48px' },
+                  backgroundColor: '#ffffff',
+                  borderRadius: '12px',
+                  borderLeft: '4px solid #ed6c02',
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                }}
+              >
+                <Skeleton variant="text" width="45%" height={40} sx={{ mb: 3 }} />
+                <Grid container spacing={3}>
+                  {[1, 2, 3, 4].map((item) => (
+                    <Grid item xs={6} sm={4} md={3} key={item}>
+                      <Card
+                        sx={{
+                          borderRadius: '12px',
+                          textAlign: 'center',
+                          padding: '24px 16px',
+                          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                        }}
+                      >
+                        <Skeleton variant="circular" width={100} height={100} sx={{ margin: '0 auto 16px' }} />
+                        <Skeleton variant="text" width="80%" height={20} sx={{ mx: 'auto', mb: 1 }} />
+                        <Skeleton variant="rounded" width="70%" height={24} sx={{ mx: 'auto', mb: 1, borderRadius: '12px' }} />
+                        <Skeleton variant="rounded" width="60%" height={28} sx={{ mx: 'auto', borderRadius: '12px' }} />
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Paper>
+            </Box>
+
+            {/* Prestasi Skeleton */}
+            <Box>
+              <Paper
+                elevation={0}
+                sx={{
+                  padding: { xs: '24px 20px', md: '40px 48px' },
+                  backgroundColor: '#ffffff',
+                  borderRadius: '12px',
+                  borderLeft: '4px solid #d32f2f',
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                }}
+              >
+                <Skeleton variant="text" width="30%" height={40} sx={{ mb: 3 }} />
+                <Grid container spacing={3}>
+                  {[1, 2, 3, 4].map((item) => (
+                    <Grid item xs={12} sm={6} key={item}>
+                      <Card
+                        sx={{
+                          borderRadius: '12px',
+                          overflow: 'hidden',
+                          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                        }}
+                      >
+                        <Skeleton variant="rectangular" width="100%" height={160} />
+                        <Box sx={{ padding: '16px' }}>
+                          <Skeleton variant="text" width="90%" height={24} sx={{ mb: 1 }} />
+                          <Skeleton variant="text" width="70%" height={20} sx={{ mb: 1 }} />
+                          <Skeleton variant="text" width="60%" height={20} sx={{ mb: 1.5 }} />
+                          <Skeleton variant="rounded" width={100} height={32} sx={{ borderRadius: '8px' }} />
+                        </Box>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Paper>
+            </Box>
+          </Container>
+        </Box>
+        
         <Footer />
       </Box>
     );
@@ -94,9 +287,6 @@ const DetailEkstrakurikulerPage = () => {
               left: { xs: '16px', md: '24px' },
               color: '#fff',
               backgroundColor: 'rgba(255,255,255,0.1)',
-              '&:hover': {
-                backgroundColor: 'rgba(255,255,255,0.2)',
-              },
             }}
           >
             <ArrowBack />
@@ -206,11 +396,6 @@ const DetailEkstrakurikulerPage = () => {
                     margin: '0 auto',
                     borderLeft: '4px solid #1976d2',
                     boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-                    transition: 'border-left-width 0.3s ease, box-shadow 0.3s ease',
-                    '&:hover': {
-                      borderLeft: '6px solid #1976d2',
-                      boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
-                    },
                   }}
                 >
                   <Typography
@@ -252,11 +437,6 @@ const DetailEkstrakurikulerPage = () => {
                     margin: '0 auto',
                     borderLeft: '4px solid #2e7d32',
                     boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-                    transition: 'border-left-width 0.3s ease, box-shadow 0.3s ease',
-                    '&:hover': {
-                      borderLeft: '6px solid #2e7d32',
-                      boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
-                    },
                   }}
                 >
                   <Typography
@@ -284,11 +464,6 @@ const DetailEkstrakurikulerPage = () => {
                             minHeight: '140px',
                             display: 'flex',
                             flexDirection: 'column',
-                            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                            '&:hover': {
-                              transform: 'translateY(-4px)',
-                              boxShadow: '0 4px 12px rgba(46, 125, 50, 0.15)',
-                            },
                           }}
                         >
                           <Chip 
@@ -340,11 +515,6 @@ const DetailEkstrakurikulerPage = () => {
                     margin: '0 auto',
                     borderLeft: '4px solid #ed6c02',
                     boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-                    transition: 'border-left-width 0.3s ease, box-shadow 0.3s ease',
-                    '&:hover': {
-                      borderLeft: '6px solid #ed6c02',
-                      boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
-                    },
                   }}
                 >
                   <Typography
@@ -368,17 +538,12 @@ const DetailEkstrakurikulerPage = () => {
                             textAlign: 'center',
                             padding: '24px 16px',
                             boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                             height: '100%',
                             minHeight: '280px',
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            '&:hover': {
-                              transform: 'translateY(-8px)',
-                              boxShadow: '0 8px 20px rgba(237, 108, 2, 0.2)',
-                            },
                           }}
                         >
                           <Avatar
@@ -449,11 +614,6 @@ const DetailEkstrakurikulerPage = () => {
                     margin: '0 auto',
                     borderLeft: '4px solid #d32f2f',
                     boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-                    transition: 'border-left-width 0.3s ease, box-shadow 0.3s ease',
-                    '&:hover': {
-                      borderLeft: '6px solid #d32f2f',
-                      boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
-                    },
                   }}
                 >
                   <Typography
@@ -476,15 +636,10 @@ const DetailEkstrakurikulerPage = () => {
                             borderRadius: '12px',
                             overflow: 'hidden',
                             boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                             height: '100%',
                             minHeight: '320px',
                             display: 'flex',
                             flexDirection: 'column',
-                            '&:hover': {
-                              transform: 'translateY(-5px)',
-                              boxShadow: '0 8px 20px rgba(211, 47, 47, 0.2)',
-                            },
                           }}
                         >
                           {item.foto ? (

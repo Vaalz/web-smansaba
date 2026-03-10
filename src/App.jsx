@@ -30,6 +30,8 @@ import AdminManagement from './pages/admin/AdminManagement';
 import AdminSiswaPtn from './pages/admin/AdminSiswaPtn';
 import ChangePassword from './pages/admin/ChangePassword';
 import ChangeEmail from './pages/admin/ChangeEmail';
+import ForgotPassword from './pages/admin/ForgotPassword';
+import ResetPassword from './pages/admin/ResetPassword';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 
 import './App.css';
@@ -54,8 +56,10 @@ function App() {
           <Route path="/galeri" element={<GaleriPage />} />
           <Route path="/kontak" element={<KontakPage />} />
           
-          {/* Admin Login */}
+          {/* Admin Login & Password Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           
           {/* Admin Routes (Protected) */}
           <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>

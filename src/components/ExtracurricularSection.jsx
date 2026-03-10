@@ -17,7 +17,7 @@ import {
   Language,
   EmojiEvents,
 } from '@mui/icons-material';
-import { getEkstrakurikulerList } from '../services/api';
+import { getEkstrakurikulerList, getImageUrl } from '../services/api';
 
 const ExtracurricularSection = () => {
   const navigate = useNavigate();
@@ -152,8 +152,8 @@ const ExtracurricularSection = () => {
                       width: '120px',
                       height: '120px',
                       borderRadius: '50%',
-                      backgroundColor: '#e0e0e0',
-                      backgroundImage: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      backgroundColor: ekskul.logo ? 'transparent' : '#e0e0e0',
+                      backgroundImage: ekskul.logo ? 'none' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -162,12 +162,25 @@ const ExtracurricularSection = () => {
                       overflow: 'hidden',
                     }}
                   >
-                    <IconComponent 
-                      sx={{
-                        fontSize: '64px',
-                        color: '#ffffff',
-                      }}
-                    />
+                    {ekskul.logo ? (
+                      <img
+                        src={getImageUrl(ekskul.logo)}
+                        alt={ekskul.nama}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          borderRadius: '50%',
+                        }}
+                      />
+                    ) : (
+                      <IconComponent 
+                        sx={{
+                          fontSize: '64px',
+                          color: '#ffffff',
+                        }}
+                      />
+                    )}
                   </Box>
                   
                   <CardContent 
