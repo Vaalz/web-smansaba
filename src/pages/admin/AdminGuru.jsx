@@ -6,6 +6,7 @@ import { getAdminGuru, createGuru, updateGuru, deleteGuru, getImageUrl } from '.
 
 const formFields = [
   { name: 'nama', label: 'Nama Lengkap', required: true },
+  { name: 'nip', label: 'NIP', required: false },
   { name: 'jabatan', label: 'Jabatan', required: true },
   { name: 'mapel', label: 'Mata Pelajaran', required: true },
   { name: 'foto', label: 'Foto', type: 'file', required: false },
@@ -26,6 +27,7 @@ function AdminGuru() {
       render: (value) => <Avatar src={getImageUrl(value)} />,
     },
     { field: 'nama', headerName: 'Nama' },
+    { field: 'nip', headerName: 'NIP' },
     { field: 'jabatan', headerName: 'Jabatan' },
     { field: 'mapel', headerName: 'Mata Pelajaran' },
   ];

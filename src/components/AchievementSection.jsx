@@ -261,6 +261,21 @@ const AchievementSection = () => {
                     {achievement.judul}
                   </Typography>
 
+                  {/* Nama Siswa */}
+                  {achievement.nama_siswa && (
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontSize: '0.95rem',
+                        marginBottom: '12px',
+                        color: '#ffd700',
+                        fontWeight: 500,
+                      }}
+                    >
+                      {achievement.nama_siswa}
+                    </Typography>
+                  )}
+
                   {/* Category */}
                   <Typography
                     variant="body1"

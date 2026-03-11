@@ -198,7 +198,7 @@ const GuruPage = () => {
                         fontSize: { xs: '0.95rem', md: '1rem' },
                         fontWeight: 700,
                         color: '#333',
-                        marginBottom: '6px',
+                        marginBottom: '4px',
                         lineHeight: 1.3,
                         minHeight: '42px',
                         display: '-webkit-box',
@@ -210,6 +210,22 @@ const GuruPage = () => {
                     >
                       {guru.nama}
                     </Typography>
+
+                    {/* NIP */}
+                    {guru.nip && (
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontSize: { xs: '0.75rem', md: '0.78rem' },
+                          color: '#1976d2',
+                          fontWeight: 500,
+                          marginBottom: '8px',
+                          letterSpacing: '0.3px',
+                        }}
+                      >
+                        NIP: {guru.nip}
+                      </Typography>
+                    )}
 
                     {/* Jabatan */}
                     <Typography

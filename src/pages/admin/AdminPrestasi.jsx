@@ -6,6 +6,7 @@ import { getAdminPrestasi, createPrestasi, updatePrestasi, deletePrestasi } from
 
 const formFields = [
   { name: 'judul', label: 'Nama Prestasi', required: true },
+  { name: 'nama_siswa', label: 'Nama Siswa', required: false },
   { 
     name: 'tingkat', 
     label: 'Tingkat', 
@@ -34,6 +35,7 @@ function AdminPrestasi() {
 
   const columns = [
     { field: 'judul', headerName: 'Prestasi' },
+    { field: 'nama_siswa', headerName: 'Nama Siswa' },
     {
       field: 'tingkat',
       headerName: 'Tingkat',

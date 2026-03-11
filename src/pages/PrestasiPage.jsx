@@ -270,6 +270,22 @@ const PrestasiPage = () => {
                       {prestasi.judul}
                     </Typography>
 
+                    {/* Nama Siswa */}
+                    {prestasi.nama_siswa && (
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontSize: '0.95rem',
+                          color: '#1976d2',
+                          marginBottom: '12px',
+                          fontWeight: 500,
+                          textAlign: 'center',
+                        }}
+                      >
+                        {prestasi.nama_siswa}
+                      </Typography>
+                    )}
+
                     {/* Kategori */}
                     <Typography
                       variant="body1"
