@@ -44,34 +44,24 @@ const Hero = () => {
             Selamat Datang di SMANSABA
           </Typography>
           
-          <Box
+          <Typography 
+            variant="body1"
             sx={{
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(3px)',
-              borderRadius: '16px',
-              padding: { xs: '20px', sm: '28px', md: '36px' },
+              fontSize: { xs: '0.95rem', sm: '1.05rem', md: '1.15rem' },
+              fontWeight: 500,
+              lineHeight: { xs: 1.8, md: 2 },
+              letterSpacing: '0.3px',
+              textAlign: 'center',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+              fontFamily: '"Inter", "Segoe UI", "Roboto", sans-serif',
+              color: '#ffffff',
               maxWidth: '900px',
               margin: '0 auto 40px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+              padding: { xs: '0 10px', md: '0' },
             }}
           >
-            <Typography 
-              variant="body1"
-              sx={{
-                fontSize: { xs: '0.95rem', sm: '1.05rem', md: '1.15rem' },
-                fontWeight: 500,
-                lineHeight: { xs: 1.8, md: 2 },
-                letterSpacing: '0.3px',
-                textAlign: 'center',
-                textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
-                fontFamily: '"Inter", "Segoe UI", "Roboto", sans-serif',
-                color: '#ffffff',
-              }}
-            >
-              TERWUJUDNYA LULUSAN YANG SANTUN, BERIMAN, BERTAQWA, BERAKHLAK MULIA. MANDIRI, BERTANGGUNG JAWAB, PARTISIPATIF, BERGOTONG ROYONG, TOLERANSI, BERKEBHINEKAAN GLOBAL, INTELEK, BERNALAR KRITIS, KREATIF, DAN BERWAWASAN LINGKUNGAN
-            </Typography>
-          </Box>
+            TERWUJUDNYA LULUSAN YANG SANTUN, BERIMAN, BERTAQWA, BERAKHLAK MULIA. MANDIRI, BERTANGGUNG JAWAB, PARTISIPATIF, BERGOTONG ROYONG, TOLERANSI, BERKEBHINEKAAN GLOBAL, INTELEK, BERNALAR KRITIS, KREATIF, DAN BERWAWASAN LINGKUNGAN
+          </Typography>
 
           <Button 
             variant="contained"

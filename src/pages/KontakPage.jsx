@@ -1,31 +1,10 @@
-import { Box, Container, Typography, Grid, Paper, TextField, Button } from '@mui/material';
-import { useState } from 'react';
+import { Box, Container, Typography, Grid, Paper } from '@mui/material';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import smansabaImage from '../assets/image/smansaba.jpg';
 import { LocationOn, Phone, Email, AccessTime } from '@mui/icons-material';
 
 const KontakPage = () => {
-  const [formData, setFormData] = useState({
-    nama: '',
-    email: '',
-    subjek: '',
-    pesan: '',
-  });
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Nanti akan dihubungkan dengan API
-    console.log('Form submitted:', formData);
-  };
-
   return (
     <Box>
       <Navbar />
@@ -242,126 +221,6 @@ const KontakPage = () => {
               </Grid>
             </Grid>
           </Paper>
-
-          {/* Form Kontak */}
-          <Box 
-            sx={{ 
-              maxWidth: '700px', 
-              marginLeft: 'auto',
-              marginRight: 'auto',
-            }}
-          >
-            <Typography
-              variant="h2"
-              sx={{
-                fontSize: { xs: '1.75rem', sm: '2rem', md: '2.25rem' },
-                fontWeight: 700,
-                textAlign: 'center',
-                marginBottom: { xs: '30px', md: '40px' },
-                color: '#333',
-              }}
-            >
-              Kirim Pesan
-            </Typography>
-
-            <Paper
-              elevation={0}
-              sx={{
-                padding: { xs: '24px', sm: '28px', md: '40px' },
-                borderRadius: { xs: '12px', md: '16px' },
-                backgroundColor: '#ffffff',
-                boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-              }}
-            >
-              <Box component="form" onSubmit={handleSubmit}>
-                <TextField
-                  fullWidth
-                  label="Nama Lengkap"
-                  name="nama"
-                  value={formData.nama}
-                  onChange={handleChange}
-                  required
-                  sx={{
-                    marginBottom: '20px',
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '10px',
-                    },
-                  }}
-                />
-
-                <TextField
-                  fullWidth
-                  label="Email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  sx={{
-                    marginBottom: '20px',
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '10px',
-                    },
-                  }}
-                />
-
-                <TextField
-                  fullWidth
-                  label="Subjek"
-                  name="subjek"
-                  value={formData.subjek}
-                  onChange={handleChange}
-                  required
-                  sx={{
-                    marginBottom: '20px',
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '10px',
-                    },
-                  }}
-                />
-
-                <TextField
-                  fullWidth
-                  label="Pesan"
-                  name="pesan"
-                  value={formData.pesan}
-                  onChange={handleChange}
-                  required
-                  multiline
-                  rows={6}
-                  sx={{
-                    marginBottom: '28px',
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '10px',
-                    },
-                  }}
-                />
-
-                <Button
-                  type="submit"
-                  variant="contained"
-                  fullWidth
-                  sx={{
-                    padding: { xs: '14px', md: '16px' },
-                    fontSize: { xs: '1rem', md: '1.05rem' },
-                    fontWeight: 600,
-                    borderRadius: { xs: '8px', md: '10px' },
-                    backgroundColor: '#1976d2',
-                    textTransform: 'none',
-                    boxShadow: '0 4px 12px rgba(25,118,210,0.3)',
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      backgroundColor: '#1565c0',
-                      boxShadow: '0 6px 20px rgba(25,118,210,0.4)',
-                      transform: 'translateY(-2px)',
-                    },
-                  }}
-                >
-                  Kirim Pesan
-                </Button>
-              </Box>
-            </Paper>
-          </Box>
 
           {/* Google Maps Embed */}
           <Box 

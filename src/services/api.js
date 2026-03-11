@@ -71,6 +71,9 @@ export const getCourseById = (id) => api.get(`/public/courses/${id}`);
 
 // ==================== ADMIN API ====================
 
+// Dashboard Stats
+export const getDashboardStats = () => api.get('/admin/dashboard/stats');
+
 // Admin Berita
 export const getAdminBerita = (params = {}) => api.get('/admin/berita', { params });
 export const createBerita = (data) => {

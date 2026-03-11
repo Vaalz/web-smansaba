@@ -1,21 +1,51 @@
-import { Box, Grid, Paper, Typography, Card, CardContent } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Box, Grid, Paper, Typography, Card, CardContent, CircularProgress } from '@mui/material';
 import { Article, Photo, People, EmojiEvents, Sports, School, TrendingUp, FiberManualRecord, BarChart } from '@mui/icons-material';
-
-const statCards = [
-  { title: 'Total Berita', value: '45', icon: <Article />, color: '#1976d2', gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-  { title: 'Total Guru', value: '35', icon: <People />, color: '#ed6c02', gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-  { title: 'Total Prestasi', value: '28', icon: <EmojiEvents />, color: '#9c27b0', gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' },
-  { title: 'Ekstrakurikuler', value: '12', icon: <Sports />, color: '#d32f2f', gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
-  { title: 'Total Course', value: '18', icon: <School />, color: '#0288d1', gradient: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)' },
-];
-
-const recentActivities = [
-  { action: 'Berita baru ditambahkan', time: '2 jam yang lalu' },
-  { action: 'Data guru ditambahkan', time: '1 hari yang lalu' },
-  { action: 'Prestasi baru ditambahkan', time: '2 hari yang lalu' },
-];
+import { getDashboardStats } from '../../services/api';
 
 function AdminDashboard() {
+  const [stats, setStats] = useState({
+    total_berita: 0,
+    total_guru: 0,
+    total_prestasi: 0,
+    total_ekstrakurikuler: 0,
+    total_course: 0,
+    total_galeri: 0,
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setLoading(true);
+        const response = await getDashboardStats();
+        if (response.data.success) {
+          setStats(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching dashboard stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  const statCards = [
+    { title: 'Total Berita', value: stats.total_berita, icon: <Article />, color: '#1976d2', gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+    { title: 'Total Guru', value: stats.total_guru, icon: <People />, color: '#ed6c02', gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
+    { title: 'Total Prestasi', value: stats.total_prestasi, icon: <EmojiEvents />, color: '#9c27b0', gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' },
+    { title: 'Ekstrakurikuler', value: stats.total_ekstrakurikuler, icon: <Sports />, color: '#d32f2f', gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
+    { title: 'Total Course', value: stats.total_course, icon: <School />, color: '#0288d1', gradient: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)' },
+  ];
+
+  const recentActivities = [
+    { action: 'Berita baru ditambahkan', time: '2 jam yang lalu' },
+    { action: 'Data guru ditambahkan', time: '1 hari yang lalu' },
+    { action: 'Prestasi baru ditambahkan', time: '2 hari yang lalu' },
+  ];
+
   return (
     <Box>
       {/* Header Section */}
@@ -32,8 +62,15 @@ function AdminDashboard() {
         </Typography>
       </Box>
 
-      {/* Statistics Cards */}
-      <Grid container spacing={7} sx={{ mb: 4 }}>
+      {/* Loading State */}
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <>
+          {/* Statistics Cards */}
+          <Grid container spacing={7} sx={{ mb: 4 }}>
         {statCards.map((card, index) => (
           <Grid item xs={12} sm={6} md={6} lg={6} xl={6} key={index}>
             <Card
@@ -234,6 +271,8 @@ function AdminDashboard() {
           </Paper>
         </Grid>
       </Grid>
+        </>
+      )}
     </Box>
   );
 }
