@@ -133,18 +133,51 @@ const Navbar = () => {
         }}
       >
         <Box
-          component="img"
-          src={logo}
-          alt="Logo SMANSABA"
           onClick={() => {
             navigate('/beranda');
             setMobileOpen(false);
           }}
           sx={{
-            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
             cursor: 'pointer',
+            gap: 1.5,
           }}
-        />
+        >
+          <Box
+            component="img"
+            src={logo}
+            alt="Logo SMANSABA"
+            sx={{
+              height: '40px',
+            }}
+          />
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Box
+              component="span"
+              sx={{
+                fontSize: '16px',
+                fontWeight: 700,
+                color: '#34495e',
+                lineHeight: 1.2,
+                letterSpacing: '0.5px',
+              }}
+            >
+              SMAN 1 BANGSRI
+            </Box>
+            <Box
+              component="span"
+              sx={{
+                fontSize: '11px',
+                fontWeight: 400,
+                color: '#666',
+                fontStyle: 'italic',
+              }}
+            >
+              Go Green School
+            </Box>
+          </Box>
+        </Box>
         <IconButton onClick={handleDrawerToggle} sx={{ color: '#333' }}>
           <CloseIcon />
         </IconButton>
@@ -235,16 +268,50 @@ const Navbar = () => {
           >
             <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
               <Box
-                component="img"
-                src={logo}
-                alt="Logo SMANSABA"
                 onClick={() => navigate('/beranda')}
                 sx={{
-                  height: { xs: '40px', md: '50px' },
-                  marginRight: { xs: '12px', md: '20px' },
+                  display: 'flex',
+                  alignItems: 'center',
                   cursor: 'pointer',
+                  gap: { xs: 1.5, md: 2 },
                 }}
-              />
+              >
+                <Box
+                  component="img"
+                  src={logo}
+                  alt="Logo SMANSABA"
+                  sx={{
+                    height: { xs: '45px', md: '60px' },
+                  }}
+                />
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <Box
+                    component="span"
+                    sx={{
+                      fontSize: { xs: '16px', sm: '20px', md: '24px' },
+                      fontWeight: 700,
+                      color: scrolled ? '#34495e' : '#ffffff',
+                      lineHeight: 1.2,
+                      letterSpacing: '0.5px',
+                      transition: 'color 0.3s ease',
+                    }}
+                  >
+                    SMAN 1 BANGSRI
+                  </Box>
+                  <Box
+                    component="span"
+                    sx={{
+                      fontSize: { xs: '10px', sm: '12px', md: '14px' },
+                      fontWeight: 400,
+                      color: scrolled ? '#666' : '#ffffff',
+                      fontStyle: 'italic',
+                      transition: 'color 0.3s ease',
+                    }}
+                  >
+                    Go Green School
+                  </Box>
+                </Box>
+              </Box>
             </Box>
 
             {/* Desktop Menu */}

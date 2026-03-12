@@ -281,6 +281,15 @@ export const updateTentang = (data) => {
   return api.put('/admin/tentang', data);
 };
 
+// Contact
+export const getContact = () => api.get('/public/contact');
+
+// Admin Contact
+export const getAdminContact = () => api.get('/admin/contact');
+export const updateContact = (data) => {
+  return api.put('/admin/contact', data);
+};
+
 // Siswa PTN
 export const getSiswaPtnList = (params = {}) => api.get('/public/siswa-ptn', { params });
 

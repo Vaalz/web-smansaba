@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Box, Container, Typography, Card, CardContent, Button, CircularProgress, Skeleton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import { Star, MilitaryTech, Grade, WorkspacePremium, EmojiEvents } from '@mui/icons-material';
 import { getPrestasiList } from '../services/api';
 
 const AchievementSection = () => {
@@ -90,9 +91,145 @@ const AchievementSection = () => {
         padding: { xs: '60px 0', md: '80px 0' },
         backgroundColor: '#1a2332',
         color: '#fff',
+        position: 'relative',
+        overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: '-100px',
+          right: '-100px',
+          width: '300px',
+          height: '300px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(255, 215, 0, 0.08) 0%, transparent 70%)',
+          zIndex: 0,
+        },
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          bottom: '-150px',
+          left: '-150px',
+          width: '400px',
+          height: '400px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(192, 192, 192, 0.06) 0%, transparent 70%)',
+          zIndex: 0,
+        },
       }}
     >
-      <Container maxWidth="lg">
+      {/* Decorative Trophy Icons */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '100px',
+          left: '5%',
+          opacity: 0.08,
+          zIndex: 0,
+          display: { xs: 'none', md: 'block' },
+        }}
+      >
+        <EmojiEvents sx={{ fontSize: '140px', color: '#FFD700', transform: 'rotate(-20deg)' }} />
+      </Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '150px',
+          right: '8%',
+          opacity: 0.08,
+          zIndex: 0,
+          display: { xs: 'none', md: 'block' },
+        }}
+      >
+        <WorkspacePremium sx={{ fontSize: '120px', color: '#C0C0C0', transform: 'rotate(25deg)' }} />
+      </Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: '100px',
+          right: '3%',
+          opacity: 0.08,
+          zIndex: 0,
+          display: { xs: 'none', md: 'block' },
+        }}
+      >
+        <MilitaryTech sx={{ fontSize: '110px', color: '#CD7F32', transform: 'rotate(-15deg)' }} />
+      </Box>
+
+      {/* Decorative Stars */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '200px',
+          left: '15%',
+          opacity: 0.06,
+          zIndex: 0,
+          display: { xs: 'none', lg: 'block' },
+        }}
+      >
+        <Star sx={{ fontSize: '80px', color: '#FFD700', transform: 'rotate(15deg)' }} />
+      </Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: '150px',
+          left: '10%',
+          opacity: 0.06,
+          zIndex: 0,
+          display: { xs: 'none', lg: 'block' },
+        }}
+      >
+        <Grade sx={{ fontSize: '70px', color: '#FFD700', transform: 'rotate(-30deg)' }} />
+      </Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '300px',
+          right: '12%',
+          opacity: 0.06,
+          zIndex: 0,
+          display: { xs: 'none', lg: 'block' },
+        }}
+      >
+        <Star sx={{ fontSize: '65px', color: '#C0C0C0', transform: 'rotate(45deg)' }} />
+      </Box>
+
+      {/* Decorative Number Pattern */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '400px',
+          left: '2%',
+          opacity: 0.05,
+          zIndex: 0,
+          display: { xs: 'none', lg: 'block' },
+          fontSize: '120px',
+          fontWeight: 900,
+          color: '#FFD700',
+          fontFamily: 'Arial Black, sans-serif',
+        }}
+      >
+        #1
+      </Box>
+
+      {/* Podium Pattern */}
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: '50px',
+          right: '5%',
+          opacity: 0.04,
+          zIndex: 0,
+          display: { xs: 'none', lg: 'block' },
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'flex-end', gap: 0.5 }}>
+          <Box sx={{ width: '30px', height: '50px', bgcolor: '#C0C0C0', borderRadius: '4px 4px 0 0' }} />
+          <Box sx={{ width: '30px', height: '70px', bgcolor: '#FFD700', borderRadius: '4px 4px 0 0' }} />
+          <Box sx={{ width: '30px', height: '40px', bgcolor: '#CD7F32', borderRadius: '4px 4px 0 0' }} />
+        </Box>
+      </Box>
+
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
         <Typography
           variant="h2"
           sx={{

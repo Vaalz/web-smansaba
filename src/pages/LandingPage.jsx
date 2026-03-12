@@ -16,8 +16,8 @@ const LandingPage = () => {
       <Navbar />
       <Hero />
       <WelcomeSection />
-      <StatisticsSection />
       <VideoProfileSection />
+      <StatisticsSection />
       <ArticleSection />
       <ExtracurricularSection />
       <AchievementSection />

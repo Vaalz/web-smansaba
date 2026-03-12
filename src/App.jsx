@@ -25,6 +25,7 @@ import AdminEkstrakurikuler from './pages/admin/AdminEkstrakurikuler';
 import AdminCourse from './pages/admin/AdminCourse';
 import AdminSambutan from './pages/admin/AdminSambutan';
 import AdminTentang from './pages/admin/AdminTentang';
+import AdminKontak from './pages/admin/AdminKontak';
 import AdminSettings from './pages/admin/AdminSettings';
 import AdminManagement from './pages/admin/AdminManagement';
 import AdminSiswaPtn from './pages/admin/AdminSiswaPtn';
@@ -72,6 +73,7 @@ function App() {
             <Route path="course" element={<AdminCourse />} />
             <Route path="sambutan" element={<AdminSambutan />} />
             <Route path="tentang" element={<AdminTentang />} />
+            <Route path="kontak" element={<AdminKontak />} />
             <Route path="siswa-ptn" element={<AdminSiswaPtn />} />
             <Route path="settings" element={<AdminSettings />} />
             <Route path="admins" element={<AdminManagement />} />

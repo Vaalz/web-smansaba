@@ -1,10 +1,29 @@
-import { Box, Container, Typography, Grid, Paper } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Box, Container, Typography, Grid, Paper, CircularProgress } from '@mui/material';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import smansabaImage from '../assets/image/smansaba.jpg';
 import { LocationOn, Phone, Email, AccessTime } from '@mui/icons-material';
+import { getContact } from '../services/api';
 
 const KontakPage = () => {
+  const [contact, setContact] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContact = async () => {
+      try {
+        const response = await getContact();
+        setContact(response.data.data);
+      } catch (error) {
+        console.error('Error fetching contact:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContact();
+  }, []);
   return (
     <Box>
       <Navbar />
@@ -68,203 +87,212 @@ const KontakPage = () => {
             Hubungi Kami
           </Typography>
 
-          {/* Informasi Kontak Card */}
-          <Paper
-            elevation={0}
-            sx={{
-              maxWidth: '1000px',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginBottom: { xs: '40px', md: '60px' },
-              padding: { xs: '28px 20px', sm: '36px 28px', md: '48px 40px' },
-              borderRadius: { xs: '12px', md: '16px' },
-              backgroundColor: '#ffffff',
-              boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-            }}
-          >
-            <Grid 
-              container 
-              spacing={{ xs: 3, sm: 4, md: 5 }}
-              justifyContent="center"
-            >
-              {/* Alamat */}
-              <Grid item xs={12} sm={6}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                  <Box
-                    sx={{
-                      width: { xs: '56px', md: '60px' },
-                      height: { xs: '56px', md: '60px' },
-                      borderRadius: '50%',
-                      backgroundColor: '#e3f2fd',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: { xs: '12px', md: '16px' },
-                    }}
-                  >
-                    <LocationOn sx={{ fontSize: { xs: 28, md: 32 }, color: '#1976d2' }} />
+          {loading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+              <CircularProgress />
+            </Box>
+          ) : contact ? (
+            <>
+              {/* Informasi Kontak Card */}
+              <Paper
+                elevation={0}
+                sx={{
+                  maxWidth: '800px',
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                  marginBottom: { xs: '40px', md: '60px' },
+                  padding: { xs: '28px 20px', sm: '36px 28px', md: '48px 40px' },
+                  borderRadius: { xs: '12px', md: '16px' },
+                  backgroundColor: '#ffffff',
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                }}
+              >
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 3, md: 4 } }}>
+                  {/* Alamat */}
+                  <Box sx={{ display: 'flex', gap: { xs: 2, md: 3 }, alignItems: 'flex-start' }}>
+                    <Box
+                      sx={{
+                        width: { xs: '48px', md: '56px' },
+                        height: { xs: '48px', md: '56px' },
+                        borderRadius: '50%',
+                        backgroundColor: '#e3f2fd',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <LocationOn sx={{ fontSize: { xs: 24, md: 28 }, color: '#1976d2' }} />
+                    </Box>
+                    <Box sx={{ flex: 1 }}>
+                      <Typography
+                        sx={{
+                          fontSize: { xs: '1rem', md: '1.1rem' },
+                          fontWeight: 700,
+                          color: '#333',
+                          marginBottom: '8px',
+                        }}
+                      >
+                        Alamat
+                      </Typography>
+                      <Typography sx={{ fontSize: { xs: '0.9rem', md: '0.95rem' }, color: '#666', lineHeight: 1.7, whiteSpace: 'pre-line' }}>
+                        {contact.alamat}
+                      </Typography>
+                    </Box>
                   </Box>
-                  <Typography
-                    sx={{
-                      fontSize: { xs: '1.05rem', md: '1.15rem' },
-                      fontWeight: 700,
-                      color: '#333',
-                      marginBottom: { xs: '10px', md: '12px' },
-                    }}
-                  >
-                    Alamat
-                  </Typography>
-                  <Typography sx={{ fontSize: { xs: '0.9rem', md: '0.95rem' }, color: '#666', lineHeight: 1.7 }}>
-                    Jl. Jerukwangi, Bangsri, Krajan, Jerukwangi,<br/> Kec. Jepara, Jawa Tengah, 59453
-                  </Typography>
-                </Box>
-              </Grid>
 
-              {/* Telepon */}
-              <Grid item xs={12} sm={6}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                  <Box
-                    sx={{
-                      width: { xs: '56px', md: '60px' },
-                      height: { xs: '56px', md: '60px' },
-                      borderRadius: '50%',
-                      backgroundColor: '#e3f2fd',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: { xs: '12px', md: '16px' },
-                    }}
-                  >
-                    <Phone sx={{ fontSize: { xs: 28, md: 32 }, color: '#1976d2' }} />
+                  {/* Telepon */}
+                  <Box sx={{ display: 'flex', gap: { xs: 2, md: 3 }, alignItems: 'flex-start' }}>
+                    <Box
+                      sx={{
+                        width: { xs: '48px', md: '56px' },
+                        height: { xs: '48px', md: '56px' },
+                        borderRadius: '50%',
+                        backgroundColor: '#e3f2fd',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <Phone sx={{ fontSize: { xs: 24, md: 28 }, color: '#1976d2' }} />
+                    </Box>
+                    <Box sx={{ flex: 1 }}>
+                      <Typography
+                        sx={{
+                          fontSize: { xs: '1rem', md: '1.1rem' },
+                          fontWeight: 700,
+                          color: '#333',
+                          marginBottom: '8px',
+                        }}
+                      >
+                        Telepon
+                      </Typography>
+                      <Typography sx={{ fontSize: { xs: '0.9rem', md: '0.95rem' }, color: '#666', lineHeight: 1.7 }}>
+                        {contact.telepon}
+                      </Typography>
+                    </Box>
                   </Box>
-                  <Typography
-                    sx={{
-                      fontSize: { xs: '1.05rem', md: '1.15rem' },
-                      fontWeight: 700,
-                      color: '#333',
-                      marginBottom: { xs: '10px', md: '12px' },
-                    }}
-                  >
-                    Telepon
-                  </Typography>
-                  <Typography sx={{ fontSize: { xs: '0.9rem', md: '0.95rem' }, color: '#666', lineHeight: 1.7 }}>
-                    (0291) 771186
-                  </Typography>
-                </Box>
-              </Grid>
 
-              {/* Email */}
-              <Grid item xs={12} sm={6}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                  <Box
-                    sx={{
-                      width: { xs: '56px', md: '60px' },
-                      height: { xs: '56px', md: '60px' },
-                      borderRadius: '50%',
-                      backgroundColor: '#e3f2fd',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: { xs: '12px', md: '16px' },
-                    }}
-                  >
-                    <Email sx={{ fontSize: { xs: 28, md: 32 }, color: '#1976d2' }} />
+                  {/* Email */}
+                  <Box sx={{ display: 'flex', gap: { xs: 2, md: 3 }, alignItems: 'flex-start' }}>
+                    <Box
+                      sx={{
+                        width: { xs: '48px', md: '56px' },
+                        height: { xs: '48px', md: '56px' },
+                        borderRadius: '50%',
+                        backgroundColor: '#e3f2fd',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <Email sx={{ fontSize: { xs: 24, md: 28 }, color: '#1976d2' }} />
+                    </Box>
+                    <Box sx={{ flex: 1 }}>
+                      <Typography
+                        sx={{
+                          fontSize: { xs: '1rem', md: '1.1rem' },
+                          fontWeight: 700,
+                          color: '#333',
+                          marginBottom: '8px',
+                        }}
+                      >
+                        Email
+                      </Typography>
+                      <Typography sx={{ fontSize: { xs: '0.9rem', md: '0.95rem' }, color: '#666', lineHeight: 1.7 }}>
+                        {contact.email}
+                      </Typography>
+                    </Box>
                   </Box>
-                  <Typography
-                    sx={{
-                      fontSize: { xs: '1.05rem', md: '1.15rem' },
-                      fontWeight: 700,
-                      color: '#333',
-                      marginBottom: { xs: '10px', md: '12px' },
-                    }}
-                  >
-                    Email
-                  </Typography>
-                  <Typography sx={{ fontSize: { xs: '0.9rem', md: '0.95rem' }, color: '#666', lineHeight: 1.7 }}>
-                    Konten akan dikelola melalui sistem admin
-                  </Typography>
-                </Box>
-              </Grid>
 
-              {/* Jam Operasional */}
-              <Grid item xs={12} sm={6}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                  <Box
-                    sx={{
-                      width: { xs: '56px', md: '60px' },
-                      height: { xs: '56px', md: '60px' },
-                      borderRadius: '50%',
-                      backgroundColor: '#e3f2fd',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: { xs: '12px', md: '16px' },
-                    }}
-                  >
-                    <AccessTime sx={{ fontSize: { xs: 28, md: 32 }, color: '#1976d2' }} />
+                  {/* Jam Operasional */}
+                  <Box sx={{ display: 'flex', gap: { xs: 2, md: 3 }, alignItems: 'flex-start' }}>
+                    <Box
+                      sx={{
+                        width: { xs: '48px', md: '56px' },
+                        height: { xs: '48px', md: '56px' },
+                        borderRadius: '50%',
+                        backgroundColor: '#e3f2fd',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <AccessTime sx={{ fontSize: { xs: 24, md: 28 }, color: '#1976d2' }} />
+                    </Box>
+                    <Box sx={{ flex: 1 }}>
+                      <Typography
+                        sx={{
+                          fontSize: { xs: '1rem', md: '1.1rem' },
+                          fontWeight: 700,
+                          color: '#333',
+                          marginBottom: '8px',
+                        }}
+                      >
+                        Jam Operasional
+                      </Typography>
+                      <Typography sx={{ fontSize: { xs: '0.9rem', md: '0.95rem' }, color: '#666', lineHeight: 1.7, whiteSpace: 'pre-line' }}>
+                        {contact.jam_operasional}
+                      </Typography>
+                    </Box>
                   </Box>
-                  <Typography
-                    sx={{
-                      fontSize: { xs: '1.05rem', md: '1.15rem' },
-                      fontWeight: 700,
-                      color: '#333',
-                      marginBottom: { xs: '10px', md: '12px' },
-                    }}
-                  >
-                    Jam Operasional
-                  </Typography>
-                  <Typography sx={{ fontSize: { xs: '0.9rem', md: '0.95rem' }, color: '#666', lineHeight: 1.7 }}>
-                    Senin - Jumat: 07.00 - 15.00 WIB<br/>
-                    Sabtu: 07.00 - 12.00 WIB
-                  </Typography>
                 </Box>
-              </Grid>
-            </Grid>
-          </Paper>
+              </Paper>
+            </>
+          ) : (
+            <Typography align="center" color="text.secondary">
+              Data kontak tidak tersedia
+            </Typography>
+          )}
 
           {/* Google Maps Embed */}
-          <Box 
-            sx={{ 
-              maxWidth: '1000px',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginTop: { xs: '50px', md: '70px' },
-            }}
-          >
-            <Typography
-              variant="h2"
-              sx={{
-                fontSize: { xs: '1.75rem', sm: '2rem', md: '2.25rem' },
-                fontWeight: 700,
-                marginBottom: { xs: '30px', md: '40px' },
-                color: '#333',
-                textAlign: 'center',
+          {contact && contact.maps_embed_url && (
+            <Box 
+              sx={{ 
+                maxWidth: '1000px',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginTop: { xs: '50px', md: '70px' },
               }}
             >
-              Lokasi Kami
-            </Typography>
+              <Typography
+                variant="h2"
+                sx={{
+                  fontSize: { xs: '1.75rem', sm: '2rem', md: '2.25rem' },
+                  fontWeight: 700,
+                  marginBottom: { xs: '30px', md: '40px' },
+                  color: '#333',
+                  textAlign: 'center',
+                }}
+              >
+                Lokasi Kami
+              </Typography>
 
-            <Paper
-              elevation={0}
-              sx={{
-                borderRadius: { xs: '12px', md: '16px' },
-                overflow: 'hidden',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-                height: { xs: '300px', sm: '350px', md: '500px' },
-              }}
-            >
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3962.1899876543!2d110.75476931477444!3d-6.513164095315428!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e711e9b1b1b1b1b%3A0x1b1b1b1b1b1b1b1b!2sSMA%20Negeri%201%20Bangsri!5e0!3m2!1sid!2sid!4v1234567890"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Google Maps Location"
-              />
-            </Paper>
-          </Box>
+              <Paper
+                elevation={0}
+                sx={{
+                  borderRadius: { xs: '12px', md: '16px' },
+                  overflow: 'hidden',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                  height: { xs: '300px', sm: '350px', md: '500px' },
+                }}
+              >
+                <iframe
+                  src={contact.maps_embed_url}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Google Maps Location"
+                />
+              </Paper>
+            </Box>
+          )}
         </Container>
       </Box>
 

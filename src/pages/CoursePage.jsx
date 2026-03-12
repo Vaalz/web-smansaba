@@ -1,29 +1,40 @@
-import { Box, Container, Typography, Grid, Card, CardContent, CardMedia, Chip, Button, Avatar, CircularProgress, Skeleton } from '@mui/material';
+import { Box, Container, Typography, Grid, Card, CardContent, CardMedia, Chip, Button, Avatar, CircularProgress, Skeleton, TextField, InputAdornment, IconButton } from '@mui/material';
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import smansabaImage from '../assets/image/smansaba.jpg';
-import { Book, Person, Schedule, ArrowForward } from '@mui/icons-material';
+import { Book, Person, Schedule, ArrowForward, Search, Clear } from '@mui/icons-material';
 import { getCourseList, getImageUrl } from '../services/api';
 
 const CoursePage = () => {
   const [selectedSubject, setSelectedSubject] = useState('ALL');
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchCourses();
-  }, []);
+  }, [searchQuery]);
 
   const fetchCourses = async () => {
+    setLoading(true);
     try {
-      const response = await getCourseList();
+      const params = searchQuery ? { search: searchQuery } : {};
+      const response = await getCourseList(params);
       setCourses(response.data.data || []);
     } catch (error) {
       console.error('Error fetching courses:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery('');
   };
 
   // Get unique subjects from courses
@@ -135,6 +146,50 @@ const CoursePage = () => {
           >
             Materi Pelajaran
           </Typography>
+
+          {/* Search Bar */}
+          <Box 
+            sx={{ 
+              marginBottom: { xs: '24px', sm: '28px', md: '32px' },
+              padding: { xs: '0 16px', sm: '0' },
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <TextField
+              fullWidth
+              placeholder="Cari materi berdasarkan judul, mata pelajaran, atau kelas..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              sx={{
+                maxWidth: '600px',
+                '& .MuiOutlinedInput-root': {
+                  backgroundColor: '#fff',
+                  borderRadius: '12px',
+                  '&:hover fieldset': {
+                    borderColor: '#34495e',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#34495e',
+                  },
+                },
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search sx={{ color: '#666' }} />
+                  </InputAdornment>
+                ),
+                endAdornment: searchQuery && (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleClearSearch} size="small">
+                      <Clear />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
 
           {/* Subject Filter Chips */}
           <Box 
